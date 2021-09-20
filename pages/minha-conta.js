@@ -14,11 +14,11 @@ import {
 } from '@chakra-ui/react';
 
 const minhaConta = () => {
-  const [journeys, setJourneys] = useState([]);
+  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      await api.get('journeys').then((res) => setJourneys(res.data));
+      await api.get('game-activities').then((res) => setActivities(res.data));
     };
 
     getData();
@@ -33,39 +33,29 @@ const minhaConta = () => {
           textAlign="center"
           m="100px auto"
         >
-          minhas jornadas
+          minhas atividades
         </Heading>
         <Grid
           templateColumns="repeat(auto-fit, minmax(275px, 300px))"
           gap="100px"
         >
-          {journeys && journeys.length > 0 ? (
-            journeys.map((journey) => (
+          {activities && activities.length > 0 ? (
+            activities.map((activity) => (
               // eslint-disable-next-line no-underscore-dangle
-              <Link key={journey._id} href={`/jornada/${journey.slug}`}>
+              <Link key={activity._id} href={`/atividade/${activity._id}`}>
                 <Flex
                   direction="column"
                   justify="center"
                   align="center"
                   textAlign="center"
                   borderRadius="10px"
-                  mt="10px"
-                  mb="80px"
+                  my="40px"
+                  h="300px"
                   mx="auto"
                   bgColor="white"
                   color="black"
                   cursor="pointer"
                 >
-                  <Image
-                    src={
-                      journey?.image
-                        ? journey.image
-                        : '/images/journey-placeholder.jpg'
-                    }
-                    alt="Imagem da jornada"
-                    borderRadius="10px 10px 0 0"
-                    minH="196px"
-                  />
                   <Flex direction="column" p="40px">
                     <Text
                       fontSize="1.4rem"
@@ -73,10 +63,7 @@ const minhaConta = () => {
                       fontWeight="700"
                       mb="16px"
                     >
-                      {journey.title}
-                    </Text>
-                    <Text lineHeight="130%" mb="16px" minH="64px" maxH="8rem">
-                      {journey.description}
+                      {activity.title}
                     </Text>
                     <Button
                       bgColor="highlight"

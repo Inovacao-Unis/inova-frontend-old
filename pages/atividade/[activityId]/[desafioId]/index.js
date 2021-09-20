@@ -10,7 +10,7 @@ import getSlugs from '@utils/getSlugs';
 
 export default function BlogPost() {
   const Router = useRouter();
-  const { jornadaSlug } = Router.query;
+  const { activityId } = Router.query;
   return (
     <>
       <Layout profile>
@@ -25,7 +25,7 @@ export default function BlogPost() {
           <Container mt="3rem">
             <Box>
               ←{' '}
-              <Link href={`/jornada/${jornadaSlug}`}>
+              <Link href={`/atividade/${activityId}`}>
                 <a>Voltar</a>
               </Link>
             </Box>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Flex,
   Container,
@@ -22,6 +23,7 @@ import {
   PopoverCloseButton,
   MenuDivider,
 } from '@chakra-ui/react';
+import api from '@services/api';
 import { BellIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -29,6 +31,16 @@ import firebase from '../lib/firebase';
 
 export default function Header({ profile }) {
   const Router = useRouter();
+  const { activityId } = Router.query;
+  const [team, setTeam] = useState({});
+
+  useEffect(() => {
+    const getData = async () => {
+      await api.get(`game-team/${activityId}`).then((res) => setTeam(res.data));
+    };
+
+    getData();
+  }, [activityId]);
 
   return (
     <Box
@@ -52,7 +64,7 @@ export default function Header({ profile }) {
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
                 <Text fontSize="1.2rem" color="#fec739">
-                  100
+                  {team.points}
                 </Text>
               </Flex>
               <Popover zIndex="999">
@@ -103,7 +115,7 @@ export default function Header({ profile }) {
                 <MenuList zIndex="999">
                   <MenuItem color="highlight">
                     <Link href="/minha-conta">
-                      <a>Minhas Jornadas</a>
+                      <a>Minhas atividades</a>
                     </Link>
                   </MenuItem>
                   <MenuItem color="highlight">

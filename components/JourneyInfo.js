@@ -2,18 +2,27 @@ import { useState, useEffect } from 'react';
 import api from '@services/api';
 import { Flex, Box, Progress, Text, Avatar } from '@chakra-ui/react';
 
-const JourneyInfo = ({ status, jornadaSlug }) => {
-  const [journey, setJourney] = useState(null);
+const JourneyInfo = ({ status, activityId }) => {
+  const [activity, setActivity] = useState(null);
+  const [team, setTeam] = useState({});
+
+  useEffect(() => {
+    const getData = async () => {
+      await api.get(`game-team/${activityId}`).then((res) => setTeam(res.data));
+    };
+
+    getData();
+  }, [activityId]);
 
   useEffect(() => {
     const getData = async () => {
       await api
-        .get(`journey/${jornadaSlug}`)
-        .then((res) => setJourney(res.data));
+        .get(`activity/${activityId}`)
+        .then((res) => setActivity(res.data));
     };
 
     getData();
-  }, [jornadaSlug, setJourney]);
+  }, [activityId, setActivity]);
 
   return (
     <Flex
@@ -41,12 +50,12 @@ const JourneyInfo = ({ status, jornadaSlug }) => {
           fontWeight="bold"
           maxW="200px"
         >
-          {journey?.title}
+          {activity?.title}
         </Text>
         <Avatar
           size="lg"
           src={
-            journey?.image ? journey.image : '/images/journey-placeholder.jpg'
+            activity?.image ? activity.image : '/images/journey-placeholder.jpg'
           }
           alt="Imagem da jornada"
         />
@@ -54,10 +63,10 @@ const JourneyInfo = ({ status, jornadaSlug }) => {
       <Box w="100%" maxW="100%" py="0" px="2rem">
         <Flex justify="space-between" align="center" mb="0.5rem">
           <Text>Seu progresso:</Text>
-          <Text>{status}/100%</Text>
+          <Text>{team.progress}/100%</Text>
         </Flex>
         <Box>
-          <Progress hasStripe colorScheme="pink" value={status} />
+          <Progress hasStripe colorScheme="pink" value={team.progress} />
         </Box>
       </Box>
     </Flex>
