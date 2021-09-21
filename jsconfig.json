@@ -9,6 +9,7 @@
           "@styles/*": ["styles/*"],
           "@utils/*": ["utils/*"],
           "@services/*": ["services/*"],
+          "@content/*": ["content/*"]
       }
   }
 }

@@ -1,0 +1,6 @@
+Duis ut dui lacus. Morbi fringilla leo eu faucibus mattis. Donec mauris nisi, molestie sit amet blandit et, cursus ac est. Donec finibus purus a risus vehicula lobortis. Vivamus interdum eros eget nisl venenatis, pulvinar porttitor turpis dignissim. Sed sed aliquet velit, sit amet dapibus metus. Nullam in fermentum dui.
+
+
+[![Design Thinking - Solucionando problemas complexos | Ricardo Ruffo | TEDxObjetivoSorocaba](https://img.youtube.com/vi/7fcqb2a5_ok/0.jpg)](https://www.youtube.com/watch?v=7fcqb2a5_ok "Design Thinking - Solucionando problemas complexos | Ricardo Ruffo | TEDxObjetivoSorocaba")
+
+Morbi vel velit ut velit fringilla sollicitudin vitae eu est. Phasellus accumsan augue sed mi sagittis, sit amet blandit dolor tincidunt. Aenean volutpat elit magna. Nulla tempor hendrerit ex eget vehicula. Proin eget erat lacus. Suspendisse a elit vel leo vestibulum luctus non quis leo. Aliquam ullamcorper nisi non turpis dictum, nec vestibulum nulla pretium. Vestibulum vitae mauris nec ipsum mattis faucibus. Proin auctor nulla dui, commodo cursus metus bibendum eu.

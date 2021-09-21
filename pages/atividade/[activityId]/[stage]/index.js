@@ -4,13 +4,14 @@ import Link from 'next/link';
 import matter from 'gray-matter';
 import ReactMarkdown from 'react-markdown';
 import Short from '@components/Short';
+import problema from '@content/problema.md';
 
 import Layout from '@components/Layout';
 import getSlugs from '@utils/getSlugs';
 
 export default function BlogPost() {
   const Router = useRouter();
-  const { activityId } = Router.query;
+  const { activityId, stage } = Router.query;
   return (
     <>
       <Layout profile>
@@ -29,10 +30,10 @@ export default function BlogPost() {
                 <a>Voltar</a>
               </Link>
             </Box>
-            <Heading>Desafio 01</Heading>
+            <Heading>Etapa {stage}</Heading>
             <Box>
               <div className="archive">
-                <ReactMarkdown>Texto aqui</ReactMarkdown>
+                <ReactMarkdown>{problema}</ReactMarkdown>
               </div>
               <Short />
             </Box>

@@ -37,7 +37,16 @@ const Journey = () => {
                 <Text>Etapa 1</Text>
               </Circle>
             </Flex>
-            <Flex cursor="pointer" mr="180px" ml="auto">
+            <Flex
+              onClick={
+                responses[1]
+                  ? () => Router.push(`/atividade/${activityId}/2`)
+                  : '#'
+              }
+              cursor={responses[1] ? 'pointer' : 'inherit'}
+              mr="180px"
+              ml="auto"
+            >
               <Circle
                 size="210px"
                 bg={responses[1] ? 'highlight' : 'gray'}
@@ -46,7 +55,16 @@ const Journey = () => {
                 <Text>Etapa 2</Text>
               </Circle>
             </Flex>
-            <Flex cursor="pointer" mr="auto" ml="180px">
+            <Flex
+              onClick={
+                responses[2]
+                  ? () => Router.push(`/atividade/${activityId}/3`)
+                  : '#'
+              }
+              cursor={responses[2] ? 'pointer' : 'inherit'}
+              mr="auto"
+              ml="180px"
+            >
               <Circle
                 size="190px"
                 bg={responses[2] ? 'highlight' : 'gray'}
@@ -55,7 +73,16 @@ const Journey = () => {
                 <Text>Etapa 3</Text>
               </Circle>
             </Flex>
-            <Flex cursor="pointer" mr="180px" ml="auto">
+            <Flex
+              onClick={
+                responses[3]
+                  ? () => Router.push(`/atividade/${activityId}/4`)
+                  : '#'
+              }
+              cursor={responses[3] ? 'pointer' : 'inherit'}
+              mr="180px"
+              ml="auto"
+            >
               <Circle
                 size="200px"
                 bg={responses[3] ? 'highlight' : 'gray'}
