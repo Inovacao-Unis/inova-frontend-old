@@ -26,7 +26,7 @@ const minhaConta = () => {
 
   return (
     <Layout profile>
-      <Container maxW="container.xl" zIndex="800">
+      <Container maxW="container.xl" zIndex="800" pb="100px">
         <Heading
           fontSize="2.5rem"
           fontWeight="700"
@@ -35,10 +35,7 @@ const minhaConta = () => {
         >
           minhas atividades
         </Heading>
-        <Grid
-          templateColumns="repeat(auto-fit, minmax(275px, 300px))"
-          gap="100px"
-        >
+        <Flex justify="space-between" wrap="wrap">
           {activities && activities.length > 0 ? (
             activities.map((activity) => (
               // eslint-disable-next-line no-underscore-dangle
@@ -51,6 +48,7 @@ const minhaConta = () => {
                   borderRadius="10px"
                   my="40px"
                   h="300px"
+                  w="250px"
                   mx="auto"
                   bgColor="white"
                   color="black"
@@ -79,7 +77,7 @@ const minhaConta = () => {
           ) : (
             <Text>Nenhuma jornada</Text>
           )}
-        </Grid>
+        </Flex>
       </Container>
     </Layout>
   );

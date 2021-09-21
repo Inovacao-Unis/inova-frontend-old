@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import api from '@services/api';
-import { Flex, Box, Progress, Text, Avatar } from '@chakra-ui/react';
+import { Flex, Box, Progress, Text, Avatar, Button } from '@chakra-ui/react';
 
 const JourneyInfo = ({ status, activityId }) => {
   const [activity, setActivity] = useState(null);
   const [team, setTeam] = useState({});
+  const [challenge, setChallenge] = useState({});
+  const [category, setCategory] = useState({});
 
   useEffect(() => {
     const getData = async () => {
@@ -12,7 +14,7 @@ const JourneyInfo = ({ status, activityId }) => {
     };
 
     getData();
-  }, [activityId]);
+  }, [activityId, setTeam]);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,6 +25,30 @@ const JourneyInfo = ({ status, activityId }) => {
 
     getData();
   }, [activityId, setActivity]);
+
+  useEffect(() => {
+    const getData = async () => {
+      await api
+        .get(`challenge/${team.challengeId}`)
+        .then((res) => setChallenge(res.data));
+    };
+
+    if (team && team.challengeId) {
+      getData();
+    }
+  }, [team, setChallenge]);
+
+  useEffect(() => {
+    const getData = async () => {
+      await api
+        .get(`category/${challenge.categoryId}`)
+        .then((res) => setCategory(res.data));
+    };
+
+    if (challenge && challenge.categoryId) {
+      getData();
+    }
+  }, [challenge, setCategory]);
 
   return (
     <Flex
@@ -42,20 +68,34 @@ const JourneyInfo = ({ status, activityId }) => {
         maxW="100%"
         py="0"
         px="2rem"
-        mb="2rem"
+        mb="3rem"
       >
-        <Text
-          fontSize="1.4rem"
-          lineHeight="1.6rem"
-          fontWeight="bold"
-          maxW="200px"
-        >
-          {activity?.title}
-        </Text>
+        <Flex direction="column">
+          <Text
+            fontSize="1.4rem"
+            lineHeight="1.6rem"
+            fontWeight="bold"
+            maxW="200px"
+            mb="10px"
+          >
+            {activity?.title}
+          </Text>
+          <Text fontSize="1rem" maxW="200px" mb="10px">
+            {challenge?.title}
+          </Text>
+          <Button
+            size="xs"
+            bgColor="highlight"
+            color="white"
+            _hover={{ bg: 'highlight' }}
+          >
+            Informações do desafio
+          </Button>
+        </Flex>
         <Avatar
-          size="lg"
+          size="xl"
           src={
-            activity?.image ? activity.image : '/images/journey-placeholder.jpg'
+            category?.image ? category.image : '/images/journey-placeholder.jpg'
           }
           alt="Imagem da jornada"
         />

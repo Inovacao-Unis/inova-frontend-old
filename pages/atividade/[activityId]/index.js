@@ -24,7 +24,7 @@ const Journey = () => {
 
   return (
     <Layout profile>
-      <Container maxW="container.xl" zIndex="800">
+      <Container maxW="container.xl" zIndex="800" pb="100px">
         <Flex py={4}>
           <Flex w="100%" flexDirection="column" align="center" flex="1">
             <Flex

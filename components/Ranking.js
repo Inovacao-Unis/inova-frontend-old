@@ -7,6 +7,7 @@ const Ranking = () => {
   const Router = useRouter();
   const { activityId } = Router.query;
   const [ranking, setRanking] = useState([]);
+  const [teamId, setTeamId] = useState('');
 
   useEffect(() => {
     const getData = async () => {
@@ -17,6 +18,16 @@ const Ranking = () => {
 
     getData();
   }, [activityId]);
+
+  useEffect(() => {
+    const getData = async () => {
+      await api
+        .get(`game-team/${activityId}`)
+        .then((res) => setTeamId(res.data._id));
+    };
+
+    getData();
+  }, [activityId, setTeamId]);
 
   return (
     <Flex
@@ -39,7 +50,15 @@ const Ranking = () => {
       <Flex direction="column" w="100%" h="100%" overflowY="auto">
         {ranking &&
           ranking.map((team, index) => (
-            <Flex w="100%" align="center" minH="60px" py="1rem" px="2rem">
+            <Flex
+              // eslint-disable-next-line no-underscore-dangle
+              bg={team._id === teamId ? 'gray.200' : '#fff'}
+              w="100%"
+              align="center"
+              minH="60px"
+              py="1rem"
+              px="2rem"
+            >
               <Text fontSize="1.2rem" mr="15px">
                 {index + 1}
               </Text>
