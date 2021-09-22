@@ -8,7 +8,7 @@ import api from '../services/api';
 const withAuth = (Component) => (props) => {
   const Router = useRouter();
   const [verified, setVerified] = useState(false);
-  const { loading, setLoading } = useAuth();
+  const { setLoading } = useAuth();
 
   useEffect(() => {
     setLoading(true);

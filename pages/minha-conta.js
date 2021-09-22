@@ -3,15 +3,7 @@ import api from '@services/api';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Link from 'next/link';
-import {
-  Container,
-  Heading,
-  Flex,
-  Grid,
-  Image,
-  Text,
-  Button,
-} from '@chakra-ui/react';
+import { Container, Heading, Flex, Text, Button } from '@chakra-ui/react';
 
 const minhaConta = () => {
   const [activities, setActivities] = useState([]);
