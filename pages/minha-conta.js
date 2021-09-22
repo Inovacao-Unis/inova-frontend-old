@@ -22,10 +22,10 @@ const minhaConta = () => {
     };
 
     getData();
-  }, []);
+  }, [setActivities]);
 
   return (
-    <Layout profile>
+    <Layout activityBtn>
       <Container maxW="container.xl" zIndex="800" pb="100px">
         <Heading
           fontSize="2.5rem"

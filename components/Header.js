@@ -21,15 +21,16 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  IconButton,
   MenuDivider,
 } from '@chakra-ui/react';
 import api from '@services/api';
-import { BellIcon } from '@chakra-ui/icons';
+import { BellIcon, AddIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import firebase from '../lib/firebase';
 
-export default function Header({ profile }) {
+export default function Header({ profile, activityBtn }) {
   const Router = useRouter();
   const { activityId } = Router.query;
   const [team, setTeam] = useState({});
@@ -58,7 +59,6 @@ export default function Header({ profile }) {
           <Spacer />
           {profile ? (
             <Flex align="center">
-              <Text mr="3rem">Sobre o jogo</Text>
               <Flex align="center" mr="3rem">
                 <Box maxW="25px" mr="0.5rem">
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
@@ -141,6 +141,34 @@ export default function Header({ profile }) {
               </Menu>
             </Flex>
           ) : null}
+          {activityBtn && (
+            <Flex>
+              <Menu>
+                <MenuButton
+                  zIndex="999"
+                  bg="white"
+                  color="black"
+                  w="40px"
+                  h="40px"
+                  borderRadius="5px"
+                >
+                  <AddIcon color="gray.900" />
+                </MenuButton>
+                <MenuList zIndex="999">
+                  <MenuItem color="gray.600">
+                    <Link href="/perfil">
+                      <a>Participar da atividade</a>
+                    </Link>
+                  </MenuItem>
+                  <MenuItem color="gray.600">
+                    <Link href="/minha-conta">
+                      <a>Criar atividade</a>
+                    </Link>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
+          )}
         </Flex>
       </Container>
     </Box>

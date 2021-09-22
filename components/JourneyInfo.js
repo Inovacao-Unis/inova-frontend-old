@@ -80,17 +80,10 @@ const JourneyInfo = ({ status, activityId }) => {
           >
             {activity?.title}
           </Text>
+          <Text>{activity?.code}</Text>
           <Text fontSize="1rem" maxW="200px" mb="10px">
             {challenge?.title}
           </Text>
-          <Button
-            size="xs"
-            bgColor="highlight"
-            color="white"
-            _hover={{ bg: 'highlight' }}
-          >
-            Informações do desafio
-          </Button>
         </Flex>
         <Avatar
           size="xl"
