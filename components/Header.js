@@ -21,6 +21,19 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Input,
+  Checkbox,
   IconButton,
   MenuDivider,
 } from '@chakra-ui/react';
@@ -34,6 +47,8 @@ export default function Header({ profile, activityBtn }) {
   const Router = useRouter();
   const { activityId } = Router.query;
   const [team, setTeam] = useState({});
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -42,6 +57,15 @@ export default function Header({ profile, activityBtn }) {
 
     getData();
   }, [activityId]);
+
+  const getChallenges = async () => {
+    await api.get('challenges').then((res) => setChallenges(res.data));
+  };
+
+  const handleModal = () => {
+    getChallenges();
+    onOpen();
+  };
 
   return (
     <Box
@@ -156,14 +180,43 @@ export default function Header({ profile, activityBtn }) {
                 </MenuButton>
                 <MenuList zIndex="999">
                   <MenuItem color="gray.600">
-                    <Link href="/perfil">
-                      <a>Participar da atividade</a>
-                    </Link>
-                  </MenuItem>
-                  <MenuItem color="gray.600">
                     <Link href="/minha-conta">
                       <a>Criar atividade</a>
                     </Link>
+                  </MenuItem>
+                  <MenuItem color="gray.600">
+                    <Flex>
+                      <Button onClick={handleModal}>Criar atividade</Button>
+
+                      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+                        <ModalOverlay />
+                        <ModalContent>
+                          <ModalHeader>Modal Title</ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody>
+                            <FormControl>
+                              <FormLabel>Título da atividade</FormLabel>
+                              <Input placeholder="Digite o título" />
+                            </FormControl>
+                            <Flex direction="column">
+                              {challenges &&
+                                challenges.map((challenge) => (
+                                  // eslint-disable-next-line no-underscore-dangle
+                                  <Checkbox key={challenge._id}>
+                                    {challenge.title}
+                                  </Checkbox>
+                                ))}
+                            </Flex>
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button mr={3} variant="ghost" onClick={onClose}>
+                              Fechar
+                            </Button>
+                            <Button colorScheme="blue">Adicionar</Button>
+                          </ModalFooter>
+                        </ModalContent>
+                      </Modal>
+                    </Flex>
                   </MenuItem>
                 </MenuList>
               </Menu>
