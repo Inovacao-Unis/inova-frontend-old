@@ -34,8 +34,7 @@ import {
   FormLabel,
   Input,
   Checkbox,
-  IconButton,
-  MenuDivider,
+  Stack,
 } from '@chakra-ui/react';
 import api from '@services/api';
 import { BellIcon, AddIcon } from '@chakra-ui/icons';
@@ -49,6 +48,8 @@ export default function Header({ profile, activityBtn }) {
   const [team, setTeam] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [challenges, setChallenges] = useState([]);
+  const [challengesChecked, setChallengesChecked] = useState([]);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -65,6 +66,10 @@ export default function Header({ profile, activityBtn }) {
   const handleModal = () => {
     getChallenges();
     onOpen();
+  };
+
+  const teste = () => {
+    console.log('challenges ', challengesChecked);
   };
 
   return (
@@ -188,7 +193,7 @@ export default function Header({ profile, activityBtn }) {
                     <Flex>
                       <Button onClick={handleModal}>Criar atividade</Button>
 
-                      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+                      <Modal isOpen={isOpen} onClose={onClose} size="6xl">
                         <ModalOverlay />
                         <ModalContent>
                           <ModalHeader>Modal Title</ModalHeader>
@@ -198,13 +203,42 @@ export default function Header({ profile, activityBtn }) {
                               <FormLabel>Título da atividade</FormLabel>
                               <Input placeholder="Digite o título" />
                             </FormControl>
-                            <Flex direction="column">
+                            <Button onClick={teste}>Teste aqui</Button>
+                            <Button onClick={() => setChecked(true)}>
+                              Marcar todos
+                            </Button>
+                            <Flex justify="space-between">
                               {challenges &&
-                                challenges.map((challenge) => (
-                                  // eslint-disable-next-line no-underscore-dangle
-                                  <Checkbox key={challenge._id}>
-                                    {challenge.title}
-                                  </Checkbox>
+                                challenges.map((category) => (
+                                  <Box>
+                                    <Checkbox
+                                      isChecked={checked}
+                                      onChange={(e) =>
+                                        setChecked(e.target.checked)
+                                      }
+                                    >
+                                      <Text fontWeight="bold" fontSize="1.1rem">
+                                        {category.title}
+                                      </Text>
+                                    </Checkbox>
+                                    <Stack pl={6} mt={1} spacing={1}>
+                                      {category.challenges.map((challenge) => (
+                                        <Checkbox
+                                          isChecked={checked}
+                                          onChange={(e) => {
+                                            // setChecked(e.target.checked);
+                                            // setChallengesChecked((arr) => [
+                                            //   ...arr,
+                                            //   challenge,
+                                            // ]);
+                                            console.log('e', e);
+                                          }}
+                                        >
+                                          {challenge.title}
+                                        </Checkbox>
+                                      ))}
+                                    </Stack>
+                                  </Box>
                                 ))}
                             </Flex>
                           </ModalBody>
