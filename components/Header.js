@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import {
   Flex,
@@ -60,7 +61,14 @@ export default function Header({ profile, activityBtn }) {
   }, [activityId]);
 
   const getChallenges = async () => {
-    await api.get('challenges').then((res) => setChallenges(res.data));
+    await api.get('challenges').then((res) => {
+      // eslint-disable-next-line no-return-assign
+      res.data.map((category) => {
+        category.checked = true;
+        category.challenges.map((challenge) => (challenge.checked = true));
+      });
+      setChallenges(res.data);
+    });
   };
 
   const handleModal = () => {
@@ -71,6 +79,8 @@ export default function Header({ profile, activityBtn }) {
   const teste = () => {
     console.log('challenges ', challengesChecked);
   };
+
+  const handleCategory = (e, category) => {};
 
   return (
     <Box
@@ -212,9 +222,8 @@ export default function Header({ profile, activityBtn }) {
                                 challenges.map((category) => (
                                   <Box>
                                     <Checkbox
-                                      isChecked={checked}
                                       onChange={(e) =>
-                                        setChecked(e.target.checked)
+                                        handleCategory(e, category)
                                       }
                                     >
                                       <Text fontWeight="bold" fontSize="1.1rem">
@@ -224,14 +233,27 @@ export default function Header({ profile, activityBtn }) {
                                     <Stack pl={6} mt={1} spacing={1}>
                                       {category.challenges.map((challenge) => (
                                         <Checkbox
-                                          isChecked={checked}
+                                          isChecked={
+                                            challengesChecked[
+                                              challengesChecked.indexOf(
+                                                challenge,
+                                              )
+                                            ]?.checked
+                                          }
                                           onChange={(e) => {
-                                            // setChecked(e.target.checked);
-                                            // setChallengesChecked((arr) => [
-                                            //   ...arr,
-                                            //   challenge,
-                                            // ]);
-                                            console.log('e', e);
+                                            if (e.target.checked) {
+                                              setChallengesChecked((prev) => [
+                                                ...prev,
+                                                challenge,
+                                              ]);
+                                            } else {
+                                              setChallengesChecked(
+                                                challengesChecked.filter(
+                                                  (item) =>
+                                                    item._id !== challenge._id,
+                                                ),
+                                              );
+                                            }
                                           }}
                                         >
                                           {challenge.title}
