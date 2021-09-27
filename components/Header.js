@@ -196,83 +196,13 @@ export default function Header({ profile, activityBtn }) {
                 <MenuList zIndex="999">
                   <MenuItem color="gray.600">
                     <Link href="/minha-conta">
-                      <a>Criar atividade</a>
+                      <a>Buscar atividade</a>
                     </Link>
                   </MenuItem>
                   <MenuItem color="gray.600">
-                    <Flex>
-                      <Button onClick={handleModal}>Criar atividade</Button>
-
-                      <Modal isOpen={isOpen} onClose={onClose} size="6xl">
-                        <ModalOverlay />
-                        <ModalContent>
-                          <ModalHeader>Modal Title</ModalHeader>
-                          <ModalCloseButton />
-                          <ModalBody>
-                            <FormControl>
-                              <FormLabel>Título da atividade</FormLabel>
-                              <Input placeholder="Digite o título" />
-                            </FormControl>
-                            <Button onClick={teste}>Teste aqui</Button>
-                            <Button onClick={() => setChecked(true)}>
-                              Marcar todos
-                            </Button>
-                            <Flex justify="space-between">
-                              {challenges &&
-                                challenges.map((category) => (
-                                  <Box>
-                                    <Checkbox
-                                      onChange={(e) =>
-                                        handleCategory(e, category)
-                                      }
-                                    >
-                                      <Text fontWeight="bold" fontSize="1.1rem">
-                                        {category.title}
-                                      </Text>
-                                    </Checkbox>
-                                    <Stack pl={6} mt={1} spacing={1}>
-                                      {category.challenges.map((challenge) => (
-                                        <Checkbox
-                                          isChecked={
-                                            challengesChecked[
-                                              challengesChecked.indexOf(
-                                                challenge,
-                                              )
-                                            ]?.checked
-                                          }
-                                          onChange={(e) => {
-                                            if (e.target.checked) {
-                                              setChallengesChecked((prev) => [
-                                                ...prev,
-                                                challenge,
-                                              ]);
-                                            } else {
-                                              setChallengesChecked(
-                                                challengesChecked.filter(
-                                                  (item) =>
-                                                    item._id !== challenge._id,
-                                                ),
-                                              );
-                                            }
-                                          }}
-                                        >
-                                          {challenge.title}
-                                        </Checkbox>
-                                      ))}
-                                    </Stack>
-                                  </Box>
-                                ))}
-                            </Flex>
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button mr={3} variant="ghost" onClick={onClose}>
-                              Fechar
-                            </Button>
-                            <Button colorScheme="blue">Adicionar</Button>
-                          </ModalFooter>
-                        </ModalContent>
-                      </Modal>
-                    </Flex>
+                    <Link href="/adicionar-atividade">
+                      <a>Criar atividade</a>
+                    </Link>
                   </MenuItem>
                 </MenuList>
               </Menu>
