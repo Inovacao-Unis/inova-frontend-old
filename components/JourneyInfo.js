@@ -71,17 +71,33 @@ const JourneyInfo = ({ status, activityId }) => {
         mb="3rem"
       >
         <Flex direction="column">
+          <Text fontSize="xs" color="gray.600">
+            Atividade
+          </Text>
           <Text
             fontSize="1.4rem"
             lineHeight="1.6rem"
             fontWeight="bold"
             maxW="200px"
-            mb="10px"
+            mb="20px"
+            color="highlight"
           >
             {activity?.title}
           </Text>
-          <Text>{activity?.code}</Text>
-          <Text fontSize="1rem" maxW="200px" mb="10px">
+          <Text fontSize="xs" color="gray.600">
+            Time
+          </Text>
+          <Text fontSize="1rem" maxW="200px" mb="20px">
+            {team?.name}
+          </Text>
+          <Text fontSize="xs" color="gray.600">
+            Código da atividade
+          </Text>
+          <Text mb="20px">{activity?.code}</Text>
+          <Text fontSize="xs" color="gray.600">
+            Desafio
+          </Text>
+          <Text fontSize="1rem" lineHeight="1rem" maxW="200px" mb="20px">
             {challenge?.title}
           </Text>
         </Flex>
