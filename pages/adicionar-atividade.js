@@ -26,12 +26,22 @@ const adicionarAtividade = () => {
   const [gestaoChallenges, setGestaoChallenges] = useState({});
   const [checked, setChecked] = useState(false);
 
+  const reduceArr = (arr) => {
+    const newArr = [];
+    arr.forEach((item) => {
+      newArr.push(item.checked);
+    });
+    console.log('newArr ', newArr);
+    return newArr;
+  };
+
   const allCheckedEngenharia =
     engenhariaChallenges.challenges &&
-    engenhariaChallenges.challenges.every((challenge) => challenge === true);
+    reduceArr(engenhariaChallenges.challenges).every(Boolean);
+
   const isIndeterminateEngenharia =
     engenhariaChallenges.challenges &&
-    engenhariaChallenges.challenges.some((challenge) => challenge === true) &&
+    reduceArr(engenhariaChallenges.challenges).some(Boolean) &&
     !allCheckedEngenharia;
 
   useEffect(() => {
@@ -85,6 +95,7 @@ const adicionarAtividade = () => {
             <Box>
               <Checkbox
                 color="black"
+                isChecked={allCheckedEngenharia}
                 isIndeterminate={isIndeterminateEngenharia}
                 onChange={(e) => {
                   const newArr = [...engenhariaChallenges.challenges];
