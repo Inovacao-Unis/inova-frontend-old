@@ -1,3 +1,5 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import api from '@services/api';
 import Layout from '@components/Layout';
@@ -18,31 +20,10 @@ import {
 } from '@chakra-ui/react';
 
 const adicionarAtividade = () => {
-  const [activities, setActivities] = useState([]);
-  const [challenges, setChallenges] = useState([]);
-  const [challengesChecked, setChallengesChecked] = useState([]);
   const [engenhariaChallenges, setEngenhariaChallenges] = useState({});
   const [saudeChallenges, setSaudeChallenges] = useState({});
   const [gestaoChallenges, setGestaoChallenges] = useState({});
   const [checked, setChecked] = useState(false);
-
-  const reduceArr = (arr) => {
-    const newArr = [];
-    arr.forEach((item) => {
-      newArr.push(item.checked);
-    });
-    console.log('newArr ', newArr);
-    return newArr;
-  };
-
-  const allCheckedEngenharia =
-    engenhariaChallenges.challenges &&
-    reduceArr(engenhariaChallenges.challenges).every(Boolean);
-
-  const isIndeterminateEngenharia =
-    engenhariaChallenges.challenges &&
-    reduceArr(engenhariaChallenges.challenges).some(Boolean) &&
-    !allCheckedEngenharia;
 
   useEffect(() => {
     const getData = async () => {
@@ -61,13 +42,63 @@ const adicionarAtividade = () => {
     getData();
   }, [setEngenhariaChallenges, setSaudeChallenges, setGestaoChallenges]);
 
-  const teste = () => {
-    console.log('engenharia ', engenhariaChallenges);
-    console.log('saude ', saudeChallenges);
-    console.log('gestao ', gestaoChallenges);
+  const reduceArr = (arr) => {
+    const newArr = [];
+    arr.forEach((item) => {
+      newArr.push(item.checked);
+    });
+
+    return newArr;
   };
 
-  const handleCategory = (e, category) => {};
+  const allCheckedEngenharia =
+    engenhariaChallenges.challenges &&
+    reduceArr(engenhariaChallenges.challenges).every(Boolean);
+
+  const isIndeterminateEngenharia =
+    engenhariaChallenges.challenges &&
+    reduceArr(engenhariaChallenges.challenges).some(Boolean) &&
+    !allCheckedEngenharia;
+
+  const allCheckedSaude =
+    saudeChallenges.challenges &&
+    reduceArr(saudeChallenges.challenges).every(Boolean);
+
+  const isIndeterminateSaude =
+    saudeChallenges.challenges &&
+    reduceArr(saudeChallenges.challenges).some(Boolean) &&
+    !allCheckedSaude;
+
+  const allCheckedGestao =
+    gestaoChallenges.challenges &&
+    reduceArr(gestaoChallenges.challenges).every(Boolean);
+
+  const isIndeterminateGestao =
+    gestaoChallenges.challenges &&
+    reduceArr(gestaoChallenges.challenges).some(Boolean) &&
+    !allCheckedGestao;
+
+  const teste = () => {
+    const challengesCheked = [];
+
+    engenhariaChallenges.challenges.forEach((challenge) => {
+      if (challenge.checked) {
+        challengesCheked.push(challenge);
+      }
+    });
+
+    saudeChallenges.challenges.forEach((challenge) => {
+      if (challenge.checked) {
+        challengesCheked.push(challenge);
+      }
+    });
+
+    gestaoChallenges.challenges.forEach((challenge) => {
+      if (challenge.checked) {
+        challengesCheked.push(challenge);
+      }
+    });
+  };
 
   return (
     <Layout activityBtn>
@@ -80,18 +111,17 @@ const adicionarAtividade = () => {
         >
           adicionar atividade
         </Heading>
-        <Box p="15px" bg="white" borderRadius="4px">
-          <FormControl>
-            <FormLabel>Título da atividade</FormLabel>
-            <Input placeholder="Digite o título" />
+        <Box p="70px" bg="white" borderRadius="4px">
+          <FormControl maxW="400px" pb="40px">
+            <FormLabel color="black" fontWeight="600" fontSize="1.4rem">
+              Título da atividade
+            </FormLabel>
+            <Input color="black" placeholder="Digite o título" />
           </FormControl>
-          <Button bg="highlight" onClick={teste}>
-            Teste aqui
-          </Button>
-          <Button bg="highlight" onClick={() => setChecked(true)}>
-            Marcar todos
-          </Button>
-          <Flex justify="space-between">
+          <Text color="black" fontWeight="600" pb="20px" fontSize="1.4rem">
+            Escolha os desafios:
+          </Text>
+          <Flex justify="space-between" mb="70px">
             <Box>
               <Checkbox
                 color="black"
@@ -114,6 +144,7 @@ const adicionarAtividade = () => {
                 {engenhariaChallenges.challenges &&
                   engenhariaChallenges.challenges.map((challenge) => (
                     <Checkbox
+                      key={challenge._id}
                       color="black"
                       isChecked={
                         engenhariaChallenges?.challenges[
@@ -137,6 +168,107 @@ const adicionarAtividade = () => {
                   ))}
               </Stack>
             </Box>
+            <Box>
+              <Checkbox
+                color="black"
+                isChecked={allCheckedSaude}
+                isIndeterminate={isIndeterminateSaude}
+                onChange={(e) => {
+                  const newArr = [...saudeChallenges.challenges];
+                  newArr.forEach((item) => (item.checked = e.target.checked));
+                  setSaudeChallenges((prevState) => ({
+                    ...prevState,
+                    challenges: newArr,
+                  }));
+                }}
+              >
+                <Text fontWeight="bold" fontSize="1.1rem">
+                  {saudeChallenges?.title}
+                </Text>
+              </Checkbox>
+              <Stack pl={6} mt={1} spacing={1}>
+                {saudeChallenges.challenges &&
+                  saudeChallenges.challenges.map((challenge) => (
+                    <Checkbox
+                      key={challenge._id}
+                      color="black"
+                      isChecked={
+                        saudeChallenges?.challenges[
+                          saudeChallenges.challenges.indexOf(challenge)
+                        ]?.checked
+                      }
+                      onChange={(e) => {
+                        const newArr = [...saudeChallenges.challenges];
+                        newArr[
+                          saudeChallenges.challenges.indexOf(challenge)
+                        ].checked = e.target.checked;
+
+                        setSaudeChallenges((prevState) => ({
+                          ...prevState,
+                          challenges: newArr,
+                        }));
+                      }}
+                    >
+                      {challenge.title}
+                    </Checkbox>
+                  ))}
+              </Stack>
+            </Box>
+            <Box>
+              <Checkbox
+                color="black"
+                isChecked={allCheckedGestao}
+                isIndeterminate={isIndeterminateGestao}
+                onChange={(e) => {
+                  const newArr = [...gestaoChallenges.challenges];
+                  newArr.forEach((item) => (item.checked = e.target.checked));
+                  setGestaoChallenges((prevState) => ({
+                    ...prevState,
+                    challenges: newArr,
+                  }));
+                }}
+              >
+                <Text fontWeight="bold" fontSize="1.1rem">
+                  {gestaoChallenges?.title}
+                </Text>
+              </Checkbox>
+              <Stack pl={6} mt={1} spacing={1}>
+                {gestaoChallenges.challenges &&
+                  gestaoChallenges.challenges.map((challenge) => (
+                    <Checkbox
+                      key={challenge._id}
+                      color="black"
+                      isChecked={
+                        gestaoChallenges?.challenges[
+                          gestaoChallenges.challenges.indexOf(challenge)
+                        ]?.checked
+                      }
+                      onChange={(e) => {
+                        const newArr = [...gestaoChallenges.challenges];
+                        newArr[
+                          gestaoChallenges.challenges.indexOf(challenge)
+                        ].checked = e.target.checked;
+
+                        setGestaoChallenges((prevState) => ({
+                          ...prevState,
+                          challenges: newArr,
+                        }));
+                      }}
+                    >
+                      {challenge.title}
+                    </Checkbox>
+                  ))}
+              </Stack>
+            </Box>
+          </Flex>
+          <Flex>
+            <Link href="minha-conta">
+              <Button bg="gray.300" mr="5px" color="black">
+                Voltar
+              </Button>
+            </Link>
+
+            <Button bg="highlight">Adicionar</Button>
           </Flex>
         </Box>
       </Container>
