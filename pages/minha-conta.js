@@ -31,7 +31,7 @@ const minhaConta = () => {
           {activities && activities.length > 0 ? (
             activities.map((activity) => (
               // eslint-disable-next-line no-underscore-dangle
-              <Link key={activity._id} href={`/atividade/${activity._id}`}>
+              <Link key={activity.team._id} href={`/atividade/${activity._id}`}>
                 <Flex
                   direction="column"
                   justify="center"
