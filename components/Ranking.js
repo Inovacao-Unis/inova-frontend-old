@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import { Flex, Text, Avatar, Box, Image } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
@@ -51,7 +52,7 @@ const Ranking = () => {
         {ranking &&
           ranking.map((team, index) => (
             <Flex
-              // eslint-disable-next-line no-underscore-dangle
+              key={team._id}
               bg={team._id === teamId ? 'gray.200' : '#fff'}
               w="100%"
               align="center"

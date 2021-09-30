@@ -28,7 +28,7 @@ const Journey = () => {
         <Flex py={4}>
           <Flex w="100%" flexDirection="column" align="center" flex="1">
             <Flex
-              onClick={() => Router.push(`/atividade/${activityId}/1`)}
+              onClick={() => Router.push(`/trilha/${activityId}/1`)}
               cursor="pointer"
               mr="auto"
               ml="180px"
@@ -40,7 +40,7 @@ const Journey = () => {
             <Flex
               onClick={
                 responses[1]
-                  ? () => Router.push(`/atividade/${activityId}/2`)
+                  ? () => Router.push(`/trilha/${activityId}/2`)
                   : '#'
               }
               cursor={responses[1] ? 'pointer' : 'inherit'}
@@ -58,7 +58,7 @@ const Journey = () => {
             <Flex
               onClick={
                 responses[2]
-                  ? () => Router.push(`/atividade/${activityId}/3`)
+                  ? () => Router.push(`/trilha/${activityId}/3`)
                   : '#'
               }
               cursor={responses[2] ? 'pointer' : 'inherit'}
@@ -76,7 +76,7 @@ const Journey = () => {
             <Flex
               onClick={
                 responses[3]
-                  ? () => Router.push(`/atividade/${activityId}/4`)
+                  ? () => Router.push(`/trilha/${activityId}/4`)
                   : '#'
               }
               cursor={responses[3] ? 'pointer' : 'inherit'}

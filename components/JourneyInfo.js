@@ -1,8 +1,17 @@
 import { useState, useEffect } from 'react';
 import api from '@services/api';
-import { Flex, Box, Progress, Text, Avatar, Button } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Progress,
+  Text,
+  Avatar,
+  Button,
+  useToast,
+} from '@chakra-ui/react';
 
 const JourneyInfo = ({ status, activityId }) => {
+  const toast = useToast();
   const [activity, setActivity] = useState(null);
   const [team, setTeam] = useState({});
   const [challenge, setChallenge] = useState({});
@@ -50,6 +59,18 @@ const JourneyInfo = ({ status, activityId }) => {
     }
   }, [challenge, setCategory]);
 
+  const copyCodeToClipboard = (url) => {
+    navigator.clipboard.writeText(url);
+
+    toast({
+      title: 'Link copiado',
+      position: 'bottom-left',
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Flex
       direction="column"
@@ -72,28 +93,38 @@ const JourneyInfo = ({ status, activityId }) => {
       >
         <Flex direction="column">
           <Text fontSize="xs" color="gray.600">
-            Atividade
+            Trilha
           </Text>
           <Text
             fontSize="1.4rem"
             lineHeight="1.6rem"
             fontWeight="bold"
             maxW="200px"
-            mb="20px"
+            mb="5px"
             color="highlight"
           >
             {activity?.title}
           </Text>
+          <Button
+            size="xs"
+            mb="20px"
+            bg="highlight"
+            _hover={{ bg: 'highlight' }}
+            color="white"
+            onClick={() =>
+              copyCodeToClipboard(
+                `http://localhost:3000/trilha/${activity?.code}`,
+              )
+            }
+          >
+            Copiar link da trilha
+          </Button>
           <Text fontSize="xs" color="gray.600">
             Time
           </Text>
           <Text fontSize="1rem" maxW="200px" mb="20px">
             {team?.name}
           </Text>
-          <Text fontSize="xs" color="gray.600">
-            Código da atividade
-          </Text>
-          <Text mb="20px">{activity?.code}</Text>
           <Text fontSize="xs" color="gray.600">
             Desafio
           </Text>

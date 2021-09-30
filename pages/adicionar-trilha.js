@@ -101,20 +101,20 @@ const adicionarAtividade = () => {
   };
 
   return (
-    <Layout activityBtn>
+    <Layout>
       <Container maxW="container.xl" zIndex="800" pb="100px">
         <Heading
           fontSize="2.5rem"
           fontWeight="700"
           textAlign="center"
-          m="100px auto"
+          m="80px auto"
         >
-          adicionar atividade
+          adicionar trilha
         </Heading>
         <Box p="70px" bg="white" borderRadius="4px">
           <FormControl maxW="400px" pb="40px">
             <FormLabel color="black" fontWeight="600" fontSize="1.4rem">
-              Título da atividade
+              Título da trilha
             </FormLabel>
             <Input color="black" placeholder="Digite o título" />
           </FormControl>

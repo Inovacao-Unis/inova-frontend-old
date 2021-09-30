@@ -154,7 +154,7 @@ export default function Header({ profile, activityBtn }) {
                 <MenuList zIndex="999">
                   <MenuItem color="highlight">
                     <Link href="/minha-conta">
-                      <a>Minhas atividades</a>
+                      <a>Minhas trilhas</a>
                     </Link>
                   </MenuItem>
                   <MenuItem color="highlight">
@@ -181,31 +181,31 @@ export default function Header({ profile, activityBtn }) {
             </Flex>
           ) : null}
           {activityBtn && (
-            <Flex>
-              <Menu>
-                <MenuButton
-                  zIndex="999"
-                  bg="white"
+            <Flex align="center">
+              <Box>
+                <Link href="/adicionar-trilha">
+                  <a>
+                    <Button
+                      bgColor="highlight"
+                      color="white"
+                      _hover={{ bg: 'highlight' }}
+                    >
+                      Criar trilha
+                    </Button>
+                  </a>
+                </Link>
+              </Box>
+              <Box ml="30px">
+                <Button
                   color="black"
-                  w="40px"
-                  h="40px"
-                  borderRadius="5px"
+                  onClick={async () => {
+                    await firebase.auth().signOut();
+                    window.location.href = '/';
+                  }}
                 >
-                  <AddIcon color="gray.900" />
-                </MenuButton>
-                <MenuList zIndex="999">
-                  <MenuItem color="gray.600">
-                    <Link href="/minha-conta">
-                      <a>Buscar atividade</a>
-                    </Link>
-                  </MenuItem>
-                  <MenuItem color="gray.600">
-                    <Link href="/adicionar-atividade">
-                      <a>Criar atividade</a>
-                    </Link>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+                  Sair
+                </Button>
+              </Box>
             </Flex>
           )}
         </Flex>
