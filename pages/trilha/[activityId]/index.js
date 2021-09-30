@@ -5,12 +5,25 @@ import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
 import JourneyInfo from '@components/JourneyInfo';
+import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 
 const Journey = () => {
   const Router = useRouter();
   const { activityId } = Router.query;
+  const { leader } = useAuth();
+  const [activity, setActivity] = useState(null);
   const [responses, setResponses] = useState({});
+
+  useEffect(() => {
+    const getData = async () => {
+      await api
+        .get(`activity/${activityId}`)
+        .then((res) => setActivity(res.data));
+    };
+
+    getData();
+  }, [activityId]);
 
   useEffect(() => {
     const getData = async () => {
@@ -93,7 +106,7 @@ const Journey = () => {
             </Flex>
           </Flex>
           <Box w="400px">
-            <JourneyInfo status={30} activityId={activityId} />
+            {activity && <JourneyInfo status={30} activity={activity} />}
             <Ranking />
           </Box>
         </Flex>

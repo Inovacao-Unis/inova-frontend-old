@@ -23,22 +23,11 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  FormControl,
-  FormLabel,
-  Input,
-  Checkbox,
-  Stack,
 } from '@chakra-ui/react';
 import api from '@services/api';
-import { BellIcon, AddIcon } from '@chakra-ui/icons';
+import { useAuth } from '@contexts/AuthContext';
+import { BellIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import firebase from '../lib/firebase';
@@ -46,18 +35,20 @@ import firebase from '../lib/firebase';
 export default function Header({ profile, activityBtn }) {
   const Router = useRouter();
   const { activityId } = Router.query;
+  const { leader } = useAuth();
   const [team, setTeam] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [challenges, setChallenges] = useState([]);
   const [challengesChecked, setChallengesChecked] = useState([]);
-  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       await api.get(`game-team/${activityId}`).then((res) => setTeam(res.data));
     };
 
-    getData();
+    if (activityId) {
+      getData();
+    }
   }, [activityId]);
 
   const getChallenges = async () => {
@@ -182,19 +173,21 @@ export default function Header({ profile, activityBtn }) {
           ) : null}
           {activityBtn && (
             <Flex align="center">
-              <Box>
-                <Link href="/adicionar-trilha">
-                  <a>
-                    <Button
-                      bgColor="highlight"
-                      color="white"
-                      _hover={{ bg: 'highlight' }}
-                    >
-                      Criar trilha
-                    </Button>
-                  </a>
-                </Link>
-              </Box>
+              {leader && (
+                <Box>
+                  <Link href="/adicionar-trilha">
+                    <a>
+                      <Button
+                        bgColor="highlight"
+                        color="white"
+                        _hover={{ bg: 'highlight' }}
+                      >
+                        Criar trilha
+                      </Button>
+                    </a>
+                  </Link>
+                </Box>
+              )}
               <Box ml="30px">
                 <Button
                   color="black"

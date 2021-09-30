@@ -8,7 +8,7 @@ import api from '../services/api';
 const withAuth = (Component) => (props) => {
   const Router = useRouter();
   const [verified, setVerified] = useState(false);
-  const { setLoading } = useAuth();
+  const { setLoading, setLeader } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -24,7 +24,8 @@ const withAuth = (Component) => (props) => {
     const check = async () => {
       await api
         .get('check')
-        .then(() => {
+        .then((res) => {
+          setLeader(res.data.leader);
           setLoading(false);
           setVerified(true);
         })

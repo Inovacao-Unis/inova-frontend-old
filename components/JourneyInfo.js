@@ -10,30 +10,21 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-const JourneyInfo = ({ status, activityId }) => {
+const JourneyInfo = ({ status, activity }) => {
   const toast = useToast();
-  const [activity, setActivity] = useState(null);
-  const [team, setTeam] = useState({});
+  const [team, setTeam] = useState(null);
   const [challenge, setChallenge] = useState({});
   const [category, setCategory] = useState({});
 
   useEffect(() => {
     const getData = async () => {
-      await api.get(`game-team/${activityId}`).then((res) => setTeam(res.data));
-    };
-
-    getData();
-  }, [activityId, setTeam]);
-
-  useEffect(() => {
-    const getData = async () => {
       await api
-        .get(`activity/${activityId}`)
-        .then((res) => setActivity(res.data));
+        .get(`game-team/${activity._id}`)
+        .then((res) => setTeam(res.data));
     };
 
     getData();
-  }, [activityId, setActivity]);
+  }, [activity, setTeam]);
 
   useEffect(() => {
     const getData = async () => {
@@ -119,18 +110,22 @@ const JourneyInfo = ({ status, activityId }) => {
           >
             Copiar link da trilha
           </Button>
-          <Text fontSize="xs" color="gray.600">
-            Time
-          </Text>
-          <Text fontSize="1rem" maxW="200px" mb="20px">
-            {team?.name}
-          </Text>
-          <Text fontSize="xs" color="gray.600">
-            Desafio
-          </Text>
-          <Text fontSize="1rem" lineHeight="1rem" maxW="200px" mb="20px">
-            {challenge?.title}
-          </Text>
+          {team && (
+            <>
+              <Text fontSize="xs" color="gray.600">
+                Time
+              </Text>
+              <Text fontSize="1rem" maxW="200px" mb="20px">
+                {team?.name}
+              </Text>
+              <Text fontSize="xs" color="gray.600">
+                Desafio
+              </Text>
+              <Text fontSize="1rem" lineHeight="1rem" maxW="200px" mb="20px">
+                {challenge?.title}
+              </Text>
+            </>
+          )}
         </Flex>
         <Avatar
           size="xl"
@@ -140,15 +135,17 @@ const JourneyInfo = ({ status, activityId }) => {
           alt="Imagem da jornada"
         />
       </Flex>
-      <Box w="100%" maxW="100%" py="0" px="2rem">
-        <Flex justify="space-between" align="center" mb="0.5rem">
-          <Text>Seu progresso:</Text>
-          <Text>{team.progress}/100%</Text>
-        </Flex>
-        <Box>
-          <Progress hasStripe colorScheme="pink" value={team.progress} />
+      {team && (
+        <Box w="100%" maxW="100%" py="0" px="2rem">
+          <Flex justify="space-between" align="center" mb="0.5rem">
+            <Text>Seu progresso:</Text>
+            <Text>{team.progress}/100%</Text>
+          </Flex>
+          <Box>
+            <Progress hasStripe colorScheme="pink" value={team.progress} />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Flex>
   );
 };
