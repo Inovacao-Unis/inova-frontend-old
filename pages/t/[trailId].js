@@ -32,6 +32,8 @@ const TrilhaPage = () => {
   const [saude, setSaude] = useState(false);
   const [gestao, setGestao] = useState(false);
   const [engenharia, setEngenharia] = useState(false);
+  const [userInput, setUserInput] = useState('');
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -68,6 +70,13 @@ const TrilhaPage = () => {
       setEngenharia(true);
     }
   }, [activity, setSaude, setGestao, setEngenharia]);
+
+  const addMember = async () => {
+    await api
+      .post('/game-user', { email: userInput })
+      .then((res) => console.log(res))
+      .catch((err) => console.log('Usuário não cadastrado'));
+  };
 
   return (
     <Layout profile>
@@ -168,13 +177,19 @@ const TrilhaPage = () => {
               Só é possível adicionar quem já se cadastrou na plataforma.
             </Text>
             <Flex>
-              <Input color="black" placeholder="E-mail do participante" />
-              <Button bg="highlight">
-                <AddIcon />
+              <Input
+                color="black"
+                type="email"
+                placeholder="E-mail do participante"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+              />
+              <Button bg="highlight" _hover={{ bg: 'highlight' }}>
+                <AddIcon onClick={addMember} />
               </Button>
             </Flex>
           </FormControl>
-          <Flex direction="column" maxW="500px">
+          <Flex direction="column" maxW="500px" mb="50px">
             <Text color="black">Membros do time:</Text>
             <Box
               border="1px"
@@ -233,6 +248,11 @@ const TrilhaPage = () => {
               </Flex>
             </Box>
           </Flex>
+          <Box>
+            <Button bg="highlight" _hover={{ bg: 'highlight' }}>
+              Participar
+            </Button>
+          </Box>
         </Flex>
       </Container>
     </Layout>
