@@ -52,10 +52,8 @@ const Journey = () => {
               <Text>Etapa 1</Text>
             </Flex>
             <Flex
-              onClick={
-                responses[1]
-                  ? () => Router.push(`/trilha/${activityId}/2`)
-                  : '#'
+              onClick={() =>
+                responses[1] ? Router.push(`/trilha/${activityId}/2`) : null
               }
               cursor={responses[1] ? 'pointer' : 'inherit'}
               mr="180px"
@@ -75,10 +73,8 @@ const Journey = () => {
               <Text color={responses[1] ? 'white' : 'gray'}>Etapa 2</Text>
             </Flex>
             <Flex
-              onClick={
-                responses[2]
-                  ? () => Router.push(`/trilha/${activityId}/3`)
-                  : '#'
+              onClick={() =>
+                responses[2] ? Router.push(`/trilha/${activityId}/3`) : null
               }
               cursor={responses[2] ? 'pointer' : 'inherit'}
               mr="auto"
@@ -98,10 +94,8 @@ const Journey = () => {
               <Text color={responses[2] ? 'white' : 'gray'}>Etapa 3</Text>
             </Flex>
             <Flex
-              onClick={
-                responses[3]
-                  ? () => Router.push(`/trilha/${activityId}/4`)
-                  : '#'
+              onClick={() =>
+                responses[3] ? Router.push(`/trilha/${activityId}/4`) : null
               }
               cursor={responses[3] ? 'pointer' : 'inherit'}
               mr="220px"

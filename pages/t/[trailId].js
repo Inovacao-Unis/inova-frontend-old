@@ -27,11 +27,10 @@ const TrilhaPage = () => {
   const [engenharia, setEngenharia] = useState(false);
 
   useEffect(() => {
-    console.log('trail ', trailId);
     const getData = async () => {
       await api
-        .get(`activity/${trailId}`)
-        .then((res) => console.log('data ', res.data));
+        .get(`game-activity/${trailId}`)
+        .then((res) => setActivity(res.data));
     };
 
     getData();
@@ -76,7 +75,11 @@ const TrilhaPage = () => {
             <Stack direction="row">
               {activity?.challenges.map((item) => {
                 if (item.categoryId === '614389a34db7167c3368f753') {
-                  return <Radio value={item._id}>{item.title}</Radio>;
+                  return (
+                    <Radio key={item._id} value={item._id}>
+                      {item.title}
+                    </Radio>
+                  );
                 }
               })}
             </Stack>
@@ -84,7 +87,11 @@ const TrilhaPage = () => {
             <Stack direction="row">
               {activity?.challenges.map((item) => {
                 if (item.categoryId === '61438a07f87adb7c88785a41') {
-                  return <Radio value={item._id}>{item.title}</Radio>;
+                  return (
+                    <Radio key={item._id} value={item._id}>
+                      {item.title}
+                    </Radio>
+                  );
                 }
               })}
             </Stack>
@@ -92,7 +99,11 @@ const TrilhaPage = () => {
             <Stack direction="row">
               {activity?.challenges.map((item) => {
                 if (item.categoryId === '61438a13f87adb7c88785a44') {
-                  return <Radio value={item._id}>{item.title}</Radio>;
+                  return (
+                    <Radio key={item._id} value={item._id}>
+                      {item.title}
+                    </Radio>
+                  );
                 }
               })}
             </Stack>
