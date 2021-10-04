@@ -27,8 +27,11 @@ const TrilhaPage = () => {
   const [engenharia, setEngenharia] = useState(false);
 
   useEffect(() => {
+    console.log('trail ', trailId);
     const getData = async () => {
-      await api.get(`activity/${trailId}`).then((res) => setActivity(res.data));
+      await api
+        .get(`activity/${trailId}`)
+        .then((res) => console.log('data ', res.data));
     };
 
     getData();

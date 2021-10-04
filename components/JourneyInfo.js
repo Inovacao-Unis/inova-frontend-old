@@ -103,9 +103,7 @@ const JourneyInfo = ({ status, activity }) => {
             _hover={{ bg: 'highlight' }}
             color="white"
             onClick={() =>
-              copyCodeToClipboard(
-                `http://localhost:3000/trilha/${activity?.code}`,
-              )
+              copyCodeToClipboard(`http://localhost:3000/t/${activity?.code}`)
             }
           >
             Copiar link da trilha

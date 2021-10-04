@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Container, Text, Circle, Flex } from '@chakra-ui/react';
+import { Box, Container, Text, Circle, Flex, Image } from '@chakra-ui/react';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
@@ -45,10 +45,11 @@ const Journey = () => {
               cursor="pointer"
               mr="auto"
               ml="180px"
+              direction="column"
+              align="center"
             >
-              <Circle size="180px" bg="highlight" color="white">
-                <Text>Etapa 1</Text>
-              </Circle>
+              <Image src="/images/planets/1.png" boxSize="180px" />
+              <Text>Etapa 1</Text>
             </Flex>
             <Flex
               onClick={
@@ -59,14 +60,19 @@ const Journey = () => {
               cursor={responses[1] ? 'pointer' : 'inherit'}
               mr="180px"
               ml="auto"
+              direction="column"
+              align="center"
             >
-              <Circle
-                size="210px"
-                bg={responses[1] ? 'highlight' : 'gray'}
-                color="white"
-              >
-                <Text>Etapa 2</Text>
-              </Circle>
+              <Image
+                src="/images/planets/2.png"
+                boxSize="250px"
+                style={
+                  responses[1]
+                    ? { filter: 'none' }
+                    : { filter: 'grayscale(100%)' }
+                }
+              />
+              <Text color={responses[1] ? 'white' : 'gray'}>Etapa 2</Text>
             </Flex>
             <Flex
               onClick={
@@ -77,14 +83,19 @@ const Journey = () => {
               cursor={responses[2] ? 'pointer' : 'inherit'}
               mr="auto"
               ml="180px"
+              direction="column"
+              align="center"
             >
-              <Circle
-                size="190px"
-                bg={responses[2] ? 'highlight' : 'gray'}
-                color="white"
-              >
-                <Text>Etapa 3</Text>
-              </Circle>
+              <Image
+                src="/images/planets/3.png"
+                boxSize="200px"
+                style={
+                  responses[1]
+                    ? { filter: 'none' }
+                    : { filter: 'grayscale(100%)' }
+                }
+              />
+              <Text color={responses[2] ? 'white' : 'gray'}>Etapa 3</Text>
             </Flex>
             <Flex
               onClick={
@@ -93,16 +104,21 @@ const Journey = () => {
                   : '#'
               }
               cursor={responses[3] ? 'pointer' : 'inherit'}
-              mr="180px"
+              mr="220px"
               ml="auto"
+              direction="column"
+              align="center"
             >
-              <Circle
-                size="200px"
-                bg={responses[3] ? 'highlight' : 'gray'}
-                color="white"
-              >
-                <Text>Etapa 4</Text>
-              </Circle>
+              <Image
+                src="/images/planets/4.png"
+                boxSize="220px"
+                style={
+                  responses[4]
+                    ? { filter: 'none' }
+                    : { filter: 'grayscale(100%)' }
+                }
+              />
+              <Text color={responses[3] ? 'white' : 'gray'}>Etapa 4</Text>
             </Flex>
           </Flex>
           <Box w="400px">
