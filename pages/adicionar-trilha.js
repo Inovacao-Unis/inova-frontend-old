@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '@services/api';
 import Layout from '@components/Layout';
+import { useAuth } from '@contexts/AuthContext';
 import withAuth from '@components/withAuth';
 import Link from 'next/link';
 import {
@@ -17,13 +18,18 @@ import {
   Input,
   Checkbox,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 const adicionarAtividade = () => {
+  const Router = useRouter();
+  const [title, setTitle] = useState('');
   const [engenhariaChallenges, setEngenhariaChallenges] = useState({});
   const [saudeChallenges, setSaudeChallenges] = useState({});
   const [gestaoChallenges, setGestaoChallenges] = useState({});
-  const [checked, setChecked] = useState(false);
+  const { leader } = useAuth();
+  const toast = useToast();
 
   useEffect(() => {
     const getData = async () => {
@@ -78,26 +84,51 @@ const adicionarAtividade = () => {
     reduceArr(gestaoChallenges.challenges).some(Boolean) &&
     !allCheckedGestao;
 
-  const teste = () => {
+  const addTrail = async () => {
     const challengesCheked = [];
 
     engenhariaChallenges.challenges.forEach((challenge) => {
       if (challenge.checked) {
-        challengesCheked.push(challenge);
+        challengesCheked.push(challenge._id);
       }
     });
 
     saudeChallenges.challenges.forEach((challenge) => {
       if (challenge.checked) {
-        challengesCheked.push(challenge);
+        challengesCheked.push(challenge._id);
       }
     });
 
     gestaoChallenges.challenges.forEach((challenge) => {
       if (challenge.checked) {
-        challengesCheked.push(challenge);
+        challengesCheked.push(challenge._id);
       }
     });
+
+    await api
+      .post('trails', {
+        title,
+        leader,
+        challenges: challengesCheked,
+      })
+      .then(() => {
+        toast({
+          title: 'Trilha criada!',
+          description: 'Redirecionando para a página de trilhas...',
+          status: 'success',
+          duration: 3000,
+        });
+        Router.push('minha-conta');
+      })
+      .catch((err) => {
+        toast({
+          title: 'Ocorreu um erro!',
+          description: 'Não foi possível criar a trilha',
+          status: 'error',
+          duration: 9000,
+        });
+        console.warn('Erro: ', err);
+      });
   };
 
   return (
@@ -116,7 +147,12 @@ const adicionarAtividade = () => {
             <FormLabel color="black" fontWeight="600" fontSize="1.4rem">
               Título da trilha
             </FormLabel>
-            <Input color="black" placeholder="Digite o título" />
+            <Input
+              color="black"
+              placeholder="Digite o título"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </FormControl>
           <Text color="black" fontWeight="600" pb="20px" fontSize="1.4rem">
             Escolha os desafios:
@@ -268,7 +304,13 @@ const adicionarAtividade = () => {
               </Button>
             </Link>
 
-            <Button bg="highlight">Adicionar</Button>
+            <Button
+              bg="highlight"
+              _hover={{ bg: 'highlight' }}
+              onClick={addTrail}
+            >
+              Adicionar
+            </Button>
           </Flex>
         </Box>
       </Container>

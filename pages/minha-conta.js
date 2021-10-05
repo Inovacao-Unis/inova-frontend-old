@@ -13,7 +13,7 @@ const minhaConta = () => {
 
   useEffect(() => {
     const getData = async () => {
-      await api.get('game-activities').then((res) => setActivities(res.data));
+      await api.get('game-trails').then((res) => setActivities(res.data));
     };
 
     getData();
@@ -21,7 +21,7 @@ const minhaConta = () => {
 
   return (
     <Layout activityBtn>
-      <Container maxW="container.xl" zIndex="800" pb="100px">
+      <Container maxW="container.xl" zIndex="800" pb="100px" minH="86vh">
         <Heading
           fontSize="2.5rem"
           fontWeight="700"
@@ -87,7 +87,9 @@ const minhaConta = () => {
               </Flex>
             ))
           ) : (
-            <Text>Nenhuma jornada</Text>
+            <Flex w="100%" align="center" justify="center">
+              <Text textAlign="center">Você ainda não tem nenhuma trilha</Text>
+            </Flex>
           )}
         </Flex>
       </Container>
