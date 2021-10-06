@@ -6,29 +6,29 @@ import api from '@services/api';
 
 const Ranking = () => {
   const Router = useRouter();
-  const { activityId } = Router.query;
+  const { trailId } = Router.query;
   const [ranking, setRanking] = useState([]);
   const [teamId, setTeamId] = useState('');
 
   useEffect(() => {
     const getData = async () => {
       await api
-        .get(`game-ranking/${activityId}`)
+        .get(`game-ranking/${trailId}`)
         .then((res) => setRanking(res.data));
     };
 
     getData();
-  }, [activityId]);
+  }, [trailId]);
 
   useEffect(() => {
     const getData = async () => {
       await api
-        .get(`game-team/${activityId}`)
+        .get(`game-team/${trailId}`)
         .then((res) => setTeamId(res.data._id));
     };
 
     getData();
-  }, [activityId, setTeamId]);
+  }, [trailId, setTeamId]);
 
   return (
     <Flex

@@ -26,7 +26,7 @@ import api from '@services/api';
 const TrilhaPage = () => {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const [activity, setActivity] = useState(null);
+  const [trail, setTrail] = useState(null);
   const [leader, setLeader] = useState({});
   const [challenge, setChallenge] = useState(null);
   const [saude, setSaude] = useState(false);
@@ -37,9 +37,7 @@ const TrilhaPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      await api
-        .get(`game-activity/${trailId}`)
-        .then((res) => setActivity(res.data));
+      await api.get(`game-trail/${trailId}`).then((res) => setTrail(res.data));
     };
 
     getData();
@@ -47,29 +45,23 @@ const TrilhaPage = () => {
 
   useEffect(() => {
     if (
-      activity?.challenges.some(
-        (e) => e.categoryId === '614389a34db7167c3368f753',
-      )
+      trail?.challenges.some((e) => e.categoryId === '614389a34db7167c3368f753')
     ) {
       setSaude(true);
     }
 
     if (
-      activity?.challenges.some(
-        (e) => e.categoryId === '61438a07f87adb7c88785a41',
-      )
+      trail?.challenges.some((e) => e.categoryId === '61438a07f87adb7c88785a41')
     ) {
       setGestao(true);
     }
 
     if (
-      activity?.challenges.some(
-        (e) => e.categoryId === '61438a13f87adb7c88785a44',
-      )
+      trail?.challenges.some((e) => e.categoryId === '61438a13f87adb7c88785a44')
     ) {
       setEngenharia(true);
     }
-  }, [activity, setSaude, setGestao, setEngenharia]);
+  }, [trail, setSaude, setGestao, setEngenharia]);
 
   const addMember = async () => {
     await api
@@ -94,10 +86,10 @@ const TrilhaPage = () => {
         <Flex bg="white" borderRadius="4px" p="30px" direction="column">
           <Flex display="column" mb="10px">
             <Text fontSize="1.6rem" fontWeight="bold" color="highlight">
-              {activity?.title}
+              {trail?.title}
             </Text>
             <Text fontSize="1rem" mb="10px" color="black">
-              Gerenciado por {activity?.leader}
+              Gerenciado por {trail?.leader}
             </Text>
           </Flex>
           <Divider mb="30px" />
@@ -116,7 +108,7 @@ const TrilhaPage = () => {
               </Text>
             )}
             <Stack direction="row">
-              {activity?.challenges.map((item) => {
+              {trail?.challenges.map((item) => {
                 if (item.categoryId === '614389a34db7167c3368f753') {
                   return (
                     <Radio key={item._id} value={item._id}>
@@ -132,7 +124,7 @@ const TrilhaPage = () => {
               </Text>
             )}
             <Stack direction="row">
-              {activity?.challenges.map((item) => {
+              {trail?.challenges.map((item) => {
                 if (item.categoryId === '61438a07f87adb7c88785a41') {
                   return (
                     <Radio key={item._id} value={item._id}>
@@ -148,7 +140,7 @@ const TrilhaPage = () => {
               </Text>
             )}
             <Stack direction="row">
-              {activity?.challenges.map((item) => {
+              {trail?.challenges.map((item) => {
                 if (item.categoryId === '61438a13f87adb7c88785a44') {
                   return (
                     <Radio key={item._id} value={item._id}>

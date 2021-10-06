@@ -34,7 +34,7 @@ const minhaConta = () => {
           {activities && activities.length > 0 ? (
             activities.map((activity) => (
               <Flex
-                key={activity.team._id}
+                key={activity._id}
                 direction="column"
                 justify="center"
                 align="center"
@@ -58,7 +58,7 @@ const minhaConta = () => {
                   </Text>
                   {activity &&
                   user &&
-                  activity.team.users.includes(user.uid) ? (
+                  activity?.team?.users.includes(user.uid) ? (
                     <Link href={`/trilha/${activity._id}`}>
                       <Button
                         bgColor="highlight"
@@ -71,7 +71,7 @@ const minhaConta = () => {
                     </Link>
                   ) : null}
                   {activity && leader && activity.leaderId === leader ? (
-                    <Link href="#">
+                    <Link href={`/painel/${activity._id}`}>
                       <Button
                         border="2px"
                         borderColor="highlight"
