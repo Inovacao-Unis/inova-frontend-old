@@ -17,6 +17,8 @@ import {
   Input,
   Box,
   Button,
+  Spinner,
+  useToast,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import Layout from '@components/Layout';
@@ -26,6 +28,7 @@ import api from '@services/api';
 const TrilhaPage = () => {
   const Router = useRouter();
   const { trailId } = Router.query;
+  const toast = useToast();
   const [trail, setTrail] = useState(null);
   const [leader, setLeader] = useState({});
   const [challenge, setChallenge] = useState(null);
@@ -33,7 +36,8 @@ const TrilhaPage = () => {
   const [gestao, setGestao] = useState(false);
   const [engenharia, setEngenharia] = useState(false);
   const [userInput, setUserInput] = useState('');
-  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState(['fulano']);
 
   useEffect(() => {
     const getData = async () => {
@@ -64,10 +68,34 @@ const TrilhaPage = () => {
   }, [trail, setSaude, setGestao, setEngenharia]);
 
   const addMember = async () => {
+    setLoading(true);
+    if (users.includes(userInput)) {
+      setLoading(false);
+      return toast({
+        title: `Usuário já adicionado!`,
+        status: 'warning',
+        isClosable: true,
+      });
+    }
     await api
-      .post('/game-user', { email: userInput })
-      .then((res) => console.log(res))
-      .catch((err) => console.log('Usuário não cadastrado'));
+      .get(`/game-user/${userInput}`)
+      .then((res) => {
+        setUsers((prev) => [...prev, res.data.email]);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast({
+          title: `Usuário não encontrado`,
+          status: 'error',
+          isClosable: true,
+        });
+        setLoading(false);
+      });
+  };
+
+  const removeMember = (userRemove) => {
+    setUsers(users.filter((item) => item !== userRemove));
   };
 
   return (
@@ -177,7 +205,7 @@ const TrilhaPage = () => {
                 onChange={(e) => setUserInput(e.target.value)}
               />
               <Button bg="highlight" _hover={{ bg: 'highlight' }}>
-                <AddIcon onClick={addMember} />
+                {loading ? <Spinner /> : <AddIcon onClick={addMember} />}
               </Button>
             </Flex>
           </FormControl>
@@ -201,42 +229,28 @@ const TrilhaPage = () => {
                 >
                   <Text>Você</Text>
                 </Flex>
-                <Flex
-                  align="center"
-                  bg="gray.100"
-                  borderRadius="4px"
-                  py="5px"
-                  px="10px"
-                  mr="10px"
-                  mb="10px"
-                >
-                  <Text>Fulano da Silva</Text>
-                  <DeleteIcon
-                    cursor="pointer"
-                    ml="8px"
-                    w={3}
-                    h={3}
-                    color="red.500"
-                  />
-                </Flex>
-                <Flex
-                  align="center"
-                  bg="gray.100"
-                  borderRadius="4px"
-                  py="5px"
-                  px="10px"
-                  mr="10px"
-                  mb="10px"
-                >
-                  <Text>Fulano da Silva</Text>
-                  <DeleteIcon
-                    cursor="pointer"
-                    ml="8px"
-                    w={3}
-                    h={3}
-                    color="red.500"
-                  />
-                </Flex>
+                {users.map((user) => (
+                  <Flex
+                    key={user}
+                    align="center"
+                    bg="gray.100"
+                    borderRadius="4px"
+                    py="5px"
+                    px="10px"
+                    mr="10px"
+                    mb="10px"
+                  >
+                    <Text>{user}</Text>
+                    <DeleteIcon
+                      cursor="pointer"
+                      ml="8px"
+                      w={3}
+                      h={3}
+                      color="red.500"
+                      onClick={() => removeMember(user)}
+                    />
+                  </Flex>
+                ))}
               </Flex>
             </Box>
           </Flex>
