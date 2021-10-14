@@ -11,7 +11,8 @@ import getSlugs from '@utils/getSlugs';
 
 export default function BlogPost() {
   const Router = useRouter();
-  const { activityId, stage } = Router.query;
+  const { trailId, stage } = Router.query;
+
   return (
     <>
       <Layout profile>
@@ -26,7 +27,7 @@ export default function BlogPost() {
           <Container mt="3rem">
             <Box>
               ←{' '}
-              <Link href={`/atividade/${activityId}`}>
+              <Link href={`/atividade/${trailId}`}>
                 <a>Voltar</a>
               </Link>
             </Box>
@@ -35,7 +36,7 @@ export default function BlogPost() {
               <div className="archive">
                 <ReactMarkdown>{problema}</ReactMarkdown>
               </div>
-              <Short />
+              <Short stage={stage} trailId={trailId} />
             </Box>
           </Container>
         </Box>

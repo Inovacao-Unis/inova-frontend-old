@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '@services/api';
+import Link from 'next/link';
 import {
   Flex,
   Box,
@@ -10,7 +11,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-const JourneyInfo = ({ status, activity }) => {
+const JourneyInfo = ({ status, trail, painel }) => {
   const toast = useToast();
   const [team, setTeam] = useState(null);
   const [challenge, setChallenge] = useState({});
@@ -18,13 +19,11 @@ const JourneyInfo = ({ status, activity }) => {
 
   useEffect(() => {
     const getData = async () => {
-      await api
-        .get(`game-team/${activity._id}`)
-        .then((res) => setTeam(res.data));
+      await api.get(`game-team/${trail._id}`).then((res) => setTeam(res.data));
     };
 
     getData();
-  }, [activity, setTeam]);
+  }, [trail, setTeam]);
 
   useEffect(() => {
     const getData = async () => {
@@ -83,9 +82,6 @@ const JourneyInfo = ({ status, activity }) => {
         mb="3rem"
       >
         <Flex direction="column">
-          <Text fontSize="xs" color="gray.600">
-            Trilha
-          </Text>
           <Text
             fontSize="1.4rem"
             lineHeight="1.6rem"
@@ -94,7 +90,7 @@ const JourneyInfo = ({ status, activity }) => {
             mb="5px"
             color="highlight"
           >
-            {activity?.title}
+            {trail?.title}
           </Text>
           <Button
             size="xs"
@@ -103,41 +99,69 @@ const JourneyInfo = ({ status, activity }) => {
             _hover={{ bg: 'highlight' }}
             color="white"
             onClick={() =>
-              copyCodeToClipboard(`http://localhost:3000/t/${activity?.code}`)
+              copyCodeToClipboard(`http://localhost:3000/t/${trail?.code}`)
             }
           >
             Copiar link da trilha
           </Button>
-          {team && (
+          {!painel && team && (
             <>
-              <Text fontSize="xs" color="gray.600">
+              <Text fontSize="xs" color="highlight">
                 Time
               </Text>
-              <Text fontSize="1rem" maxW="200px" mb="20px">
+              <Text
+                fontSize="1.1rem"
+                fontWeight="bold"
+                maxW="200px"
+                mb="20px"
+                color="highlight"
+              >
                 {team?.name}
               </Text>
-              <Text fontSize="xs" color="gray.600">
+              <Text fontSize="xs" color="highlight">
                 Desafio
               </Text>
-              <Text fontSize="1rem" lineHeight="1rem" maxW="200px" mb="20px">
+              <Text
+                fontSize="1.1rem"
+                fontWeight="bold"
+                lineHeight="1rem"
+                maxW="300px"
+                mb="5px"
+                color="highlight"
+              >
                 {challenge?.title}
               </Text>
+              <Link href="/desafios">
+                <Button
+                  size="xs"
+                  bgColor="white"
+                  border="2px"
+                  borderColor="highlight"
+                  color="highlight"
+                  _hover={{ bg: 'white' }}
+                  mb="30px"
+                >
+                  Ver o conteúdo dos desafios
+                </Button>
+              </Link>
             </>
           )}
         </Flex>
-        <Avatar
-          size="xl"
-          src={
-            category?.image ? category.image : '/images/journey-placeholder.jpg'
-          }
-          alt="Imagem da jornada"
-        />
+        {!painel && (
+          <Avatar
+            size="xl"
+            src={category?.image ? category.image : '/images/saude.png'}
+            alt="Imagem da jornada"
+          />
+        )}
       </Flex>
-      {team && (
+      {!painel && team && (
         <Box w="100%" maxW="100%" py="0" px="2rem">
           <Flex justify="space-between" align="center" mb="0.5rem">
-            <Text>Seu progresso:</Text>
-            <Text>{team.progress}/100%</Text>
+            <Text color="highlight" fontWeight="bold">
+              Seu progresso:
+            </Text>
+            <Text color="highlight">{team.progress}/100%</Text>
           </Flex>
           <Box>
             <Progress hasStripe colorScheme="pink" value={team.progress} />

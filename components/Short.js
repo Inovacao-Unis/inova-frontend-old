@@ -12,8 +12,8 @@ import {
 
 import api from '../services/api';
 
-function Short({ formId }) {
-  const [title, setTitle] = useState('');
+function Short({ stage, trailId }) {
+  const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -22,9 +22,9 @@ function Short({ formId }) {
   useEffect(() => {
     const getResponse = async () => {
       await api
-        .get(`team-response/${formId}`)
+        .get(`game-response?trailId=${trailId}&stage=${stage}`)
         .then((res) => {
-          setTitle(res.data.items[0].response);
+          setResponse(res.data.response);
           setIsDisabled(true);
           setSuccess(true);
         })
@@ -37,8 +37,11 @@ function Short({ formId }) {
         });
     };
 
-    return getResponse();
-  }, [formId]);
+    if (trailId) {
+      return getResponse();
+    }
+    return null;
+  }, [trailId, stage]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -47,9 +50,10 @@ function Short({ formId }) {
 
     try {
       await api
-        .post('form-items', {
-          title,
-          form_id: formId,
+        .post('responses', {
+          response,
+          stage,
+          trailId,
         })
         .then((res) => {
           if (res.status === 200) {
@@ -61,7 +65,7 @@ function Short({ formId }) {
     } catch (err) {
       setError('Error ', err);
       setIsLoading(false);
-      setTitle('');
+      setResponse('');
     }
   };
 
@@ -77,8 +81,8 @@ function Short({ formId }) {
               borderColor: '#bec3c9',
             }}
             isDisabled={isDisabled}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={response}
+            onChange={(e) => setResponse(e.target.value)}
           />
         </FormControl>
         {success ? (

@@ -93,11 +93,11 @@ export default function Header({ profile, activityBtn }) {
                 <Box maxW="25px" mr="0.5rem">
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
-                <Text fontSize="1.2rem" color="#fec739">
-                  {team.points}
+                <Text fontSize="1.2rem" color="white">
+                  {team.points || '0'}
                 </Text>
               </Flex>
-              <Popover zIndex="999">
+              {/* <Popover zIndex="999">
                 <PopoverTrigger>
                   <BellIcon mr="1.5rem" w={8} h={8} cursor="pointer" />
                 </PopoverTrigger>
@@ -137,10 +137,15 @@ export default function Header({ profile, activityBtn }) {
                     </List>
                   </PopoverBody>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
               <Menu>
                 <MenuButton zIndex="999">
-                  <Avatar name="Nome perfil" src="/images/zebra.jpg" />
+                  <Avatar
+                    name="Nome perfil"
+                    src="/images/avatar.png"
+                    bg="transparent"
+                    size="md"
+                  />
                 </MenuButton>
                 <MenuList zIndex="999">
                   <MenuItem color="highlight">

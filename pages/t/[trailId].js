@@ -23,21 +23,23 @@ import {
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
+import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 
 const TrilhaPage = () => {
   const Router = useRouter();
   const { trailId } = Router.query;
+  const { user } = useAuth();
   const toast = useToast();
   const [trail, setTrail] = useState(null);
-  const [leader, setLeader] = useState({});
+  const [name, setName] = useState('');
   const [challenge, setChallenge] = useState(null);
   const [saude, setSaude] = useState(false);
   const [gestao, setGestao] = useState(false);
   const [engenharia, setEngenharia] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState(['fulano']);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -80,7 +82,10 @@ const TrilhaPage = () => {
     await api
       .get(`/game-user/${userInput}`)
       .then((res) => {
-        setUsers((prev) => [...prev, res.data.email]);
+        setUsers((prev) => [
+          ...prev,
+          { uid: res.data.uid, email: res.data.email },
+        ]);
         setLoading(false);
       })
       .catch((err) => {
@@ -96,6 +101,56 @@ const TrilhaPage = () => {
 
   const removeMember = (userRemove) => {
     setUsers(users.filter((item) => item !== userRemove));
+  };
+
+  const handleTeam = async () => {
+    if (!challenge) {
+      return toast({
+        title: `Escolha um desafio`,
+        status: 'error',
+        isClosable: true,
+      });
+    }
+
+    if (name === '') {
+      return toast({
+        title: `Digite um nome para o time`,
+        status: 'error',
+        isClosable: true,
+      });
+    }
+
+    const usersArr = [];
+    users.forEach((item) => usersArr.push(item.uid));
+
+    const usersFull = [user.uid, ...usersArr];
+
+    await api
+      .post('teams', {
+        name,
+        challengeId: challenge,
+        leaderId: trail.leaderId,
+        trailId: trail._id,
+        users: usersFull,
+      })
+      .then(() => {
+        toast({
+          title: `Time cadastrado!`,
+          status: 'success',
+          isClosable: true,
+        });
+
+        Router.push('/minha-conta');
+      })
+      .catch((err) => {
+        console.error(err);
+
+        toast({
+          title: `Houve um erro!`,
+          status: 'error',
+          isClosable: true,
+        });
+      });
   };
 
   return (
@@ -187,7 +242,12 @@ const TrilhaPage = () => {
             <FormLabel color="black" fontWeight="600" fontSize="1rem">
               Nome do time
             </FormLabel>
-            <Input color="black" placeholder="Digite o nome" />
+            <Input
+              color="black"
+              placeholder="Digite o nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </FormControl>
           <FormControl maxW="400px" pb="40px">
             <FormLabel color="black" mb="0" fontWeight="600" fontSize="1rem">
@@ -227,7 +287,7 @@ const TrilhaPage = () => {
                   mr="10px"
                   mb="10px"
                 >
-                  <Text>Você</Text>
+                  <Text>{user?.email}</Text>
                 </Flex>
                 {users.map((user) => (
                   <Flex
@@ -240,7 +300,7 @@ const TrilhaPage = () => {
                     mr="10px"
                     mb="10px"
                   >
-                    <Text>{user}</Text>
+                    <Text>{user.email}</Text>
                     <DeleteIcon
                       cursor="pointer"
                       ml="8px"
@@ -255,7 +315,11 @@ const TrilhaPage = () => {
             </Box>
           </Flex>
           <Box>
-            <Button bg="highlight" _hover={{ bg: 'highlight' }}>
+            <Button
+              bg="highlight"
+              _hover={{ bg: 'highlight' }}
+              onClick={handleTeam}
+            >
               Participar
             </Button>
           </Box>

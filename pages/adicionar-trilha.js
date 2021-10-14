@@ -154,9 +154,20 @@ const adicionarAtividade = () => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </FormControl>
-          <Text color="black" fontWeight="600" pb="20px" fontSize="1.4rem">
+          <Text color="black" fontWeight="600" fontSize="1.4rem">
             Escolha os desafios:
           </Text>
+          <Link href="/desafios">
+            <Button
+              size="xs"
+              bgColor="highlight"
+              color="white"
+              _hover={{ bg: 'highlight' }}
+              mb="30px"
+            >
+              Ver o conteúdo dos desafios
+            </Button>
+          </Link>
           <Flex justify="space-between" mb="70px">
             <Box>
               <Checkbox

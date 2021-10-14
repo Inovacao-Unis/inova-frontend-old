@@ -10,30 +10,28 @@ import api from '@services/api';
 
 const Journey = () => {
   const Router = useRouter();
-  const { activityId } = Router.query;
+  const { trailId } = Router.query;
   const { leader } = useAuth();
-  const [activity, setActivity] = useState(null);
+  const [trail, setTrail] = useState(null);
   const [responses, setResponses] = useState({});
 
   useEffect(() => {
     const getData = async () => {
-      await api
-        .get(`activity/${activityId}`)
-        .then((res) => setActivity(res.data));
+      await api.get(`trail/${trailId}`).then((res) => setTrail(res.data));
     };
 
     getData();
-  }, [activityId]);
+  }, [trailId]);
 
   useEffect(() => {
     const getData = async () => {
       await api
-        .get(`game-responses/${activityId}`)
+        .get(`game-responses/${trailId}`)
         .then((res) => setResponses(res.data));
     };
 
     getData();
-  }, [activityId]);
+  }, [trailId]);
 
   return (
     <Layout profile>
@@ -41,7 +39,7 @@ const Journey = () => {
         <Flex py={4}>
           <Flex w="100%" flexDirection="column" align="center" flex="1">
             <Flex
-              onClick={() => Router.push(`/trilha/${activityId}/1`)}
+              onClick={() => Router.push(`/trilha/${trailId}/1`)}
               cursor="pointer"
               mr="auto"
               ml="180px"
@@ -53,7 +51,7 @@ const Journey = () => {
             </Flex>
             <Flex
               onClick={() =>
-                responses[1] ? Router.push(`/trilha/${activityId}/2`) : null
+                responses[1] ? Router.push(`/trilha/${trailId}/2`) : null
               }
               cursor={responses[1] ? 'pointer' : 'inherit'}
               mr="180px"
@@ -74,7 +72,7 @@ const Journey = () => {
             </Flex>
             <Flex
               onClick={() =>
-                responses[2] ? Router.push(`/trilha/${activityId}/3`) : null
+                responses[2] ? Router.push(`/trilha/${trailId}/3`) : null
               }
               cursor={responses[2] ? 'pointer' : 'inherit'}
               mr="auto"
@@ -95,7 +93,7 @@ const Journey = () => {
             </Flex>
             <Flex
               onClick={() =>
-                responses[3] ? Router.push(`/trilha/${activityId}/4`) : null
+                responses[3] ? Router.push(`/trilha/${trailId}/4`) : null
               }
               cursor={responses[3] ? 'pointer' : 'inherit'}
               mr="220px"
@@ -116,7 +114,7 @@ const Journey = () => {
             </Flex>
           </Flex>
           <Box w="400px">
-            {activity && <JourneyInfo status={30} activity={activity} />}
+            {trail && <JourneyInfo status={30} trail={trail} />}
             <Ranking />
           </Box>
         </Flex>

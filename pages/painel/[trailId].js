@@ -31,7 +31,7 @@ const Painel = () => {
             <p>titulo</p>
           </Flex>
           <Box w="400px">
-            {trail && <JourneyInfo status={30} activity={trail} />}
+            {trail && <JourneyInfo status={30} trail={trail} painel />}
             <Ranking />
           </Box>
         </Flex>
