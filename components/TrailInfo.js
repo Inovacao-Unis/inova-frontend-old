@@ -11,7 +11,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-const JourneyInfo = ({ status, trail, painel }) => {
+const TrailInfo = ({ status, trail, painel }) => {
   const toast = useToast();
   const [team, setTeam] = useState(null);
   const [challenge, setChallenge] = useState({});
@@ -172,4 +172,4 @@ const JourneyInfo = ({ status, trail, painel }) => {
   );
 };
 
-export default JourneyInfo;
+export default TrailInfo;

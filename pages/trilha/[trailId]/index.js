@@ -4,7 +4,7 @@ import { Box, Container, Text, Circle, Flex, Image } from '@chakra-ui/react';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
-import JourneyInfo from '@components/JourneyInfo';
+import TrailInfo from '@components/TrailInfo';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 
@@ -114,7 +114,7 @@ const Journey = () => {
             </Flex>
           </Flex>
           <Box w="400px">
-            {trail && <JourneyInfo status={30} trail={trail} />}
+            {trail && <TrailInfo status={30} trail={trail} />}
             <Ranking />
           </Box>
         </Flex>

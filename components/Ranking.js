@@ -4,7 +4,7 @@ import { Flex, Text, Avatar, Box, Image } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import api from '@services/api';
 
-const Ranking = () => {
+const Ranking = ({ noTitle }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
   const [ranking, setRanking] = useState([]);
@@ -35,8 +35,6 @@ const Ranking = () => {
       bgColor="white"
       direction="column"
       align="center"
-      border="1px"
-      borderColor="gray.600"
       borderRadius="md"
       pt="2rem"
       pb="4px"
@@ -45,9 +43,11 @@ const Ranking = () => {
       h={400}
       textAlign="center"
     >
-      <Text fontSize="xl" mb={4} fontWeight="bold">
-        Ranking
-      </Text>
+      {!noTitle ? (
+        <Text fontSize="xl" mb={4} fontWeight="bold">
+          Ranking
+        </Text>
+      ) : null}
       <Flex direction="column" w="100%" h="100%" overflowY="auto">
         {ranking &&
           ranking.map((team, index) => (
