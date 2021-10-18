@@ -20,14 +20,33 @@ import {
   Input,
   NumberInput,
   NumberInputField,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
+import ModalResponse from '@components/ModalResponse';
 
 const PainelAdmin = ({ trail }) => {
   const { leader } = useAuth();
   const [teams, setTeams] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [select, setSelect] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -41,6 +60,11 @@ const PainelAdmin = ({ trail }) => {
 
   const handleTrail = () => {
     console.log('trail ', trail);
+  };
+
+  const handleModal = (response) => {
+    setSelect(response);
+    onOpen();
   };
 
   return (
@@ -57,6 +81,173 @@ const PainelAdmin = ({ trail }) => {
             <Ranking noTitle />
           </TabPanel>
           <TabPanel>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Time</Th>
+                  <Th textAlign="center">Etapa 1</Th>
+                  <Th textAlign="center">Etapa 2</Th>
+                  <Th textAlign="center">Etapa 3</Th>
+                  <Th textAlign="center">Etapa 4</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {teams?.map((team) => (
+                  <Tr>
+                    <Td color="black">{team.name}</Td>
+                    <Td color="black" textAlign="center">
+                      <Flex direction="column" w="100%" align="center">
+                        {team.responses.find((item) => item.stage === 1) ? (
+                          <Text color="black" mb="10px">
+                            {team.responses[
+                              team.responses.findIndex(
+                                (item) => item.stage === 1,
+                              )
+                            ].points.value || '-'}
+                          </Text>
+                        ) : (
+                          <Text color="black" mb="10px">
+                            -
+                          </Text>
+                        )}
+                        {team.responses.find((item) => item.stage === 1) ? (
+                          <Button
+                            onClick={() =>
+                              handleModal(
+                                team.responses[
+                                  team.responses.findIndex(
+                                    (item) => item.stage === 1,
+                                  )
+                                ],
+                              )
+                            }
+                            size="sm"
+                          >
+                            Ver
+                          </Button>
+                        ) : null}
+                      </Flex>
+                    </Td>
+                    <Td color="black" textAlign="center">
+                      <Flex direction="column" w="100%" align="center">
+                        {team.responses.find((item) => item.stage === 2) ? (
+                          <Text color="black" mb="10px">
+                            {team.responses[
+                              team.responses.findIndex(
+                                (item) => item.stage === 2,
+                              )
+                            ].points?.value || '-'}
+                          </Text>
+                        ) : (
+                          <Text color="black" mb="10px">
+                            -
+                          </Text>
+                        )}
+                        {team.responses.find((item) => item.stage === 2) ? (
+                          <Button
+                            onClick={() =>
+                              handleModal(
+                                team.responses[
+                                  team.responses.findIndex(
+                                    (item) => item.stage === 2,
+                                  )
+                                ],
+                              )
+                            }
+                            size="sm"
+                          >
+                            Ver
+                          </Button>
+                        ) : null}
+                      </Flex>
+                    </Td>
+                    <Td color="black" textAlign="center">
+                      <Flex direction="column" w="100%" align="center">
+                        {team.responses.find((item) => item.stage === 3) ? (
+                          <Text color="black" mb="10px">
+                            {team.responses[
+                              team.responses.findIndex(
+                                (item) => item.stage === 3,
+                              )
+                            ].points?.value || '-'}
+                          </Text>
+                        ) : (
+                          <Text color="black" mb="10px">
+                            -
+                          </Text>
+                        )}
+                        {team.responses.find((item) => item.stage === 3) ? (
+                          <Button
+                            onClick={() =>
+                              handleModal(
+                                team.responses[
+                                  team.responses.findIndex(
+                                    (item) => item.stage === 3,
+                                  )
+                                ],
+                              )
+                            }
+                            size="sm"
+                          >
+                            Ver
+                          </Button>
+                        ) : null}
+                      </Flex>
+                    </Td>
+                    <Td color="black" textAlign="center">
+                      <Flex direction="column" w="100%" align="center">
+                        {team.responses.find((item) => item.stage === 4) ? (
+                          <Text color="black" mb="10px">
+                            {team.responses[
+                              team.responses.findIndex(
+                                (item) => item.stage === 4,
+                              )
+                            ].points?.value || '-'}
+                          </Text>
+                        ) : (
+                          <Text color="black" mb="10px">
+                            -
+                          </Text>
+                        )}
+                        {team.responses.find((item) => item.stage === 4) ? (
+                          <Button
+                            onClick={() =>
+                              handleModal(
+                                team.responses[
+                                  team.responses.findIndex(
+                                    (item) => item.stage === 4,
+                                  )
+                                ],
+                              )
+                            }
+                            size="sm"
+                          >
+                            Ver
+                          </Button>
+                        ) : null}
+                      </Flex>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Modal Title</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Text>Resposta: {select?.response}</Text>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button variant="ghost">Secondary Action</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
             <Flex direction="column">
               {teams?.map((team) => (
                 <Flex>
@@ -71,7 +262,7 @@ const PainelAdmin = ({ trail }) => {
                         }
                       </Text>
                     ) : (
-                      <Text color="black">Não</Text>
+                      <Text color="black">-</Text>
                     )}
                   </Flex>
                   <Flex>
@@ -84,7 +275,7 @@ const PainelAdmin = ({ trail }) => {
                         }
                       </Text>
                     ) : (
-                      <Text color="black">Não</Text>
+                      <Text color="black">-</Text>
                     )}
                   </Flex>
                   <Flex>
@@ -97,7 +288,7 @@ const PainelAdmin = ({ trail }) => {
                         }
                       </Text>
                     ) : (
-                      <Text color="black">Não</Text>
+                      <Text color="black">-</Text>
                     )}
                   </Flex>
                   <Flex>
@@ -110,7 +301,7 @@ const PainelAdmin = ({ trail }) => {
                         }
                       </Text>
                     ) : (
-                      <Text color="black">Não</Text>
+                      <Text color="black">-</Text>
                     )}
                   </Flex>
                 </Flex>
