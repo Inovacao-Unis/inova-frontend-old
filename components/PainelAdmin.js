@@ -23,11 +23,9 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   Textarea,
   Modal,
   ModalOverlay,
@@ -108,7 +106,7 @@ const PainelAdmin = ({ trail }) => {
         <TabList>
           <Tab color="black">Ranking</Tab>
           <Tab color="black">Respostas</Tab>
-          <Tab color="black">Editar</Tab>
+          <Tab color="black">Editar/Excluir</Tab>
         </TabList>
 
         <TabPanels>
@@ -331,53 +329,74 @@ const PainelAdmin = ({ trail }) => {
             </Modal>
           </TabPanel>
           <TabPanel>
-            <Flex direction="column" maxW="400px">
-              <FormControl pb="40px">
-                <FormLabel color="black" fontWeight="600" fontSize="1rem">
-                  Título da trilha
-                </FormLabel>
-                <Box mb="10px">
-                  <Editable
-                    border="1px"
-                    borderColor="gray.400"
-                    borderRadius="4px"
-                    color="gray.600"
-                    defaultValue={trail?.title}
-                    px="10px"
-                    py="10px"
+            {trail && (
+              <Box mt="20px" maxW="400px" mx="auto">
+                <Flex direction="column" mx="auto">
+                  <FormControl pb="10px">
+                    <FormLabel color="black" fontWeight="600" fontSize="1rem">
+                      Título da trilha
+                    </FormLabel>
+                    <Box mb="5px">
+                      <Editable
+                        border="1px"
+                        borderColor="gray.400"
+                        borderRadius="4px"
+                        color="gray.600"
+                        defaultValue={trail?.title}
+                        px="10px"
+                        py="10px"
+                      >
+                        <EditablePreview />
+                        <EditableInput />
+                      </Editable>
+                    </Box>
+                  </FormControl>
+                  <FormControl pb="20px">
+                    <FormLabel color="black" fontWeight="600" fontSize="1rem">
+                      Cronograma
+                    </FormLabel>
+                    <Box mb="10px">
+                      <Editable
+                        border="1px"
+                        maxlength="50"
+                        borderColor="gray.400"
+                        borderRadius="4px"
+                        color="gray.600"
+                        defaultValue="Take some chakra"
+                        px="10px"
+                        py="10px"
+                      >
+                        <EditablePreview maxW="100%" w="100%" />
+                        <EditableInput />
+                      </Editable>
+                    </Box>
+                  </FormControl>
+
+                  <Button
+                    bg="highlight"
+                    _hover={{ bg: 'highlight' }}
+                    onClick={handleTrail}
                   >
-                    <EditablePreview />
-                    <EditableInput />
-                  </Editable>
-                </Box>
-              </FormControl>
-              <FormControl maxW="400px" pb="40px">
-                <FormLabel color="black" fontWeight="600" fontSize="1rem">
-                  Cronograma
-                </FormLabel>
-                <Box mb="10px">
-                  <Editable
-                    border="1px"
-                    borderColor="gray.400"
-                    borderRadius="4px"
-                    color="gray.600"
-                    defaultValue="Take some chakra"
-                    px="10px"
-                    py="10px"
-                  >
-                    <EditablePreview />
-                    <EditableInput />
-                  </Editable>
-                </Box>
-              </FormControl>
-              <Button
-                bg="highlight"
-                _hover={{ bg: 'highlight' }}
-                onClick={handleTrail}
-              >
-                Salvar
-              </Button>
-            </Flex>
+                    Salvar
+                  </Button>
+                </Flex>
+                <Flex
+                  border="1px"
+                  borderColor="red"
+                  direction="column"
+                  maxW="400px"
+                  mx="auto"
+                  p="10px"
+                  mt="80px"
+                  borderRadius="4px"
+                >
+                  <Text color="gray.800" mb="10px">
+                    Depois de excluir uma trilha, não há como voltar atrás.
+                  </Text>
+                  <Button colorScheme="red">Deletar trilha</Button>
+                </Flex>
+              </Box>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>

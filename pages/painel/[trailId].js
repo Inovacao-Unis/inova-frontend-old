@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Flex, Button, Heading, toast } from '@chakra-ui/react';
+import { Container, Flex, Button, Heading, useToast } from '@chakra-ui/react';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import PainelAdmin from '@components/PainelAdmin';
@@ -10,6 +10,7 @@ const Painel = () => {
   const Router = useRouter();
   const { trailId } = Router.query;
   const [trail, setTrail] = useState(null);
+  const toast = useToast();
 
   useEffect(() => {
     const getData = async () => {

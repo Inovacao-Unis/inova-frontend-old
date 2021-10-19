@@ -25,6 +25,7 @@ import { useRouter } from 'next/router';
 const adicionarAtividade = () => {
   const Router = useRouter();
   const [title, setTitle] = useState('');
+  const [schedule, setSchedule] = useState('');
   const [engenhariaChallenges, setEngenhariaChallenges] = useState({});
   const [saudeChallenges, setSaudeChallenges] = useState({});
   const [gestaoChallenges, setGestaoChallenges] = useState({});
@@ -108,6 +109,7 @@ const adicionarAtividade = () => {
     await api
       .post('trails', {
         title,
+        schedule,
         leader,
         challenges: challengesCheked,
       })
@@ -152,6 +154,18 @@ const adicionarAtividade = () => {
               placeholder="Digite o título"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+            />
+          </FormControl>
+          <FormControl maxW="400px" pb="40px">
+            <FormLabel color="black" fontWeight="600" fontSize="1.4rem">
+              Cronograma
+            </FormLabel>
+            <Input
+              color="black"
+              maxlength="50"
+              placeholder="Digite o cronograma (máx. 50 caracteres)"
+              value={schedule}
+              onChange={(e) => setSchedule(e.target.value)}
             />
           </FormControl>
           <Text color="black" fontWeight="600" fontSize="1.4rem">

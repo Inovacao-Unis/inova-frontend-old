@@ -16,15 +16,16 @@ export default function BlogPost() {
   return (
     <>
       <Layout profile>
-        <Box
-          bgColor="white"
-          color="black"
-          w="100%"
-          maxW="100%"
-          zIndex="900"
-          pb="5rem"
-        >
-          <Container mt="3rem">
+        <Box w="100%" maxW="100%" zIndex="900" pb="5rem">
+          <Container
+            mt="3rem"
+            bgColor="white"
+            color="black"
+            maxW="800px"
+            py="40px"
+            px="40px"
+            borderRadius="4px"
+          >
             <Box>
               ←{' '}
               <Link href={`/atividade/${trailId}`}>
