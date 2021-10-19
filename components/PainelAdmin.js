@@ -11,7 +11,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  toast,
+  useToast,
   Editable,
   EditableInput,
   EditablePreview,
@@ -28,6 +28,7 @@ import {
   Th,
   Td,
   TableCaption,
+  Textarea,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -45,18 +46,23 @@ import ModalResponse from '@components/ModalResponse';
 const PainelAdmin = ({ trail }) => {
   const { leader } = useAuth();
   const [teams, setTeams] = useState(null);
+  const [points, setPoints] = useState(0);
+  const [feedback, setFeedback] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
+  const toast = useToast();
 
   useEffect(() => {
     const getData = async () => {
       await api
-        .get(`painel-teams/${trail?._id}`)
+        .get(`painel-teams/${trail._id}`)
         .then((res) => setTeams(res.data));
     };
 
-    getData();
-  }, [trail]);
+    if (trail) {
+      getData();
+    }
+  }, [trail, select]);
 
   const handleTrail = () => {
     console.log('trail ', trail);
@@ -65,6 +71,35 @@ const PainelAdmin = ({ trail }) => {
   const handleModal = (response) => {
     setSelect(response);
     onOpen();
+  };
+
+  const handlePoints = async () => {
+    await api
+      .post('points', {
+        value: points,
+        feedback,
+        responseId: select._id,
+        leaderId: leader,
+        trailId: select.trailId,
+        teamId: select.teamId,
+      })
+      .then(() => {
+        toast({
+          title: 'Resposta avaliada!',
+          status: 'success',
+          duration: 3000,
+        });
+        setSelect(null);
+        onClose();
+      })
+      .catch((err) => {
+        console.error('Erro: ', err.response.data.error);
+        toast({
+          title: 'Houve um erro!',
+          status: 'error',
+          duration: 3000,
+        });
+      });
   };
 
   return (
@@ -234,79 +269,66 @@ const PainelAdmin = ({ trail }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+                <ModalHeader>Resposta do time</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                  <Text>Resposta: {select?.response}</Text>
+                  <Flex direction="column">
+                    <Text fontWeight="bold">Resposta:</Text>
+                    <Text>{select?.response}</Text>
+                  </Flex>
+                  {select?.points ? (
+                    <Flex direction="column">
+                      <Text pt="10px" fontWeight="bold">
+                        Pontos:
+                      </Text>
+                      <Text>{select?.points?.value}</Text>
+                      <Text pt="10px" fontWeight="bold">
+                        Feedback:
+                      </Text>
+                      <Text>{select?.points?.feedback}</Text>
+                    </Flex>
+                  ) : (
+                    <Flex direction="column">
+                      <FormControl pt="15px" w="80px" isRequired id="response">
+                        <FormLabel>Pontos</FormLabel>
+                        <NumberInput
+                          min={0}
+                          max={5}
+                          value={points}
+                          onChange={(value) => setPoints(value)}
+                        >
+                          <NumberInputField />
+                        </NumberInput>
+                      </FormControl>
+                      <FormControl pt="15px" isRequired id="response">
+                        <FormLabel>Feedback</FormLabel>
+                        <Textarea
+                          value={feedback}
+                          onChange={(e) => setFeedback(e.target.value)}
+                          placeholder="Digite o feedback para o time"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
                 </ModalBody>
 
                 <ModalFooter>
-                  <Button colorScheme="blue" mr={3} onClick={onClose}>
-                    Close
+                  <Button variant="ghost" bg="gray.100" onClick={onClose}>
+                    Fechar
                   </Button>
-                  <Button variant="ghost">Secondary Action</Button>
+                  {select?.points ? null : (
+                    <Button
+                      ml="10px"
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={handlePoints}
+                    >
+                      Salvar
+                    </Button>
+                  )}
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <Flex direction="column">
-              {teams?.map((team) => (
-                <Flex>
-                  <Text color="black">{team.name}</Text>
-                  <Flex>
-                    {team.responses.find((item) => item.stage === 1) ? (
-                      <Text color="black">
-                        {
-                          team.responses[
-                            team.responses.findIndex((item) => item.stage === 1)
-                          ].response
-                        }
-                      </Text>
-                    ) : (
-                      <Text color="black">-</Text>
-                    )}
-                  </Flex>
-                  <Flex>
-                    {team.responses.find((item) => item.stage === 2) ? (
-                      <Text color="black">
-                        {
-                          team.responses[
-                            team.responses.findIndex((item) => item.stage === 2)
-                          ].response
-                        }
-                      </Text>
-                    ) : (
-                      <Text color="black">-</Text>
-                    )}
-                  </Flex>
-                  <Flex>
-                    {team.responses.find((item) => item.stage === 3) ? (
-                      <Text color="black">
-                        {
-                          team.responses[
-                            team.responses.findIndex((item) => item.stage === 3)
-                          ].response
-                        }
-                      </Text>
-                    ) : (
-                      <Text color="black">-</Text>
-                    )}
-                  </Flex>
-                  <Flex>
-                    {team.responses.find((item) => item.stage === 4) ? (
-                      <Text color="black">
-                        {
-                          team.responses[
-                            team.responses.findIndex((item) => item.stage === 4)
-                          ].response
-                        }
-                      </Text>
-                    ) : (
-                      <Text color="black">-</Text>
-                    )}
-                  </Flex>
-                </Flex>
-              ))}
-            </Flex>
           </TabPanel>
           <TabPanel>
             <Flex direction="column" maxW="400px">
