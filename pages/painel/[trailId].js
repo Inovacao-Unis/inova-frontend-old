@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Container, Flex, Button, Heading, useToast } from '@chakra-ui/react';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
+import { useAuth } from '@contexts/AuthContext';
 import PainelAdmin from '@components/PainelAdmin';
 import api from '@services/api';
 
@@ -11,6 +12,7 @@ const Painel = () => {
   const { trailId } = Router.query;
   const [trail, setTrail] = useState(null);
   const toast = useToast();
+  const { leader } = useAuth();
 
   useEffect(() => {
     const getData = async () => {
@@ -31,6 +33,11 @@ const Painel = () => {
       isClosable: true,
     });
   };
+
+  if (!leader) {
+    Router.push('/minha-conta');
+    return <div />;
+  }
 
   return (
     <Layout profile>

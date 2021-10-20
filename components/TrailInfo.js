@@ -92,7 +92,7 @@ const TrailInfo = ({ status, trail, painel }) => {
             {trail?.title}
           </Text>
           <Text mb="5px" color="highlight" fontSize="xs">
-            Começa no dia 12/12/2021 e termina no dia 20/20/2021
+            {trail?.schedule}
           </Text>
           <Button
             size="xs"

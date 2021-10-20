@@ -110,7 +110,7 @@ const adicionarAtividade = () => {
       .post('trails', {
         title,
         schedule,
-        leader,
+        leaderId: leader,
         challenges: challengesCheked,
       })
       .then(() => {
@@ -129,7 +129,11 @@ const adicionarAtividade = () => {
           status: 'error',
           duration: 9000,
         });
-        console.warn('Erro: ', err);
+        if (err.response) {
+          console.error(err.response.data.error);
+        } else {
+          console.error('Ocorreu um erro. Tente novamente, por favor.');
+        }
       });
   };
 
@@ -162,7 +166,7 @@ const adicionarAtividade = () => {
             </FormLabel>
             <Input
               color="black"
-              maxlength="50"
+              maxLength="50"
               placeholder="Digite o cronograma (máx. 50 caracteres)"
               value={schedule}
               onChange={(e) => setSchedule(e.target.value)}

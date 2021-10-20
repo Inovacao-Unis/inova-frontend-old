@@ -171,6 +171,9 @@ const TrilhaPage = () => {
             <Text fontSize="1.6rem" fontWeight="bold" color="highlight">
               {trail?.title}
             </Text>
+            <Text mb="5px" color="highlight" fontSize="xs">
+              {trail?.schedule}
+            </Text>
             <Text fontSize="1rem" mb="10px" color="black">
               Gerenciado por {trail?.leader}
             </Text>
@@ -190,7 +193,7 @@ const TrilhaPage = () => {
                 Saúde
               </Text>
             )}
-            <Stack direction="row">
+            <Stack direction="column">
               {trail?.challenges.map((item) => {
                 if (item.categoryId === '614389a34db7167c3368f753') {
                   return (
@@ -202,11 +205,11 @@ const TrilhaPage = () => {
               })}
             </Stack>
             {gestao && (
-              <Text fontSize="1.1rem" fontWeight="bold" mb="10px">
+              <Text fontSize="1.1rem" fontWeight="bold" mb="10px" mt="15px">
                 Gestão
               </Text>
             )}
-            <Stack direction="row">
+            <Stack direction="column">
               {trail?.challenges.map((item) => {
                 if (item.categoryId === '61438a07f87adb7c88785a41') {
                   return (
@@ -218,11 +221,11 @@ const TrilhaPage = () => {
               })}
             </Stack>
             {engenharia && (
-              <Text fontSize="1.1rem" fontWeight="bold" mb="10px">
+              <Text fontSize="1.1rem" fontWeight="bold" mb="10px" mt="15px">
                 Engenharia
               </Text>
             )}
-            <Stack direction="row">
+            <Stack direction="column">
               {trail?.challenges.map((item) => {
                 if (item.categoryId === '61438a13f87adb7c88785a44') {
                   return (

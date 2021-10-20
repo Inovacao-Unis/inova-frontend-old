@@ -50,7 +50,7 @@ const minhaConta = () => {
                 <Flex direction="column" p="40px">
                   <Text
                     fontSize="1.4rem"
-                    lineHeight="20px"
+                    lineHeight="24px"
                     fontWeight="700"
                     mb="16px"
                   >

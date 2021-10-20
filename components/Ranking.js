@@ -8,7 +8,7 @@ const Ranking = ({ noTitle }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
   const [ranking, setRanking] = useState([]);
-  const [teamId, setTeamId] = useState('');
+  const [teamId, setTeamId] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -27,7 +27,9 @@ const Ranking = ({ noTitle }) => {
         .then((res) => setTeamId(res.data._id));
     };
 
-    getData();
+    if (!noTitle) {
+      getData();
+    }
   }, [trailId, setTeamId]);
 
   return (
@@ -49,11 +51,11 @@ const Ranking = ({ noTitle }) => {
         </Text>
       ) : null}
       <Flex direction="column" w="100%" h="100%" overflowY="auto">
-        {ranking &&
+        {ranking.length > 0 ? (
           ranking.map((team, index) => (
             <Flex
               key={team._id}
-              bg={team._id === teamId ? 'gray.200' : '#fff'}
+              bg={teamId && team._id === teamId ? 'gray.200' : '#fff'}
               w="100%"
               align="center"
               minH="60px"
@@ -81,7 +83,10 @@ const Ranking = ({ noTitle }) => {
                 <Text fontSize="1.2rem">{team.points}</Text>
               </Flex>
             </Flex>
-          ))}
+          ))
+        ) : (
+          <Text color="gray.600">Nenhum time nessa trilha</Text>
+        )}
       </Flex>
     </Flex>
   );
