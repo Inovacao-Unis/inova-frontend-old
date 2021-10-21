@@ -143,13 +143,21 @@ const TrilhaPage = () => {
         Router.push('/minha-conta');
       })
       .catch((err) => {
-        console.error(err);
-
-        toast({
-          title: `Houve um erro!`,
-          status: 'error',
-          isClosable: true,
-        });
+        if (err.response) {
+          console.log(err.response.data.error);
+          toast({
+            title: err.response.data.error,
+            status: 'error',
+            isClosable: true,
+          });
+        } else {
+          console.log(err);
+          toast({
+            title: 'Houve um erro',
+            status: 'error',
+            isClosable: true,
+          });
+        }
       });
   };
 
