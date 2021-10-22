@@ -35,6 +35,12 @@ import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import api from '@services/api';
 import { useAuth } from '@contexts/AuthContext';
 
+const images = [
+  'https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F1.png?alt=media&token=03082ec9-282b-49ed-a2c8-ffc61e47e9a1',
+  'https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F2.png?alt=media&token=c94d6d77-ccb8-48fd-82dc-4dad4d78f18c',
+  'https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F3.png?alt=media&token=b28452ee-168d-43bc-bd3f-1e6a2cc0b230',
+];
+
 const Time = () => {
   const Router = useRouter();
   const { trailId } = Router.query;
@@ -45,6 +51,9 @@ const Time = () => {
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [avatar, setAvatar] = useState(
+    'https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F10.png?alt=media&token=51aff87b-2b64-40fc-9da9-541f9962f934',
+  );
 
   useEffect(() => {
     const data = async () => {
@@ -180,6 +189,28 @@ const Time = () => {
                 <Text>Notas e feedback</Text>
               </TabPanel>
               <TabPanel>
+                <Flex direction="column">
+                  <Text color="black">Avatar</Text>
+                  <Avatar
+                    name="Avatar time"
+                    src={avatar}
+                    bg="transparent"
+                    size="2xl"
+                    cursor="pointer"
+                  />
+                  <Flex>
+                    {images.map((image) => (
+                      <Avatar
+                        name="Avatar time"
+                        src={image}
+                        bg="transparent"
+                        size="md"
+                        cursor="pointer"
+                        onClick={() => setAvatar(image)}
+                      />
+                    ))}
+                  </Flex>
+                </Flex>
                 <Flex py="3rem" direction="column" align="center" pb="25vh">
                   <FormControl pb="10px">
                     <FormLabel color="black" fontWeight="600" fontSize="1rem">

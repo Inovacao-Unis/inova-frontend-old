@@ -142,7 +142,7 @@ export default function Header({ profile, activityBtn }) {
                 <MenuButton zIndex="999">
                   <Avatar
                     name="Nome perfil"
-                    src="/images/avatar.png"
+                    src="https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F10.png?alt=media&token=51aff87b-2b64-40fc-9da9-541f9962f934"
                     bg="transparent"
                     size="md"
                   />
