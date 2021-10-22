@@ -5,6 +5,7 @@ import { useAuth } from '@contexts/AuthContext';
 import Layout from '@components/Layout';
 import {
   Box,
+  Flex,
   Text,
   Input,
   FormControl,
@@ -14,6 +15,8 @@ import {
   CircularProgress,
   useToast,
   Link,
+  Image,
+  Divider,
 } from '@chakra-ui/react';
 import firebase from '@lib/firebase';
 import firebaseErrors from '@utils/firebaseErrors';
@@ -50,6 +53,20 @@ export default function Login() {
     return check();
   }, []);
 
+  const signinGoogle = async () => {
+    try {
+      setLoading(true);
+      await firebase
+        .auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(() => {
+          window.location.href = '/minha-conta';
+        });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -77,10 +94,44 @@ export default function Login() {
 
   return (
     <Layout noHeader>
-      <Box w={400} mx="auto" minH="100vh" pt="20vh" zIndex="888">
+      <Button
+        pt="10px"
+        bg="none"
+        _hover={{ bg: 'none' }}
+        w="100px"
+        ml="30px"
+        onClick={() => Router.push('/')}
+      >
+        Voltar
+      </Button>
+      <Box w={400} mx="auto" minH="100vh" pt="15vh" zIndex="888">
         <Heading textAlign="center" as="h2">
           Login
         </Heading>
+        <Flex justify="center" pt="8vh">
+          <Button
+            bg="#1a73e8"
+            _hover={{ bg: '1a73e8' }}
+            fontWeight="400"
+            pl="0"
+            onClick={signinGoogle}
+          >
+            <Image
+              src="/images/google.jpg"
+              width="40px"
+              borderTopLeftRadius="4px"
+              borderBottomLeftRadius="4px"
+              alt="Logo Google"
+              mr="var(--chakra-space-4)"
+            />
+            Fazer login com o Google
+          </Button>
+        </Flex>
+        <Flex align="center" py="5vh">
+          <Divider />
+          <Text px="10px">Ou</Text>
+          <Divider />
+        </Flex>
         <form onSubmit={(e) => handleSubmit(e)} width="100%">
           <FormControl isRequired id="email">
             <FormLabel>E-mail</FormLabel>

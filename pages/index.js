@@ -64,8 +64,18 @@ const Home = () => {
               _hover={{ bg: 'highlight' }}
               color="white"
               onClick={() => Router.push('/login')}
+              mb="10px"
             >
-              entrar
+              Entrar
+            </Button>
+            <Button
+              size="lg"
+              bg="white"
+              color="highlight"
+              _hover={{ bg: 'white' }}
+              onClick={() => Router.push('/login')}
+            >
+              Criar uma conta
             </Button>
           </Flex>
         </Container>
