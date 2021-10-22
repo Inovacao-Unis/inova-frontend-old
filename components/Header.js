@@ -34,7 +34,7 @@ import firebase from '../lib/firebase';
 
 export default function Header({ profile, activityBtn }) {
   const Router = useRouter();
-  const { activityId } = Router.query;
+  const { trailId } = Router.query;
   const { leader } = useAuth();
   const [team, setTeam] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,13 +43,13 @@ export default function Header({ profile, activityBtn }) {
 
   useEffect(() => {
     const getData = async () => {
-      await api.get(`game-team/${activityId}`).then((res) => setTeam(res.data));
+      await api.get(`game-team/${trailId}`).then((res) => setTeam(res.data));
     };
 
-    if (activityId) {
+    if (trailId) {
       getData();
     }
-  }, [activityId]);
+  }, [trailId]);
 
   const getChallenges = async () => {
     await api.get('challenges').then((res) => {
@@ -154,8 +154,8 @@ export default function Header({ profile, activityBtn }) {
                     </Link>
                   </MenuItem>
                   <MenuItem color="highlight">
-                    <Link href="/perfil">
-                      <a>Perfil</a>
+                    <Link href={`/time/${trailId}`}>
+                      <a>Área do Time</a>
                     </Link>
                   </MenuItem>
                   <MenuItem color="highlight">

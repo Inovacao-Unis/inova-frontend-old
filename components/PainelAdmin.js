@@ -196,7 +196,7 @@ const PainelAdmin = ({ trail }) => {
   };
 
   return (
-    <Flex p="30px" mx="auto" maxW="900px" bg="white">
+    <Flex p="30px" mx="auto" borderRadius="4px" maxW="900px" bg="white">
       <Tabs colorScheme="pink" isFitted w="100%">
         <TabList>
           <Tab color="black">Ranking</Tab>
