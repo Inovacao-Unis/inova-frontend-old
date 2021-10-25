@@ -21,7 +21,7 @@ const minhaConta = () => {
 
   return (
     <Layout activityBtn>
-      <Container maxW="container.xl" zIndex="800" pb="100px" minH="86vh">
+      <Container maxW="container.xl" zIndex="800" pb="100px" minH="87vh">
         <Heading
           fontSize="2.5rem"
           fontWeight="700"
