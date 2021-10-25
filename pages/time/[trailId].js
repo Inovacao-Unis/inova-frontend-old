@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -65,9 +66,8 @@ const Time = () => {
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
-  const [avatar, setAvatar] = useState(
-    'https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F10.png?alt=media&token=51aff87b-2b64-40fc-9da9-541f9962f934',
-  );
+  const [avatar, setAvatar] = useState(null);
+  const [responses, setResponses] = useState(null);
 
   useEffect(() => {
     const data = async () => {
@@ -77,6 +77,7 @@ const Time = () => {
         const usersFilter = res.data.users.filter(
           (item) => item.uid !== user.uid,
         );
+        setAvatar(res.data.avatar);
         setUsers(usersFilter);
       });
     };
@@ -85,6 +86,16 @@ const Time = () => {
       data();
     }
   }, [trailId, user]);
+
+  useEffect(() => {
+    const data = async () => {
+      await api
+        .get(`game-responses-team/${trailId}`)
+        .then((res) => setResponses(res.data));
+    };
+
+    data();
+  }, []);
 
   const addMember = async () => {
     setLoading(true);
@@ -137,40 +148,36 @@ const Time = () => {
 
     const usersFull = [user.uid, ...usersArr];
 
-    console.log('nome ', name);
-    console.log('avatar ', avatar);
-    console.log('users ', usersFull);
-
-    // await api
-    //   .put('teams', {
-    //     name,
-    //     avatar,
-    //     users: usersFull,
-    //   })
-    //   .then(() => {
-    //     toast({
-    //       title: `Alterado com sucesso!`,
-    //       status: 'success',
-    //       isClosable: true,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     if (err.response) {
-    //       console.log(err.response.data.error);
-    //       toast({
-    //         title: err.response.data.error,
-    //         status: 'error',
-    //         isClosable: true,
-    //       });
-    //     } else {
-    //       console.log(err);
-    //       toast({
-    //         title: 'Houve um erro',
-    //         status: 'error',
-    //         isClosable: true,
-    //       });
-    //     }
-    //   });
+    await api
+      .put(`team/${team._id}`, {
+        name,
+        avatar,
+        users: usersFull,
+      })
+      .then(() => {
+        toast({
+          title: `Salvo com sucesso!`,
+          status: 'success',
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data.error);
+          toast({
+            title: err.response.data.error,
+            status: 'error',
+            isClosable: true,
+          });
+        } else {
+          console.log(err);
+          toast({
+            title: 'Houve um erro',
+            status: 'error',
+            isClosable: true,
+          });
+        }
+      });
   };
 
   return (
@@ -218,16 +225,48 @@ const Time = () => {
 
             <TabPanels>
               <TabPanel>
-                <Text>Notas e feedback</Text>
+                <Flex direction="column">
+                  {responses && responses.length > 0 ? (
+                    responses?.map((item) => (
+                      <Flex
+                        direction="column"
+                        mb="20px"
+                        bg="#eeeeee"
+                        p="20px"
+                        borderRadius="4px"
+                      >
+                        <Text color="black">{item.response}</Text>
+                        {item?.points ? (
+                          <Flex direction="column" mt="10px">
+                            <Text color="gray.700" fontSize="1.1rem">
+                              Nota: {item.points.value} pontos
+                            </Text>
+                            <Text color="gray.700" fontSize=".9rem">
+                              Feedback: {item.points.feedback}
+                            </Text>
+                          </Flex>
+                        ) : (
+                          <Text color="gray.600" mt="10px" fontSize=".9rem">
+                            Aguardando correção
+                          </Text>
+                        )}
+                      </Flex>
+                    ))
+                  ) : (
+                    <Text color="black">Nenhuma resposta enviada</Text>
+                  )}
+                </Flex>
               </TabPanel>
               <TabPanel>
                 <Flex direction="column">
                   <Text color="black" fontWeight="600" fontSize="1rem">
                     Avatar do Time
                   </Text>
-                  <Box cursor="pointer" maxW="250px" mx="auto">
-                    <img alt="Avatar time" src={avatar} />
-                  </Box>
+                  {avatar && (
+                    <Box cursor="pointer" maxW="250px" mx="auto">
+                      <img alt="Avatar time" src={avatar} />
+                    </Box>
+                  )}
                   <Text color="gray" fontSize=".8rem" mt="20px">
                     Para alterar, clique em uma das opções:
                   </Text>

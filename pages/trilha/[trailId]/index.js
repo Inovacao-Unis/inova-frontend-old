@@ -84,7 +84,7 @@ const Journey = () => {
                 src="/images/planets/3.png"
                 boxSize="200px"
                 style={
-                  responses[1]
+                  responses[2]
                     ? { filter: 'none' }
                     : { filter: 'grayscale(100%)' }
                 }
@@ -105,7 +105,7 @@ const Journey = () => {
                 src="/images/planets/4.png"
                 boxSize="220px"
                 style={
-                  responses[4]
+                  responses[3]
                     ? { filter: 'none' }
                     : { filter: 'grayscale(100%)' }
                 }

@@ -232,7 +232,7 @@ const PainelAdmin = ({ trail }) => {
                                 team.responses.findIndex(
                                   (item) => item.stage === 1,
                                 )
-                              ].points.value || '-'}
+                              ].points?.value || '-'}
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">

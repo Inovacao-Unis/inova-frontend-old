@@ -40,7 +40,7 @@ const Painel = () => {
   }
 
   return (
-    <Layout profile>
+    <Layout painel>
       <Container maxW="container.xl" zIndex="800" pb="100px" minH="89vh">
         <Flex direction="column" m="70px 0">
           <Heading

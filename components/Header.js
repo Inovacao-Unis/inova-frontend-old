@@ -32,7 +32,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import firebase from '../lib/firebase';
 
-export default function Header({ profile, activityBtn }) {
+export default function Header({ profile, activityBtn, painel }) {
   const Router = useRouter();
   const { trailId } = Router.query;
   const { leader } = useAuth();
@@ -94,7 +94,7 @@ export default function Header({ profile, activityBtn }) {
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
                 <Text fontSize="1.2rem" color="white">
-                  {team.points || '0'}
+                  {team?.points?.value || '0'}
                 </Text>
               </Flex>
               {/* <Popover zIndex="999">
@@ -140,12 +140,14 @@ export default function Header({ profile, activityBtn }) {
               </Popover> */}
               <Menu>
                 <MenuButton zIndex="999">
-                  <Avatar
-                    name="Nome perfil"
-                    src="https://firebasestorage.googleapis.com/v0/b/inova-c70f5.appspot.com/o/inova%2Favatars%2F10.png?alt=media&token=51aff87b-2b64-40fc-9da9-541f9962f934"
-                    bg="transparent"
-                    size="md"
-                  />
+                  {team?.avatar && (
+                    <Avatar
+                      name="Nome perfil"
+                      src={team.avatar}
+                      bg="transparent"
+                      size="md"
+                    />
+                  )}
                 </MenuButton>
                 <MenuList zIndex="999">
                   <MenuItem color="highlight">
@@ -205,6 +207,19 @@ export default function Header({ profile, activityBtn }) {
                 </Button>
               </Box>
             </Flex>
+          )}
+          {painel && (
+            <Link href="/minha-conta">
+              <a>
+                <Button
+                  bgColor="highlight"
+                  color="white"
+                  _hover={{ bg: 'highlight' }}
+                >
+                  Voltar
+                </Button>
+              </a>
+            </Link>
           )}
         </Flex>
       </Container>

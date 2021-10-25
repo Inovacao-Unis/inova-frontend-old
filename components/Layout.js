@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import Header from './Header';
 import Footer from './Footer';
 
-function Layout({ children, noHeader, profile, activityBtn }) {
+function Layout({ children, noHeader, profile, activityBtn, painel }) {
   return (
     <Box>
       <Box
@@ -17,7 +17,11 @@ function Layout({ children, noHeader, profile, activityBtn }) {
         <div id="stars3" />
         <Flex flexDirection="column" w="100%" zIndex="888">
           {noHeader ? null : (
-            <Header profile={profile} activityBtn={activityBtn} />
+            <Header
+              profile={profile}
+              activityBtn={activityBtn}
+              painel={painel}
+            />
           )}
           {children}
           <Footer />
