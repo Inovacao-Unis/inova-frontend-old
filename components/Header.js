@@ -6,8 +6,6 @@ import {
   Box,
   Image,
   Spacer,
-  List,
-  ListItem,
   Center,
   Text,
   Avatar,
@@ -15,19 +13,10 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   Button,
-  useDisclosure,
 } from '@chakra-ui/react';
 import api from '@services/api';
 import { useAuth } from '@contexts/AuthContext';
-import { BellIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import firebase from '../lib/firebase';
@@ -37,9 +26,6 @@ export default function Header({ profile, activityBtn, painel }) {
   const { trailId } = Router.query;
   const { leader } = useAuth();
   const [team, setTeam] = useState({});
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [challenges, setChallenges] = useState([]);
-  const [challengesChecked, setChallengesChecked] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -50,28 +36,6 @@ export default function Header({ profile, activityBtn, painel }) {
       getData();
     }
   }, [trailId]);
-
-  const getChallenges = async () => {
-    await api.get('challenges').then((res) => {
-      // eslint-disable-next-line no-return-assign
-      res.data.map((category) => {
-        category.checked = true;
-        category.challenges.map((challenge) => (challenge.checked = true));
-      });
-      setChallenges(res.data);
-    });
-  };
-
-  const handleModal = () => {
-    getChallenges();
-    onOpen();
-  };
-
-  const teste = () => {
-    console.log('challenges ', challengesChecked);
-  };
-
-  const handleCategory = (e, category) => {};
 
   return (
     <Box

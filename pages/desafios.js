@@ -1,11 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import { useState, useEffect } from 'react';
-import api from '@services/api';
 import Layout from '@components/Layout';
-import { useAuth } from '@contexts/AuthContext';
 import withAuth from '@components/withAuth';
-import Link from 'next/link';
-import { Container, Heading, Flex, Text, Button } from '@chakra-ui/react';
+import { Container, Heading, Flex, Text } from '@chakra-ui/react';
 
 const Desafios = () => (
   <Layout activityBtn>

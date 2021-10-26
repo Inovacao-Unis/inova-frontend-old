@@ -63,7 +63,8 @@ function Short({ stage, trailId }) {
         });
       setIsLoading(false);
     } catch (err) {
-      setError('Error ', err);
+      setError(err);
+      console.log(error);
       setIsLoading(false);
       setResponse('');
     }

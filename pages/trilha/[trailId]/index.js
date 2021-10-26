@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Container, Text, Circle, Flex, Image } from '@chakra-ui/react';
+import { Box, Container, Text, Flex, Image } from '@chakra-ui/react';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
 import TrailInfo from '@components/TrailInfo';
-import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 
 const Journey = () => {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const { leader } = useAuth();
   const [trail, setTrail] = useState(null);
   const [responses, setResponses] = useState({});
 

@@ -17,7 +17,6 @@ import {
   EditablePreview,
   FormControl,
   FormLabel,
-  Input,
   NumberInput,
   NumberInputField,
   Table,
@@ -45,7 +44,6 @@ import {
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
-import ModalResponse from '@components/ModalResponse';
 
 const PainelAdmin = ({ trail }) => {
   const Router = useRouter();
@@ -81,6 +79,7 @@ const PainelAdmin = ({ trail }) => {
     }
   }, [trail, select]);
 
+  // eslint-disable-next-line consistent-return
   const editTrail = async () => {
     if (title === '' && schedule === '') {
       toast({
@@ -114,13 +113,13 @@ const PainelAdmin = ({ trail }) => {
         title,
         schedule,
       })
-      .then(() => {
+      .then(() =>
         toast({
           title: 'Alterado com sucesso',
           status: 'success',
           duration: 3000,
-        });
-      })
+        }),
+      )
       .catch((err) => {
         toast({
           title: 'Houve um erro',
@@ -128,10 +127,9 @@ const PainelAdmin = ({ trail }) => {
           duration: 3000,
         });
         if (err.response) {
-          console.log(err.response.data.error);
-        } else {
-          console.log('Ocorreu um erro. Tente novamente, por favor.');
+          return console.log(err.response.data.error);
         }
+        return console.log('Ocorreu um erro. Tente novamente, por favor.');
       });
   };
 

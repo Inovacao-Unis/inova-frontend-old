@@ -300,7 +300,7 @@ const TrilhaPage = () => {
                 >
                   <Text>{user?.email}</Text>
                 </Flex>
-                {users.map((user) => (
+                {users.map((item) => (
                   <Flex
                     key={user}
                     align="center"
@@ -311,14 +311,14 @@ const TrilhaPage = () => {
                     mr="10px"
                     mb="10px"
                   >
-                    <Text>{user.email}</Text>
+                    <Text>{item.email}</Text>
                     <DeleteIcon
                       cursor="pointer"
                       ml="8px"
                       w={3}
                       h={3}
                       color="red.500"
-                      onClick={() => removeMember(user)}
+                      onClick={() => removeMember(item)}
                     />
                   </Flex>
                 ))}

@@ -1,13 +1,11 @@
 import { useRouter } from 'next/router';
-import { Container, Box, Text, Heading } from '@chakra-ui/react';
+import { Container, Box, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
-import matter from 'gray-matter';
 import ReactMarkdown from 'react-markdown';
 import Short from '@components/Short';
 import problema from '@content/problema.md';
 
 import Layout from '@components/Layout';
-import getSlugs from '@utils/getSlugs';
 
 export default function BlogPost() {
   const Router = useRouter();

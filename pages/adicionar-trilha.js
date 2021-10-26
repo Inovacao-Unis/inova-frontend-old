@@ -35,8 +35,7 @@ const adicionarAtividade = () => {
   useEffect(() => {
     const getData = async () => {
       await api.get('challenges').then((res) => {
-        // eslint-disable-next-line no-return-assign
-        res.data.map((category) => {
+        res.data.forEach((category) => {
           category.checked = false;
           category.challenges.map((challenge) => (challenge.checked = false));
           if (category.slug === 'engenharia') setEngenhariaChallenges(category);

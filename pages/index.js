@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { useAuth } from '@contexts/AuthContext';
 import Layout from '@components/Layout';
 import {
   Container,
@@ -17,24 +15,18 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  CircularProgress,
 } from '@chakra-ui/react';
 import firebase from '@lib/firebase';
 import api from '../services/api';
 
 const Home = () => {
-  const Router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [login, setLogin] = useState(true);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-
     const token = Cookies.get('itka');
 
     if (!token) {
-      setLoading(false);
       return null;
     }
 
@@ -42,7 +34,6 @@ const Home = () => {
       await api
         .get('check')
         .then(() => {
-          setLoading(false);
           window.location.href = '/minha-conta';
         })
         .catch((err) => console.log('error: ', err));
@@ -53,7 +44,6 @@ const Home = () => {
 
   const signinGoogle = async () => {
     try {
-      setLoading(true);
       await firebase
         .auth()
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
@@ -61,7 +51,7 @@ const Home = () => {
           window.location.href = '/minha-conta';
         });
     } finally {
-      setLoading(false);
+      console.log('ok');
     }
   };
 

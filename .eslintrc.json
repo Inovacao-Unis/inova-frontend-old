@@ -25,6 +25,8 @@
       "prettier/prettier": "error",
       "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
       "react/prop-types": "off",
+      "no-param-reassign": 0,
+      "no-console": "off",
       "react/jsx-props-no-spreading": ["error", {
           "html": "ignore",
           "custom": "ignore",

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import api from '@services/api';
 import Link from 'next/link';
@@ -11,7 +12,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-const TrailInfo = ({ status, trail, painel }) => {
+const TrailInfo = ({ trail, painel }) => {
   const toast = useToast();
   const [team, setTeam] = useState(null);
   const [challenge, setChallenge] = useState({});

@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 const ModalResponse = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>

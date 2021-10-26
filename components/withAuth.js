@@ -17,7 +17,7 @@ const withAuth = (Component) => (props) => {
 
     if (!token) {
       setLoading(false);
-      Router.push('/login');
+      Router.push('/');
       return null;
     }
 
@@ -32,7 +32,7 @@ const withAuth = (Component) => (props) => {
         .catch((err) => {
           console.log('error', err);
           setLoading(false);
-          Router.push('/login');
+          Router.push('/');
         });
     };
 
