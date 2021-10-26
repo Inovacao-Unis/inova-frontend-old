@@ -1,14 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { useAuth } from '@contexts/AuthContext';
 import Layout from '@components/Layout';
-import { Container, Text, Button, Flex, Image } from '@chakra-ui/react';
+import {
+  Container,
+  Text,
+  Button,
+  Flex,
+  Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  CircularProgress,
+} from '@chakra-ui/react';
+import firebase from '@lib/firebase';
 import api from '../services/api';
 
 const Home = () => {
   const Router = useRouter();
-  const { setLoading } = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [login, setLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -33,9 +51,23 @@ const Home = () => {
     return check();
   }, []);
 
+  const signinGoogle = async () => {
+    try {
+      setLoading(true);
+      await firebase
+        .auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(() => {
+          window.location.href = '/minha-conta';
+        });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Layout>
-      <Flex w="100vw" minH="100vh" direction="column" align="center">
+      <Flex w="100vw" minH="87vh" direction="column" align="center">
         <Image
           src="/images/astronaut.png"
           alt="Imagem de astronauta"
@@ -63,7 +95,10 @@ const Home = () => {
               bgColor="highlight"
               _hover={{ bg: 'highlight' }}
               color="white"
-              onClick={() => Router.push('/login')}
+              onClick={() => {
+                setLogin(true);
+                onOpen();
+              }}
               mb="10px"
             >
               Entrar
@@ -73,11 +108,52 @@ const Home = () => {
               bg="white"
               color="highlight"
               _hover={{ bg: 'white' }}
-              onClick={() => Router.push('/login')}
+              onClick={() => {
+                setLogin(false);
+                onOpen();
+              }}
             >
               Criar uma conta
             </Button>
           </Flex>
+          <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader color="highlight">
+                {login ? 'Entrar' : 'Criar uma nova conta'}
+              </ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Flex justify="center">
+                  <Button
+                    bg="#1a73e8"
+                    _hover={{ bg: '1a73e8' }}
+                    color="white"
+                    fontWeight="400"
+                    pl="0"
+                    onClick={signinGoogle}
+                  >
+                    <Image
+                      src="/images/google.jpg"
+                      width="36px"
+                      borderTopLeftRadius="4px"
+                      borderBottomLeftRadius="4px"
+                      alt="Logo Google"
+                      mr="var(--chakra-space-4)"
+                      ml="3px;"
+                    />
+                    {login ? 'Login com Google' : 'Criar conta com Google'}
+                  </Button>
+                </Flex>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button variant="ghost" onClick={onClose}>
+                  Fechar
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </Container>
       </Flex>
     </Layout>

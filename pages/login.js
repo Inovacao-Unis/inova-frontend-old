@@ -25,10 +25,12 @@ import api from '../services/api';
 export default function Login() {
   const toast = useToast();
   const Router = useRouter();
-  const { loading, setLoading } = useAuth();
+  const { loading, setLoading, user } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [confirm, setConfirm] = useState(true);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -75,9 +77,13 @@ export default function Login() {
     await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((res) => {
         setIsLoading(false);
-        window.location.href = '/minha-conta';
+        if (res.user.emailVerified) {
+          window.location.href = '/minha-conta';
+        }
+
+        return setConfirm(true);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -90,6 +96,10 @@ export default function Login() {
           isClosable: true,
         });
       });
+  };
+
+  const sendConfirmEmail = async () => {
+    await user.sendEmailVerification().then(() => setSent(true));
   };
 
   return (
@@ -108,70 +118,91 @@ export default function Login() {
         <Heading textAlign="center" as="h2">
           Login
         </Heading>
-        <Flex justify="center" pt="8vh">
-          <Button
-            bg="#1a73e8"
-            _hover={{ bg: '1a73e8' }}
-            fontWeight="400"
-            pl="0"
-            onClick={signinGoogle}
-          >
-            <Image
-              src="/images/google.jpg"
-              width="40px"
-              borderTopLeftRadius="4px"
-              borderBottomLeftRadius="4px"
-              alt="Logo Google"
-              mr="var(--chakra-space-4)"
-            />
-            Fazer login com o Google
-          </Button>
-        </Flex>
-        <Flex align="center" py="5vh">
-          <Divider />
-          <Text px="10px">Ou</Text>
-          <Divider />
-        </Flex>
-        <form onSubmit={(e) => handleSubmit(e)} width="100%">
-          <FormControl isRequired id="email">
-            <FormLabel>E-mail</FormLabel>
-            <Input
-              type="email"
-              mb={4}
-              _focus={{
-                boxShadow: '0 0 0 3px rgba(0, 0, 0, 0.3)',
-                outline: '2px solid transparent',
-              }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </FormControl>
-          <FormControl isRequired id="password">
-            <FormLabel>Senha</FormLabel>
-            <Input
-              type="password"
-              mb={4}
-              _focus={{
-                boxShadow: '0 0 0 3px rgba(0, 0, 0, 0.3)',
-                outline: '2px solid transparent',
-              }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </FormControl>
-          <Button
-            bgColor="highlight"
-            _hover={{ bg: 'highlight' }}
-            type="submit"
-            width="full"
-          >
-            {isLoading ? (
-              <CircularProgress isIndeterminate size="24px" color="highlight" />
+        {/* {confirm ? (
+          <Flex direction="column" align="center">
+            <Text textAlign="center" fontSize="1.4rem" my="40px">
+              Você precisa confirmar seu e-mail para continuar. Não recebeu?
+            </Text>
+            {sent ? (
+              <Text>Enviado! Confira a caixa de entrada do seu e-mail.</Text>
             ) : (
-              'Enviar'
+              <Button color="wine" onClick={sendConfirmEmail}>
+                Reenviar e-mail de confirmação
+              </Button>
             )}
-          </Button>
-        </form>
+          </Flex>
+        ) : ( */}
+        <Box>
+          <Flex justify="center" pt="8vh">
+            <Button
+              bg="#1a73e8"
+              _hover={{ bg: '1a73e8' }}
+              fontWeight="400"
+              pl="0"
+              onClick={signinGoogle}
+            >
+              <Image
+                src="/images/google.jpg"
+                width="40px"
+                borderTopLeftRadius="4px"
+                borderBottomLeftRadius="4px"
+                alt="Logo Google"
+                mr="var(--chakra-space-4)"
+              />
+              Fazer login com o Google
+            </Button>
+          </Flex>
+          {/* <Flex align="center" py="5vh">
+            <Divider />
+            <Text px="10px">Ou</Text>
+            <Divider />
+          </Flex>
+          <form onSubmit={(e) => handleSubmit(e)} width="100%">
+            <FormControl isRequired id="email">
+              <FormLabel>E-mail</FormLabel>
+              <Input
+                type="email"
+                mb={4}
+                _focus={{
+                  boxShadow: '0 0 0 3px rgba(0, 0, 0, 0.3)',
+                  outline: '2px solid transparent',
+                }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormControl>
+            <FormControl isRequired id="password">
+              <FormLabel>Senha</FormLabel>
+              <Input
+                type="password"
+                mb={4}
+                _focus={{
+                  boxShadow: '0 0 0 3px rgba(0, 0, 0, 0.3)',
+                  outline: '2px solid transparent',
+                }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </FormControl>
+            <Button
+              bgColor="highlight"
+              _hover={{ bg: 'highlight' }}
+              type="submit"
+              width="full"
+            >
+              {isLoading ? (
+                <CircularProgress
+                  isIndeterminate
+                  size="24px"
+                  color="highlight"
+                />
+              ) : (
+                'Enviar'
+              )}
+            </Button>
+          </form> */}
+        </Box>
+        {/* )} */}
         <Box mt="3rem" textAlign="center">
           <Text>Problemas para entrar? Envie um e-mail para:</Text>
           <Link
