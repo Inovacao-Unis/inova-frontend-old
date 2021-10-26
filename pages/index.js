@@ -65,7 +65,7 @@ const Home = () => {
           top="0"
           bottom="0"
           right="0"
-          maxW="620px"
+          maxW="565px"
         />
         <Container maxW="container.xl">
           <Flex direction="column" align="center" pt="15vh">
