@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 const token = Cookies.get('itka');
 
 const api = axios.create({
-  baseURL: 'https://inova-uaiinovei.herokuapp.com',
+  baseURL: process.env.NEXT_PUBLIC_API,
   withCredentials: true,
   crossDomain: true,
   headers: {

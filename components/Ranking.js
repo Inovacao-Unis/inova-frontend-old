@@ -65,7 +65,12 @@ const Ranking = ({ noTitle }) => {
               <Text fontSize="1.2rem" mr="15px">
                 {index + 1}
               </Text>
-              <Avatar mr="15px" name="Nome perfil" src="/images/zebra.jpg" />
+              <Avatar
+                mr="15px"
+                name="Nome perfil"
+                src={team.avatar}
+                bg="none"
+              />
               <Text
                 fontWeight="bold"
                 overflow="hidden"
