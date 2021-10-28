@@ -65,13 +65,13 @@ const Home = () => {
           top="0"
           bottom="0"
           right="0"
-          maxW="565px"
+          maxW={{ base: '0', lg: '0', xl: '567px', '2xl': '705px' }}
         />
         <Container maxW="container.xl">
           <Flex direction="column" align="center" pt="15vh">
             <Text fontSize="3rem">seja</Text>
             <Text
-              fontSize="4rem"
+              fontSize={['3rem', '4rem']}
               lineHeight="4rem"
               fontWeight="bold"
               mb="3rem"

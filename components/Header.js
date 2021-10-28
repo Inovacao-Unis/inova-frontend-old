@@ -152,6 +152,7 @@ export default function Header({ profile, activityBtn, painel }) {
                         bgColor="highlight"
                         color="white"
                         _hover={{ bg: 'highlight' }}
+                        fontSize={['.8rem', '1rem']}
                       >
                         Criar trilha
                       </Button>
@@ -159,8 +160,9 @@ export default function Header({ profile, activityBtn, painel }) {
                   </Link>
                 </Box>
               )}
-              <Box ml="30px">
+              <Box ml={['10px', '30px']}>
                 <Button
+                  fontSize={['.8rem', '1rem']}
                   color="black"
                   onClick={async () => {
                     await firebase.auth().signOut();
