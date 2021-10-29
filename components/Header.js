@@ -53,12 +53,12 @@ export default function Header({ profile, activityBtn, painel }) {
           <Spacer />
           {profile ? (
             <Flex align="center">
-              <Flex align="center" mr="3rem">
+              <Flex align="center" mr={{ base: '20px', lg: '3rem' }}>
                 <Box maxW="25px" mr="0.5rem">
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
                 <Text fontSize="1.2rem" color="white">
-                  {team?.points?.value || '0'}
+                  {team?.points || '0'}
                 </Text>
               </Flex>
               {/* <Popover zIndex="999">
