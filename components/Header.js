@@ -104,14 +104,7 @@ export default function Header({ profile, activityBtn, painel }) {
               </Popover> */}
               <Menu>
                 <MenuButton zIndex="999">
-                  {team?.avatar && (
-                    <Avatar
-                      name="Nome perfil"
-                      src={team.avatar}
-                      bg="transparent"
-                      size="md"
-                    />
-                  )}
+                  <Avatar src={team.avatar} bg="transparent" size="md" />
                 </MenuButton>
                 <MenuList zIndex="999">
                   <MenuItem color="highlight">

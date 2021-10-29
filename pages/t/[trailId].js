@@ -25,6 +25,7 @@ import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
+import imgAvatars from '@utils/imgAvatars.json';
 
 const TrilhaPage = () => {
   const Router = useRouter();
@@ -40,6 +41,7 @@ const TrilhaPage = () => {
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -120,6 +122,14 @@ const TrilhaPage = () => {
       });
     }
 
+    if (!avatar) {
+      return toast({
+        title: `Escolha um avatar`,
+        status: 'error',
+        isClosable: true,
+      });
+    }
+
     const usersArr = [];
     users.forEach((item) => usersArr.push(item.uid));
 
@@ -132,8 +142,10 @@ const TrilhaPage = () => {
         leaderId: trail.leaderId,
         trailId: trail._id,
         users: usersFull,
+        avatar,
       })
-      .then(() => {
+      .then((res) => {
+        console.log(res);
         toast({
           title: `Time cadastrado!`,
           status: 'success',
@@ -249,6 +261,30 @@ const TrilhaPage = () => {
           <Text fontSize="1.3rem" fontWeight="bold" mb="30px" color="black">
             Crie seu time:
           </Text>
+          <Flex direction="column" maxW="400px" pb="40px">
+            <Text color="black" fontWeight="600" fontSize="1rem">
+              Avatar do Time
+            </Text>
+            {avatar && (
+              <Box cursor="pointer" maxW="250px" mx="auto">
+                <img alt="Avatar time" src={avatar} />
+              </Box>
+            )}
+            <Text color="gray" fontSize=".8rem" mt="20px">
+              Para escolher, clique em uma das opções:
+            </Text>
+            <Flex wrap="wrap">
+              {imgAvatars.map((image) => (
+                <Box
+                  cursor="pointer"
+                  maxW="70px"
+                  onClick={() => setAvatar(image)}
+                >
+                  <img alt="Avatar time" src={image} />
+                </Box>
+              ))}
+            </Flex>
+          </Flex>
           <FormControl maxW="400px" pb="40px">
             <FormLabel color="black" fontWeight="600" fontSize="1rem">
               Nome do time

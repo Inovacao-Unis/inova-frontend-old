@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
@@ -24,6 +24,12 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import api from '@services/api';
@@ -42,6 +48,9 @@ const Time = () => {
   const [users, setUsers] = useState([]);
   const [avatar, setAvatar] = useState(null);
   const [responses, setResponses] = useState(null);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const onCloseAlert = () => setIsOpenAlert(false);
+  const cancelRef = useRef();
 
   useEffect(() => {
     const data = async () => {
@@ -150,6 +159,32 @@ const Time = () => {
             status: 'error',
             isClosable: true,
           });
+        }
+      });
+  };
+
+  const deleteTeam = async () => {
+    await api
+      .delete(`team/${team._id}`)
+      .then(() => {
+        toast({
+          title: 'Time deletado',
+          status: 'success',
+          duration: 3000,
+        });
+        Router.push('/minha-conta');
+      })
+      .catch((err) => {
+        onCloseAlert();
+        toast({
+          title: 'Houve um erro',
+          status: 'error',
+          duration: 3000,
+        });
+        if (err.response) {
+          console.log(err.response.data.error);
+        } else {
+          console.log('Ocorreu um erro. Tente novamente, por favor.');
         }
       });
   };
@@ -364,6 +399,50 @@ const Time = () => {
                       Salvar
                     </Button>
                   </Box>
+                </Flex>
+                <Flex
+                  border="1px"
+                  borderColor="red"
+                  direction="column"
+                  maxW="400px"
+                  mx="auto"
+                  p="10px"
+                  mt="80px"
+                  borderRadius="4px"
+                >
+                  <Text color="gray.800" mb="10px">
+                    Depois de excluir um time, não há como voltar atrás.
+                  </Text>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => setIsOpenAlert(true)}
+                  >
+                    Deletar trilha
+                  </Button>
+                  <AlertDialog
+                    isOpen={isOpenAlert}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onCloseAlert}
+                  >
+                    <AlertDialogOverlay>
+                      <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                          Deletar time
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>Tem certeza?</AlertDialogBody>
+
+                        <AlertDialogFooter>
+                          <Button ref={cancelRef} onClick={onCloseAlert}>
+                            Cancelar
+                          </Button>
+                          <Button colorScheme="red" onClick={deleteTeam} ml={3}>
+                            Deletar
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialogOverlay>
+                  </AlertDialog>
                 </Flex>
               </TabPanel>
             </TabPanels>
