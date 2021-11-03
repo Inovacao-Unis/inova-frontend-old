@@ -17,11 +17,13 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import firebase from '@lib/firebase';
+import { useAuth } from '@contexts/AuthContext';
 import api from '../services/api';
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [login, setLogin] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const token = Cookies.get('itka');
@@ -40,7 +42,7 @@ const Home = () => {
     };
 
     return check();
-  }, [Cookies]);
+  }, [user]);
 
   const signinGoogle = async () => {
     try {
