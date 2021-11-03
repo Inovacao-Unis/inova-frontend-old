@@ -23,7 +23,11 @@ const Painel = () => {
   }, [trailId]);
 
   const copyCodeToClipboard = (url) => {
-    navigator.clipboard.writeText(url);
+    const origin =
+      typeof window !== 'undefined' && window.location.origin
+        ? window.location.origin
+        : '';
+    navigator.clipboard.writeText(origin + url);
 
     toast({
       title: 'Link copiado',
@@ -58,9 +62,7 @@ const Painel = () => {
             bg="white"
             _hover={{ bg: 'white' }}
             color="highlight"
-            onClick={() =>
-              copyCodeToClipboard(`http://localhost:3000/t/${trail?.code}`)
-            }
+            onClick={() => copyCodeToClipboard(`/t/${trail?.code}`)}
           >
             Copiar link da trilha
           </Button>

@@ -40,7 +40,6 @@ export default function Header({ profile, activityBtn, painel }) {
   const toast = useToast();
 
   useEffect(() => {
-    console.log('user ', user);
     const getData = async () => {
       await api.get(`game-team/${trailId}`).then((res) => setTeam(res.data));
     };
