@@ -194,8 +194,19 @@ const PainelAdmin = ({ trail }) => {
   };
 
   return (
-    <Flex p="30px" mx="auto" borderRadius="4px" maxW="900px" bg="white">
-      <Tabs colorScheme="pink" isFitted w="100%">
+    <Flex
+      p={{ base: '10px', lg: '30px' }}
+      mx="auto"
+      borderRadius="4px"
+      maxW={{ base: '100%', lg: '900px' }}
+      bg="white"
+    >
+      <Tabs
+        colorScheme="pink"
+        isFitted
+        w="100%"
+        overflowX={{ base: 'scroll', lg: 'inherit' }}
+      >
         <TabList>
           <Tab color="black">Ranking</Tab>
           <Tab color="black">Respostas</Tab>
@@ -203,10 +214,10 @@ const PainelAdmin = ({ trail }) => {
         </TabList>
 
         <TabPanels>
-          <TabPanel>
+          <TabPanel p="0">
             <Ranking noTitle />
           </TabPanel>
-          <TabPanel>
+          <TabPanel p="0">
             {teams?.length > 0 ? (
               <Table variant="simple">
                 <Thead>
@@ -427,7 +438,7 @@ const PainelAdmin = ({ trail }) => {
               </ModalContent>
             </Modal>
           </TabPanel>
-          <TabPanel>
+          <TabPanel p="0">
             {trail && (
               <Box mt="20px" maxW="400px" mx="auto">
                 <Flex direction="column" mx="auto">

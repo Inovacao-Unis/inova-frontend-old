@@ -156,11 +156,6 @@ export default function Header({ profile, activityBtn, painel }) {
                       <a>Área do Time</a>
                     </Link>
                   </MenuItem>
-                  <MenuItem color="highlight">
-                    <Link href="/editar-perfil">
-                      <a>Configurações</a>
-                    </Link>
-                  </MenuItem>
                   <MenuItem
                     color="highlight"
                     onClick={async () => {
