@@ -96,7 +96,7 @@ export default function Header({ profile, activityBtn, painel }) {
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
                 <Text fontSize="1.2rem" color="white">
-                  {team?.points || '0'}
+                  {team?.points?.value || '0'}
                 </Text>
               </Flex>
               {/* <Popover zIndex="999">

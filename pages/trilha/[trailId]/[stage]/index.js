@@ -26,7 +26,7 @@ export default function BlogPost() {
           >
             <Box>
               ←{' '}
-              <Link href={`/atividade/${trailId}`}>
+              <Link href={`/trilha/${trailId}`}>
                 <a>Voltar</a>
               </Link>
             </Box>

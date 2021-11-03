@@ -175,6 +175,8 @@ const PainelAdmin = ({ trail }) => {
         teamId: select.teamId,
       })
       .then(() => {
+        setPoints(0);
+        setFeedback('');
         toast({
           title: 'Resposta avaliada!',
           status: 'success',
@@ -254,15 +256,17 @@ const PainelAdmin = ({ trail }) => {
                           )}
                           {team.responses.find((item) => item.stage === 1) ? (
                             <Button
-                              onClick={() =>
+                              onClick={() => {
+                                setPoints(0);
+                                setFeedback('');
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 1,
                                     )
                                   ],
-                                )
-                              }
+                                );
+                              }}
                               size="sm"
                             >
                               Ver
@@ -287,15 +291,17 @@ const PainelAdmin = ({ trail }) => {
                           )}
                           {team.responses.find((item) => item.stage === 2) ? (
                             <Button
-                              onClick={() =>
+                              onClick={() => {
+                                setPoints(0);
+                                setFeedback('');
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 2,
                                     )
                                   ],
-                                )
-                              }
+                                );
+                              }}
                               size="sm"
                             >
                               Ver
@@ -320,15 +326,17 @@ const PainelAdmin = ({ trail }) => {
                           )}
                           {team.responses.find((item) => item.stage === 3) ? (
                             <Button
-                              onClick={() =>
+                              onClick={() => {
+                                setPoints(0);
+                                setFeedback('');
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 3,
                                     )
                                   ],
-                                )
-                              }
+                                );
+                              }}
                               size="sm"
                             >
                               Ver
@@ -353,15 +361,17 @@ const PainelAdmin = ({ trail }) => {
                           )}
                           {team.responses.find((item) => item.stage === 4) ? (
                             <Button
-                              onClick={() =>
+                              onClick={() => {
+                                setPoints(0);
+                                setFeedback('');
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 4,
                                     )
                                   ],
-                                )
-                              }
+                                );
+                              }}
                               size="sm"
                             >
                               Ver
