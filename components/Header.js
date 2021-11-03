@@ -14,6 +14,7 @@ import {
   MenuList,
   MenuItem,
   Button,
+  MenuDivider,
 } from '@chakra-ui/react';
 import api from '@services/api';
 import { useAuth } from '@contexts/AuthContext';
@@ -24,10 +25,11 @@ import firebase from '../lib/firebase';
 export default function Header({ profile, activityBtn, painel }) {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const { leader } = useAuth();
+  const { user, leader } = useAuth();
   const [team, setTeam] = useState({});
 
   useEffect(() => {
+    console.log('user ', user);
     const getData = async () => {
       await api.get(`game-team/${trailId}`).then((res) => setTeam(res.data));
     };
@@ -35,7 +37,7 @@ export default function Header({ profile, activityBtn, painel }) {
     if (trailId) {
       getData();
     }
-  }, [trailId]);
+  }, [trailId, user]);
 
   return (
     <Box
@@ -153,18 +155,30 @@ export default function Header({ profile, activityBtn, painel }) {
                   </Link>
                 </Box>
               )}
-              <Box ml={['10px', '30px']}>
-                <Button
-                  fontSize={['.8rem', '1rem']}
-                  color="black"
-                  onClick={async () => {
-                    await firebase.auth().signOut();
-                    window.location.href = '/';
-                  }}
-                >
-                  Sair
-                </Button>
-              </Box>
+              <Menu>
+                <MenuButton zIndex="999" ml={['10px', '30px']}>
+                  <Avatar src={user?.photoURL} bg="transparent" size="md" />
+                </MenuButton>
+                <MenuList zIndex="999">
+                  <Box p=".8rem">
+                    <Text color="gray.700">{user?.displayName}</Text>
+                    <Text color="gray.700" fontSize=".9rem">
+                      {user?.email}
+                    </Text>
+                  </Box>
+
+                  <MenuDivider />
+                  <MenuItem
+                    color="highlight"
+                    onClick={async () => {
+                      await firebase.auth().signOut();
+                      window.location.href = '/';
+                    }}
+                  >
+                    Sair
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             </Flex>
           )}
           {painel && (
