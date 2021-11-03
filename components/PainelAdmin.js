@@ -214,7 +214,11 @@ const PainelAdmin = ({ trail }) => {
         </TabList>
 
         <TabPanels>
-          <TabPanel p="0">
+          <TabPanel
+            w={{ base: '100%', lg: '500px' }}
+            mx="auto"
+            p={{ base: '0', lg: 'var(--chakra-space-4)' }}
+          >
             <Ranking noTitle />
           </TabPanel>
           <TabPanel p="0">

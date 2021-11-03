@@ -82,7 +82,7 @@ const Ranking = ({ noTitle }) => {
                 {team.name}
               </Text>
               <Flex flexGrow="1" textAlign="right" align="center" justify="end">
-                <Box maxW="15px" mr="0.5rem">
+                <Box w="15px" mr="0.5rem">
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
                 <Text fontSize="1.2rem">{team.points}</Text>
