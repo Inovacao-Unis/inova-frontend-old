@@ -174,7 +174,7 @@ const TrilhaPage = () => {
   };
 
   return (
-    <Layout profile>
+    <Layout painel>
       <Container maxW="container.lg" zIndex="800" pb="40vh">
         <Flex direction="column">
           <Heading

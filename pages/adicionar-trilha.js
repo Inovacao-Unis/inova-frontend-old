@@ -137,7 +137,7 @@ const adicionarAtividade = () => {
   };
 
   return (
-    <Layout>
+    <Layout painel>
       <Container maxW="container.xl" zIndex="800" pb="100px">
         <Heading
           fontSize="2.5rem"
