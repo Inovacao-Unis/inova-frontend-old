@@ -41,7 +41,10 @@ export default function Header({ profile, activityBtn, painel }) {
 
   useEffect(() => {
     const getData = async () => {
-      await api.get(`game-team/${trailId}`).then((res) => setTeam(res.data));
+      await api.get(`game-team/${trailId}`).then((res) => {
+        setTeam(res.data);
+        console.log(res.data);
+      });
     };
 
     if (trailId) {
@@ -96,7 +99,7 @@ export default function Header({ profile, activityBtn, painel }) {
                   <Image src="/images/pointIcon.png" alt="Ícone dos pontos" />
                 </Box>
                 <Text fontSize="1.2rem" color="white">
-                  {team?.points?.value || '0'}
+                  {team?.points || '0'}
                 </Text>
               </Flex>
               {/* <Popover zIndex="999">
