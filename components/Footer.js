@@ -1,4 +1,4 @@
-import { Container, Box, Flex, Center, Text, Link } from '@chakra-ui/react';
+import { Container, Box, Flex, Center, Link } from '@chakra-ui/react';
 import { FaInstagram, FaYoutube, FaRegEnvelope } from 'react-icons/fa';
 
 export default function Footer() {

@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Flex,
   Container,
@@ -15,6 +15,13 @@ import {
   MenuItem,
   Button,
   MenuDivider,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  useToast,
 } from '@chakra-ui/react';
 import api from '@services/api';
 import { useAuth } from '@contexts/AuthContext';
@@ -27,6 +34,10 @@ export default function Header({ profile, activityBtn, painel }) {
   const { trailId } = Router.query;
   const { user, leader } = useAuth();
   const [team, setTeam] = useState({});
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const onCloseAlert = () => setIsOpenAlert(false);
+  const cancelRef = useRef();
+  const toast = useToast();
 
   useEffect(() => {
     console.log('user ', user);
@@ -38,6 +49,32 @@ export default function Header({ profile, activityBtn, painel }) {
       getData();
     }
   }, [trailId, user]);
+
+  const deleteAccount = async () => {
+    await user
+      .delete()
+      .then(() => {
+        toast({
+          title: 'Conta deletada',
+          status: 'success',
+          duration: 3000,
+        });
+        Router.push('/');
+      })
+      .catch((err) => {
+        onCloseAlert();
+        toast({
+          title: 'Houve um erro',
+          status: 'error',
+          duration: 3000,
+        });
+        if (err.response) {
+          console.log(err.response.data.error);
+        } else {
+          console.log('Ocorreu um erro. Tente novamente, por favor.');
+        }
+      });
+  };
 
   return (
     <Box
@@ -166,9 +203,56 @@ export default function Header({ profile, activityBtn, painel }) {
                       {user?.email}
                     </Text>
                   </Box>
+                  <MenuItem
+                    justifyContent="center"
+                    onClick={() => setIsOpenAlert(true)}
+                  >
+                    <Box
+                      bg="black"
+                      py="2px"
+                      w="100%"
+                      fontSize=".9rem"
+                      textAlign="center"
+                      borderRadius="4px"
+                    >
+                      Deletar conta
+                    </Box>
+                  </MenuItem>
+                  <AlertDialog
+                    isOpen={isOpenAlert}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onCloseAlert}
+                  >
+                    <AlertDialogOverlay>
+                      <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                          Deletar conta
+                        </AlertDialogHeader>
 
+                        <AlertDialogBody>Tem certeza?</AlertDialogBody>
+
+                        <AlertDialogFooter>
+                          <Button ref={cancelRef} onClick={onCloseAlert}>
+                            Cancelar
+                          </Button>
+                          <Button
+                            colorScheme="red"
+                            onClick={deleteAccount}
+                            ml={3}
+                          >
+                            Deletar
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialogOverlay>
+                  </AlertDialog>
                   <MenuDivider />
                   <MenuItem
+                    justifyContent="center"
+                    border="1px"
+                    borderRadius="3px"
+                    maxW="100px"
+                    mx="auto"
                     color="highlight"
                     onClick={async () => {
                       await firebase.auth().signOut();

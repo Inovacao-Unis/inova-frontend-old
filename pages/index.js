@@ -40,7 +40,7 @@ const Home = () => {
     };
 
     return check();
-  }, []);
+  }, [Cookies]);
 
   const signinGoogle = async () => {
     try {
