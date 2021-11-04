@@ -41,13 +41,20 @@ export default function Header({ profile, activityBtn, painel }) {
 
   useEffect(() => {
     const getData = async () => {
-      await api.get(`game-team/${trailId}`).then((res) => {
-        setTeam(res.data);
-        console.log(res.data);
-      });
+      await api
+        .get(`game-team/${trailId}`)
+        .then((res) => {
+          setTeam(res.data);
+        })
+        .catch((err) => {
+          if (err.response) {
+            return console.log(err.response.data.error);
+          }
+          return console.log('Ocorreu um erro. Tente novamente, por favor.');
+        });
     };
 
-    if (trailId) {
+    if (trailId && !painel) {
       getData();
     }
   }, [trailId, user]);

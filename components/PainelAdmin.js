@@ -237,7 +237,7 @@ const PainelAdmin = ({ trail }) => {
                 </Thead>
                 <Tbody>
                   {teams?.map((team) => (
-                    <Tr>
+                    <Tr key={team._id}>
                       <Td color="black">{team.name}</Td>
                       <Td color="black" textAlign="center">
                         <Flex direction="column" w="100%" align="center">

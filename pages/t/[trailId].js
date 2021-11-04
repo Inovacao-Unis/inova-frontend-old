@@ -3,6 +3,7 @@
 /* eslint-disable array-callback-return */
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   Container,
   Heading,
@@ -257,6 +258,20 @@ const TrilhaPage = () => {
               })}
             </Stack>
           </RadioGroup>
+          <Link href="/desafios">
+            <Button
+              maxW={{ base: '100%', lg: '260px' }}
+              size="sm"
+              border="2px"
+              mt="30px"
+              bg="highlight"
+              color="white"
+              _hover={{ bg: 'highlight' }}
+              mb="30px"
+            >
+              Acessar o conteúdo dos desafios
+            </Button>
+          </Link>
           <Divider mb="30px" />
           <Text fontSize="1.3rem" fontWeight="bold" mb="30px" color="black">
             Crie seu time:
@@ -276,6 +291,7 @@ const TrilhaPage = () => {
             <Flex wrap="wrap">
               {imgAvatars.map((image) => (
                 <Box
+                  key={image}
                   cursor="pointer"
                   maxW="70px"
                   onClick={() => setAvatar(image)}

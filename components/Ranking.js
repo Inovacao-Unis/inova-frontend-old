@@ -24,7 +24,13 @@ const Ranking = ({ noTitle }) => {
     const getData = async () => {
       await api
         .get(`game-team/${trailId}`)
-        .then((res) => setTeamId(res.data._id));
+        .then((res) => setTeamId(res.data._id))
+        .catch((err) => {
+          if (err.response) {
+            return console.log(err.response.data.error);
+          }
+          return console.log('Ocorreu um erro. Tente novamente, por favor.');
+        });
     };
 
     if (!noTitle) {

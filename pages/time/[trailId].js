@@ -54,15 +54,23 @@ const Time = () => {
 
   useEffect(() => {
     const data = async () => {
-      await api.get(`game-team/${trailId}`).then((res) => {
-        setTeam(res.data);
-        setName(res.data.name);
-        const usersFilter = res.data.users.filter(
-          (item) => item.uid !== user.uid,
-        );
-        setAvatar(res.data.avatar);
-        setUsers(usersFilter);
-      });
+      await api
+        .get(`game-team/${trailId}`)
+        .then((res) => {
+          setTeam(res.data);
+          setName(res.data.name);
+          const usersFilter = res.data.users.filter(
+            (item) => item.uid !== user.uid,
+          );
+          setAvatar(res.data.avatar);
+          setUsers(usersFilter);
+        })
+        .catch((err) => {
+          if (err.response) {
+            return console.log(err.response.data.error);
+          }
+          return console.log('Ocorreu um erro. Tente novamente, por favor.');
+        });
     };
 
     if (trailId && user) {

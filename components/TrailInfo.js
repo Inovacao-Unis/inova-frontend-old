@@ -20,7 +20,15 @@ const TrailInfo = ({ trail, painel }) => {
 
   useEffect(() => {
     const getData = async () => {
-      await api.get(`game-team/${trail._id}`).then((res) => setTeam(res.data));
+      await api
+        .get(`game-team/${trail._id}`)
+        .then((res) => setTeam(res.data))
+        .catch((err) => {
+          if (err.response) {
+            return console.log(err.response.data.error);
+          }
+          return console.log('Ocorreu um erro. Tente novamente, por favor.');
+        });
     };
 
     getData();
