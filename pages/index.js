@@ -16,19 +16,22 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import firebase from '@lib/firebase';
 import { useAuth } from '@contexts/AuthContext';
 import api from '../services/api';
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [login, setLogin] = useState(true);
-  const { user } = useAuth();
+  const { user, signinGoogle } = useAuth();
 
   useEffect(() => {
     const token = Cookies.get('itka');
 
     if (!token) {
+      return null;
+    }
+
+    if (!user) {
       return null;
     }
 
@@ -42,20 +45,7 @@ const Home = () => {
     };
 
     return check();
-  }, [user]);
-
-  const signinGoogle = async () => {
-    try {
-      await firebase
-        .auth()
-        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-        .then(() => {
-          window.location.href = '/minha-conta';
-        });
-    } finally {
-      console.log('ok');
-    }
-  };
+  }, [user, Cookies]);
 
   return (
     <Layout>

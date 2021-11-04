@@ -25,9 +25,21 @@ export function AuthProvider({ children }) {
     [],
   );
 
+  const signinGoogle = async () => {
+    await firebase
+      .auth()
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(async (res) => {
+        const token = await res.user.getIdToken(true);
+        setUser(res.user);
+        Cookies.set('itka', token, { expires: 60 });
+        window.location.href = '/minha-conta';
+      });
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, loading, setLoading, leader, setLeader }}
+      value={{ user, loading, setLoading, leader, setLeader, signinGoogle }}
     >
       {children}
     </AuthContext.Provider>
