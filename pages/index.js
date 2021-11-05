@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import Layout from '@components/Layout';
+import Link from 'next/link';
 import {
   Container,
   Text,
@@ -106,26 +107,37 @@ const Home = () => {
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Flex justify="center">
-                  <Button
-                    bg="#1a73e8"
-                    _hover={{ bg: '1a73e8' }}
-                    color="white"
-                    fontWeight="400"
-                    pl="0"
-                    onClick={signinGoogle}
-                  >
-                    <Image
-                      src="/images/google.jpg"
-                      width="36px"
-                      borderTopLeftRadius="4px"
-                      borderBottomLeftRadius="4px"
-                      alt="Logo Google"
-                      mr="var(--chakra-space-4)"
-                      ml="3px;"
-                    />
-                    {login ? 'Login com Google' : 'Criar conta com Google'}
-                  </Button>
+                <Flex direction="column">
+                  <Flex justify="center">
+                    <Button
+                      mb="50px"
+                      bg="#1a73e8"
+                      _hover={{ bg: '1a73e8' }}
+                      color="white"
+                      fontWeight="400"
+                      pl="0"
+                      onClick={signinGoogle}
+                    >
+                      <Image
+                        src="/images/google.jpg"
+                        width="36px"
+                        borderTopLeftRadius="4px"
+                        borderBottomLeftRadius="4px"
+                        alt="Logo Google"
+                        mr="var(--chakra-space-4)"
+                        ml="3px;"
+                      />
+                      {login ? 'Login com Google' : 'Criar conta com Google'}
+                    </Button>
+                  </Flex>
+                  <Text fontSize=".9rem" maxW="300px" mx="auto">
+                    Ao utilizar a plataforma você concorda com a{' '}
+                    <Link href="politica-de-privacidade">
+                      <a style={{ color: '#9e2a96' }}>
+                        Política de Privacidade
+                      </a>
+                    </Link>
+                  </Text>
                 </Flex>
               </ModalBody>
 
