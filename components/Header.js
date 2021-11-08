@@ -94,7 +94,7 @@ export default function Header({ profile, activityBtn, painel }) {
       <Container maxW="container.xl">
         <Flex>
           <Center cursor="pointer" onClick={() => Router.push('/minha-conta')}>
-            <Box maxWidth="150">
+            <Box maxWidth="45">
               <Image src="/images/logo.png" alt="Logo UaiInovei" />
             </Box>
           </Center>
