@@ -41,10 +41,10 @@ const Politica = () => (
           </Text>
           <Text mt="20px" mb="5px">
             Apenas retemos as informações coletadas pelo tempo necessário para
-            fornecer o serviço solicitado. Quando armazenamos dados, protegemos
-            dentro de meios comercialmente aceitáveis para evitar perdas e
-            roubos, bem como acesso, divulgação, cópia, uso ou modificação não
-            autorizados.
+            fornecer o serviço solicitado. Quando armazenamos dados, os
+            protegemos dentro de meios comercialmente aceitáveis para evitar
+            perdas e roubos, bem como acesso, divulgação, cópia, uso ou
+            modificação não autorizados.
           </Text>
           <Text mt="20px" mb="5px">
             Não compartilhamos informações de identificação pessoal publicamente
@@ -61,19 +61,19 @@ const Politica = () => (
             pessoais, entendendo que talvez não possamos fornecer alguns dos
             serviços desejados.
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mt="20px" mb="50px">
             O uso continuado de nosso site será considerado como aceitação de
             nossas práticas em torno de privacidade e informações pessoais. Se
             você tiver alguma dúvida sobre como lidamos com dados do usuário e
-            informações pessoais, entre em contacto connosco.
+            informações pessoais, entre em contato conosco.
           </Text>
-          <Text fontSize="lg" fontWeight="bold">
+          <Text fontSize="lg" mb="20px" fontWeight="bold">
             Política de Cookies Inova{' '}
           </Text>{' '}
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold" mb="5px">
             O que são cookies?
           </Text>
-          <Text mt="10px" mb="5px">
+          <Text mb="30px">
             Como é prática comum em quase todos os sites profissionais, este
             site usa cookies, que são pequenos arquivos baixados no seu
             computador, para melhorar sua experiência. Esta página descreve
@@ -83,10 +83,10 @@ const Politica = () => (
             isso pode fazer o downgrade ou &apos;quebrar&apos; certos elementos
             da funcionalidade do site.
           </Text>
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold">
             Como usamos os cookies?
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mb="30px">
             Utilizamos cookies por vários motivos, detalhados abaixo.
             Infelizmente, na maioria dos casos, não existem opções padrão do
             setor para desativar os cookies sem desativar completamente a
@@ -95,26 +95,26 @@ const Politica = () => (
             precisa ou não deles, caso sejam usados para fornecer um serviço que
             você usa.
           </Text>
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold">
             Desativar cookies
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mb="30px">
             Você pode impedir a configuração de cookies ajustando as
-            configurações do seu navegador (consulte a Ajuda do navegador para
+            configurações do seu navegador (consulte a ajuda do navegador para
             saber como fazer isso). Esteja ciente de que a desativação de
             cookies afetará a funcionalidade deste e de muitos outros sites que
             você visita. A desativação de cookies geralmente resultará na
             desativação de determinadas funcionalidades e recursos deste site.
             Portanto, é recomendável que você não desative os cookies.
           </Text>
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold">
             Cookies que definimos
           </Text>
           <UnorderedList>
             <ListItem>
               Cookies relacionados à conta
               <br />
-              <br /> Se você criar uma conta connosco, usaremos cookies para o
+              <br /> Se você criar uma conta conosco, usaremos cookies para o
               gerenciamento do processo de inscrição e administração geral.
               Esses cookies geralmente serão excluídos quando você sair do
               sistema, porém, em alguns casos, eles poderão permanecer
@@ -135,27 +135,6 @@ const Politica = () => (
               <br />
             </ListItem>
             <ListItem>
-              Cookies relacionados a boletins por e-mail
-              <br />
-              <br />
-              Este site oferece serviços de assinatura de boletim informativo ou
-              e-mail e os cookies podem ser usados para lembrar se você já está
-              registrado e se deve mostrar determinadas notificações válidas
-              apenas para usuários inscritos / não inscritos.
-              <br />
-              <br />
-            </ListItem>
-            <ListItem>
-              Pedidos processando cookies relacionados
-              <br />
-              <br /> Este site oferece facilidades de comércio eletrônico ou
-              pagamento e alguns cookies são essenciais para garantir que seu
-              pedido seja lembrado entre as páginas, para que possamos
-              processá-lo adequadamente.
-              <br />
-              <br />
-            </ListItem>
-            <ListItem>
               Cookies relacionados a pesquisas
               <br />
               <br /> Periodicamente, oferecemos pesquisas e questionários para
@@ -170,13 +149,13 @@ const Politica = () => (
               Cookies relacionados a formulários
               <br />
               <br /> Quando você envia dados por meio de um formulário como os
-              encontrados nas páginas de contacto ou nos formulários de
-              comentários, os cookies podem ser configurados para lembrar os
-              detalhes do usuário para correspondência futura.
+              encontrados nas páginas de contato, os cookies podem ser
+              configurados para lembrar os detalhes do usuário para
+              correspondência futura.
               <br />
               <br />
             </ListItem>
-            <ListItem>
+            <ListItem mb="30px">
               Cookies de preferências do site
               <br />
               <br /> Para proporcionar uma ótima experiência neste site,
@@ -188,10 +167,10 @@ const Politica = () => (
               <br />
             </ListItem>
           </UnorderedList>
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold">
             Cookies de Terceiros
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mb="20px">
             Em alguns casos especiais, também usamos cookies fornecidos por
             terceiros confiáveis. A seção a seguir detalha quais cookies de
             terceiros você pode encontrar através deste site.
@@ -205,10 +184,14 @@ const Politica = () => (
               você gasta no site e as páginas visitadas, para que possamos
               continuar produzindo conteúdo atraente.
             </ListItem>
+            <ListItem>
+              Este site usa Firebase, que é um serviço de login e análise
+              fornecido pelo Google Inc.
+            </ListItem>
           </UnorderedList>
-          <Text mt="20px" mb="5px">
-            Para mais informações sobre cookies do Google Analytics, consulte a
-            página oficial do Google Analytics.
+          <Text mt="20px" mb="30px">
+            Para mais informações sobre cookies do Google Analytics e Firebase,
+            consulte a página oficial do Google Analytics e Firebase.
           </Text>
           <UnorderedList>
             <ListItem>
@@ -218,42 +201,33 @@ const Politica = () => (
               passa no site ou as páginas visitadas, o que nos ajuda a entender
               como podemos melhorar o site para você.
             </ListItem>
-            <ListItem>
-              Periodicamente, testamos novos recursos e fazemos alterações
-              subtis na maneira como o site se apresenta. Quando ainda estamos
-              testando novos recursos, esses cookies podem ser usados para
-              garantir que você receba uma experiência consistente enquanto
-              estiver no site, enquanto entendemos quais otimizações os nossos
-              usuários mais apreciam.
-            </ListItem>
-            <ListItem>
-              À medida que vendemos produtos, é importante entendermos as
-              estatísticas sobre quantos visitantes de nosso site realmente
-              compram e, portanto, esse é o tipo de dados que esses cookies
-              rastrearão. Isso é importante para você, pois significa que
-              podemos fazer previsões de negócios com precisão que nos permitem
-              analizar nossos custos de publicidade e produtos para garantir o
-              melhor preço possível.
+            <ListItem mb="30px">
+              Periodicamente, testamos novos recursos e fazemos alterações sutis
+              na maneira como o site se apresenta. Quando ainda estamos testando
+              novos recursos, esses cookies podem ser usados para garantir que
+              você receba uma experiência consistente enquanto estiver no site,
+              enquanto entendemos quais otimizações os nossos usuários mais
+              apreciam.
             </ListItem>
           </UnorderedList>
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold">
             Compromisso do Usuário
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mb="10px">
             O usuário se compromete a fazer uso adequado dos conteúdos e da
             informação que o Inova oferece no site e com caráter enunciativo,
             mas não limitativo:
           </Text>
-          <UnorderedList>
+          <UnorderedList mb="30px">
             <ListItem>
               A) Não se envolver em atividades que sejam ilegais ou contrárias à
               boa fé a à ordem pública;
             </ListItem>
             <ListItem>
               B) Não difundir propaganda ou conteúdo de natureza racista,
-              xenofóbica, ou casas de apostas legais (ex.: Betano), jogos de
-              sorte e azar, qualquer tipo de pornografia ilegal, de apologia ao
-              terrorismo ou contra os direitos humanos;
+              xenofóbica, ou casas de apostas legais, jogos de sorte e azar,
+              qualquer tipo de pornografia ilegal, de apologia ao terrorismo ou
+              contra os direitos humanos;
             </ListItem>
             <ListItem>
               C) Não causar danos aos sistemas físicos (hardwares) e lógicos
@@ -263,16 +237,16 @@ const Politica = () => (
               anteriormente mencionados.
             </ListItem>
           </UnorderedList>
-          <Text fontSize="md" fontWeight="bold" mt="10px" mb="5px">
+          <Text fontSize="md" fontWeight="bold">
             Mais informações
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mb="50px">
             Esperemos que esteja esclarecido e, como mencionado anteriormente,
             se houver algo que você não tem certeza se precisa ou não,
             geralmente é mais seguro deixar os cookies ativados, caso interaja
             com um dos recursos que você usa em nosso site.
           </Text>
-          <Text mt="20px" mb="5px">
+          <Text mb="50px">
             Esta política é efetiva a partir de <strong>Novembro</strong>/
             <strong>2021</strong>.
           </Text>
