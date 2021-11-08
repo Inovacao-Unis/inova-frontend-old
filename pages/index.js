@@ -138,6 +138,10 @@ const Home = () => {
                       </a>
                     </Link>
                   </Text>
+                  <Text fontSize=".9rem" maxW="300px" mx="auto">
+                    Se tiver alguma dúvida ou dificuldade, envie um e-mail para{' '}
+                    <strong>inovacao@unis.edu.br</strong>
+                  </Text>
                 </Flex>
               </ModalBody>
 
