@@ -1,9 +1,11 @@
 /* eslint-disable react/no-danger */
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Box, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
 // import ReactMarkdown from 'react-markdown';
 import Short from '@components/Short';
+import api from '@services/api';
 import um from '@content/um.md';
 import dois from '@content/dois.md';
 import tres from '@content/tres.md';
@@ -14,6 +16,30 @@ import Layout from '@components/Layout';
 export default function BlogPost() {
   const Router = useRouter();
   const { trailId, stage } = Router.query;
+
+  useEffect(() => {
+    let isMounted = true;
+    const getData = async () => {
+      // eslint-disable-next-line consistent-return
+      await api.get(`game-responses/${trailId}`).then((res) => {
+        const page = Number(stage);
+        if (page === 1) {
+          return null;
+        }
+        if (!res.data[page - 1]) {
+          // eslint-disable-next-line no-return-assign
+          window.location.href = '/minha-conta';
+        }
+      });
+    };
+
+    if (isMounted) {
+      getData();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [trailId]);
 
   function createMarkup(content) {
     if (content === '1') {
