@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Box, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
