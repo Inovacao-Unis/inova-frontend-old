@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import { Container, Box, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
+//import ReactMarkdown from 'react-markdown';
 import Short from '@components/Short';
 import um from '@content/um.md';
 import dois from '@content/dois.md';
