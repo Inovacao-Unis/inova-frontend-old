@@ -74,7 +74,7 @@ function Short({ stage, trailId }) {
     <Box>
       <form onSubmit={(e) => handleSubmit(e)}>
         <FormControl isRequired id="response">
-          <FormLabel>Resposta</FormLabel>
+          <FormLabel fontSize="2xl">Resposta</FormLabel>
           <Input
             type="text"
             mb={4}

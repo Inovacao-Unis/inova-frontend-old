@@ -1,15 +1,41 @@
+/* eslint-disable react/no-danger */
 import { useRouter } from 'next/router';
 import { Container, Box, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import Short from '@components/Short';
-import problema from '@content/problema.md';
+import um from '@content/um.md';
+import dois from '@content/dois.md';
+import tres from '@content/tres.md';
+import quatro from '@content/quatro.md';
 
 import Layout from '@components/Layout';
 
 export default function BlogPost() {
   const Router = useRouter();
   const { trailId, stage } = Router.query;
+
+  function createMarkup(content) {
+    if (content === '1') {
+      return {
+        __html: um,
+      };
+    }
+    if (content === '2') {
+      return {
+        __html: dois,
+      };
+    }
+    if (content === '3') {
+      return {
+        __html: tres,
+      };
+    }
+
+    return {
+      __html: quatro,
+    };
+  }
 
   return (
     <>
@@ -24,16 +50,24 @@ export default function BlogPost() {
             px="40px"
             borderRadius="4px"
           >
-            <Box>
+            <Box mb="10px">
               ←{' '}
               <Link href={`/trilha/${trailId}`}>
                 <a>Voltar</a>
               </Link>
             </Box>
-            <Heading>Etapa {stage}</Heading>
+            <Heading>Planeta {stage}</Heading>
             <Box>
-              <div className="archive">
-                <ReactMarkdown>{problema}</ReactMarkdown>
+              <div
+                className="archive"
+                dangerouslySetInnerHTML={createMarkup(stage)}
+              >
+                {/* {stage === '1' && <ReactMarkdown>{um}</ReactMarkdown>}
+                {stage === '2' && <ReactMarkdown>{dois}</ReactMarkdown>}
+                {stage === '3' && <ReactMarkdown>{tres}</ReactMarkdown>}
+                {stage === '4' && (
+                  <ReactMarkdown >{quatro}</ReactMarkdown>
+                )} */}
               </div>
               <Short stage={stage} trailId={trailId} />
             </Box>

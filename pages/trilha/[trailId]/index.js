@@ -74,7 +74,7 @@ const Journey = () => {
                   src="/images/planets/1.png"
                   boxSize={{ base: '100%', lg: '180px' }}
                 />
-                <Text>Etapa 1</Text>
+                <Text>Planeta 1</Text>
               </Flex>
               <Flex
                 onClick={() =>
@@ -95,7 +95,7 @@ const Journey = () => {
                       : { filter: 'grayscale(100%)' }
                   }
                 />
-                <Text color={responses[1] ? 'white' : 'gray'}>Etapa 2</Text>
+                <Text color={responses[1] ? 'white' : 'gray'}>Planeta 2</Text>
               </Flex>
               <Flex
                 onClick={() =>
@@ -116,7 +116,7 @@ const Journey = () => {
                       : { filter: 'grayscale(100%)' }
                   }
                 />
-                <Text color={responses[2] ? 'white' : 'gray'}>Etapa 3</Text>
+                <Text color={responses[2] ? 'white' : 'gray'}>Planeta 3</Text>
               </Flex>
               <Flex
                 onClick={() =>
@@ -137,7 +137,7 @@ const Journey = () => {
                       : { filter: 'grayscale(100%)' }
                   }
                 />
-                <Text color={responses[3] ? 'white' : 'gray'}>Etapa 4</Text>
+                <Text color={responses[3] ? 'white' : 'gray'}>Planeta 4</Text>
               </Flex>
             </Flex>
           )}
