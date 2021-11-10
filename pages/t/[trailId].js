@@ -20,6 +20,14 @@ import {
   Button,
   Spinner,
   useToast,
+  Modal,
+  ModalHeader,
+  ModalOverlay,
+  ModalContent,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import Layout from '@components/Layout';
@@ -27,6 +35,7 @@ import withAuth from '@components/withAuth';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 import imgAvatars from '@utils/imgAvatars.json';
+import Challenges from '@components/Challenges';
 
 const TrilhaPage = () => {
   const Router = useRouter();
@@ -43,6 +52,7 @@ const TrilhaPage = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [avatar, setAvatar] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const getData = async () => {
@@ -258,20 +268,19 @@ const TrilhaPage = () => {
               })}
             </Stack>
           </RadioGroup>
-          <Link href="/desafios">
-            <Button
-              maxW={{ base: '100%', lg: '260px' }}
-              size="sm"
-              border="2px"
-              mt="30px"
-              bg="highlight"
-              color="white"
-              _hover={{ bg: 'highlight' }}
-              mb="30px"
-            >
-              Acessar o conteúdo dos desafios
-            </Button>
-          </Link>
+          <Button
+            maxW={{ base: '100%', lg: '260px' }}
+            size="sm"
+            border="2px"
+            mt="30px"
+            bg="highlight"
+            color="white"
+            _hover={{ bg: 'highlight' }}
+            mb="30px"
+            onClick={onOpen}
+          >
+            Ver o conteúdo dos desafios
+          </Button>
           <Divider mb="30px" />
           <Text fontSize="1.3rem" fontWeight="bold" mb="30px" color="black">
             Crie seu time:
@@ -387,6 +396,22 @@ const TrilhaPage = () => {
             </Button>
           </Box>
         </Flex>
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Desafios</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Challenges />
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="pink" mr={3} onClick={onClose}>
+                Fechar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Container>
     </Layout>
   );
