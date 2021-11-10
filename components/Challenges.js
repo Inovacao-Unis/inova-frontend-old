@@ -218,8 +218,8 @@ const Challenges = () => (
         </Text>
         <Text color="black">
           Muitas empresas e governos tomam as suas decisões sem se amparar em
-          indicadores e dados reais, usando muito mais o "achismo". Isso
-          ocasiona uma série de ações superficiais e sem fundamento,
+          indicadores e dados reais, usando muito mais o &quot;achismo&quot;.
+          Isso ocasiona uma série de ações superficiais e sem fundamento,
           comprometendo a própria sobrevivência das organzações. A principal
           dificuldade é demonstrar aos estudantes da área de gestão as fontes
           que eles podem utilizar para levantar dados e indicadores, bem como
