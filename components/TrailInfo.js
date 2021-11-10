@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import api from '@services/api';
-import Link from 'next/link';
 import {
   Flex,
   Box,
@@ -10,13 +9,23 @@ import {
   Avatar,
   Button,
   useToast,
+  Modal,
+  ModalHeader,
+  ModalOverlay,
+  ModalContent,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
+import Challenges from '@components/Challenges';
 
 const TrailInfo = ({ trail, painel }) => {
   const toast = useToast();
   const [team, setTeam] = useState(null);
   const [challenge, setChallenge] = useState({});
   const [category, setCategory] = useState({});
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const getData = async () => {
@@ -75,76 +84,76 @@ const TrailInfo = ({ trail, painel }) => {
   };
 
   return (
-    <Flex
-      direction="column"
-      align="center"
-      borderRadius="5px"
-      py="2rem"
-      px="0"
-      mb="2rem"
-      bgColor="white"
-      color="black"
-    >
+    <>
       <Flex
+        direction="column"
         align="center"
-        justify="space-between"
-        w="100%"
-        maxW="100%"
-        py="0"
-        px="2rem"
-        mb="3rem"
+        borderRadius="5px"
+        py="2rem"
+        px="0"
+        mb="2rem"
+        bgColor="white"
+        color="black"
       >
-        <Flex direction="column">
-          <Text
-            fontSize="1.4rem"
-            lineHeight="1.6rem"
-            fontWeight="bold"
-            maxW="200px"
-            color="highlight"
-          >
-            {trail?.title}
-          </Text>
-          <Text mb="5px" color="highlight" fontSize="xs">
-            {trail?.schedule}
-          </Text>
-          <Button
-            size="xs"
-            mb="20px"
-            bg="highlight"
-            _hover={{ bg: 'highlight' }}
-            color="white"
-            onClick={() => copyCodeToClipboard(`/t/${trail?.code}`)}
-          >
-            Copiar link da trilha
-          </Button>
-          {!painel && team && (
-            <>
-              <Text fontSize="xs" color="highlight">
-                Time
-              </Text>
-              <Text
-                fontSize="1.1rem"
-                fontWeight="bold"
-                maxW="200px"
-                mb="20px"
-                color="highlight"
-              >
-                {team?.name}
-              </Text>
-              <Text fontSize="xs" color="highlight">
-                Desafio
-              </Text>
-              <Text
-                fontSize="1.1rem"
-                fontWeight="bold"
-                lineHeight="1rem"
-                maxW="300px"
-                mb="5px"
-                color="highlight"
-              >
-                {challenge?.title}
-              </Text>
-              <Link href="/desafios">
+        <Flex
+          align="center"
+          justify="space-between"
+          w="100%"
+          maxW="100%"
+          py="0"
+          px="2rem"
+          mb="3rem"
+        >
+          <Flex direction="column">
+            <Text
+              fontSize="1.4rem"
+              lineHeight="1.6rem"
+              fontWeight="bold"
+              maxW="200px"
+              color="highlight"
+            >
+              {trail?.title}
+            </Text>
+            <Text mb="5px" color="highlight" fontSize="xs">
+              {trail?.schedule}
+            </Text>
+            <Button
+              size="xs"
+              mb="20px"
+              bg="highlight"
+              _hover={{ bg: 'highlight' }}
+              color="white"
+              onClick={() => copyCodeToClipboard(`/t/${trail?.code}`)}
+            >
+              Copiar link da trilha
+            </Button>
+            {!painel && team && (
+              <>
+                <Text fontSize="xs" color="highlight">
+                  Time
+                </Text>
+                <Text
+                  fontSize="1.1rem"
+                  fontWeight="bold"
+                  maxW="200px"
+                  mb="20px"
+                  color="highlight"
+                >
+                  {team?.name}
+                </Text>
+                <Text fontSize="xs" color="highlight">
+                  Desafio
+                </Text>
+                <Text
+                  fontSize="1.1rem"
+                  fontWeight="bold"
+                  lineHeight="1rem"
+                  maxW="300px"
+                  mb="5px"
+                  color="highlight"
+                >
+                  {challenge?.title}
+                </Text>
                 <Button
                   size="xs"
                   bgColor="white"
@@ -153,35 +162,52 @@ const TrailInfo = ({ trail, painel }) => {
                   color="highlight"
                   _hover={{ bg: 'white' }}
                   mb="30px"
+                  onClick={onOpen}
                 >
                   Ver o conteúdo dos desafios
                 </Button>
-              </Link>
-            </>
+              </>
+            )}
+          </Flex>
+          {!painel && (
+            <Avatar
+              size="xl"
+              src={category?.image ? category.image : '/images/saude.png'}
+              alt="Imagem da jornada"
+            />
           )}
         </Flex>
-        {!painel && (
-          <Avatar
-            size="xl"
-            src={category?.image ? category.image : '/images/saude.png'}
-            alt="Imagem da jornada"
-          />
+        {!painel && team && (
+          <Box w="100%" maxW="100%" py="0" px="2rem">
+            <Flex justify="space-between" align="center" mb="0.5rem">
+              <Text color="highlight" fontWeight="bold">
+                Seu progresso:
+              </Text>
+              <Text color="highlight">{team.progress}/100%</Text>
+            </Flex>
+            <Box>
+              <Progress hasStripe colorScheme="pink" value={team.progress} />
+            </Box>
+          </Box>
         )}
       </Flex>
-      {!painel && team && (
-        <Box w="100%" maxW="100%" py="0" px="2rem">
-          <Flex justify="space-between" align="center" mb="0.5rem">
-            <Text color="highlight" fontWeight="bold">
-              Seu progresso:
-            </Text>
-            <Text color="highlight">{team.progress}/100%</Text>
-          </Flex>
-          <Box>
-            <Progress hasStripe colorScheme="pink" value={team.progress} />
-          </Box>
-        </Box>
-      )}
-    </Flex>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Desafios</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Challenges />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="pink" mr={3} onClick={onClose}>
+              Fechar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

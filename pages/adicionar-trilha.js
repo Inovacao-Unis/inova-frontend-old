@@ -15,12 +15,22 @@ import {
   Box,
   FormControl,
   FormLabel,
+  FormHelperText,
   Input,
   Checkbox,
   Stack,
   useToast,
+  Modal,
+  ModalHeader,
+  ModalOverlay,
+  ModalContent,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import Challenges from '@components/Challenges';
 
 const adicionarAtividade = () => {
   const Router = useRouter();
@@ -31,6 +41,7 @@ const adicionarAtividade = () => {
   const [gestaoChallenges, setGestaoChallenges] = useState({});
   const { leader } = useAuth();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const getData = async () => {
@@ -147,7 +158,7 @@ const adicionarAtividade = () => {
         >
           adicionar trilha
         </Heading>
-        <Box p="70px" bg="white" borderRadius="4px">
+        <Box p={{ base: '10px', lg: '70px' }} bg="white" borderRadius="4px">
           <FormControl maxW="400px" pb="40px">
             <FormLabel color="black" fontWeight="600" fontSize="1.4rem">
               Título da trilha
@@ -160,13 +171,15 @@ const adicionarAtividade = () => {
             />
           </FormControl>
           <FormControl maxW="400px" pb="40px">
-            <FormLabel color="black" fontWeight="600" fontSize="1.4rem">
+            <FormLabel mb="0" color="black" fontWeight="600" fontSize="1.4rem">
               Cronograma
             </FormLabel>
+            <FormHelperText mt="0" mb="10px">
+              Data limite das etapas
+            </FormHelperText>
             <Input
               color="black"
-              maxLength="50"
-              placeholder="Digite o cronograma (máx. 50 caracteres)"
+              placeholder="Digite o cronograma"
               value={schedule}
               onChange={(e) => setSchedule(e.target.value)}
             />
@@ -174,19 +187,22 @@ const adicionarAtividade = () => {
           <Text color="black" fontWeight="600" fontSize="1.4rem">
             Escolha os desafios:
           </Text>
-          <Link href="/desafios">
-            <Button
-              size="xs"
-              bgColor="highlight"
-              color="white"
-              _hover={{ bg: 'highlight' }}
-              mb="30px"
-            >
-              Ver o conteúdo dos desafios
-            </Button>
-          </Link>
-          <Flex justify="space-between" mb="70px">
-            <Box>
+          <Button
+            size="xs"
+            bgColor="highlight"
+            color="white"
+            _hover={{ bg: 'highlight' }}
+            mb="30px"
+            onClick={onOpen}
+          >
+            Ver o conteúdo dos desafios
+          </Button>
+          <Flex
+            justify="space-between"
+            mb="70px"
+            direction={{ base: 'column', lg: 'row' }}
+          >
+            <Box mb="20px">
               <Checkbox
                 color="black"
                 isChecked={allCheckedEngenharia}
@@ -232,7 +248,7 @@ const adicionarAtividade = () => {
                   ))}
               </Stack>
             </Box>
-            <Box>
+            <Box mb="20px">
               <Checkbox
                 color="black"
                 isChecked={allCheckedSaude}
@@ -278,7 +294,7 @@ const adicionarAtividade = () => {
                   ))}
               </Stack>
             </Box>
-            <Box>
+            <Box mb="20px">
               <Checkbox
                 color="black"
                 isChecked={allCheckedGestao}
@@ -341,6 +357,22 @@ const adicionarAtividade = () => {
             </Button>
           </Flex>
         </Box>
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Desafios</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Challenges />
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="pink" mr={3} onClick={onClose}>
+                Fechar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Container>
     </Layout>
   );

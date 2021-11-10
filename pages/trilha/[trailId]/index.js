@@ -8,6 +8,7 @@ import {
   Image,
   Button,
   Modal,
+  ModalHeader,
   ModalOverlay,
   ModalContent,
   ModalFooter,
@@ -21,6 +22,7 @@ import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
 import TrailInfo from '@components/TrailInfo';
 import api from '@services/api';
+import { FaMapSigns } from 'react-icons/fa';
 
 const Journey = () => {
   const Router = useRouter();
@@ -29,6 +31,11 @@ const Journey = () => {
   const [info, setInfo] = useState(true);
   const [responses, setResponses] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenStart,
+    onOpen: onOpenStart,
+    onClose: onCloseStart,
+  } = useDisclosure();
 
   useEffect(() => {
     const getData = async () => {
@@ -62,6 +69,21 @@ const Journey = () => {
               >
                 {trail?.title}
               </Heading>
+              <Flex w={{ base: '86%', lg: '300px' }} mx="auto" my="50px">
+                <Button
+                  w="100%"
+                  mx="auto"
+                  mb="20px"
+                  bg="white"
+                  size="lg"
+                  _hover={{ bg: 'white' }}
+                  color="highlight"
+                  onClick={onOpenStart}
+                >
+                  <FaMapSigns fontSize={30} />
+                  <Text ml="10px">Comece aqui</Text>
+                </Button>
+              </Flex>
               <Flex
                 onClick={() => Router.push(`/trilha/${trailId}/1`)}
                 cursor="pointer"
@@ -204,6 +226,47 @@ const Journey = () => {
           </Button>
         </Flex>
       </Box>
+      <Modal isOpen={isOpenStart} onClose={onCloseStart}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Introdução</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              A partir de agora, vocês começarão uma trilha de aprendizado
+              dividida em planetas… os planetas inovadores.
+            </Text>
+            <br />
+            <Text>
+              Ao final de cada planeta, você e o seu time serão capazes de
+              desempenhar funções necessárias para atingir o ápice de
+              desempenho, seja resolvendo um problema dentro de uma empresa ou
+              criando a sua própria empresa.
+            </Text>
+            <br />
+            <Text>
+              Primeiro, vocês terão que escolher qual desafio irão enfrentar na
+              nossa lista de desafios. Irão pensar em como querem resolvê-lo, e
+              aí sim começarão a passar pelos planetas a fim de descobrir se
+              essa sua ideia é ou não válida e como reproduzir a ideia de
+              maneira escalável.
+            </Text>
+            <br />
+            <Text>E aí? Estão prontos para entrar na Galáxia da Inovação?</Text>
+            <br />
+            <Text>O que será que virá em cada planeta?</Text>
+            <br />
+            <Text>Bora descobrir?</Text>
+            <br />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="pink" mr={3} onClick={onCloseStart}>
+              Fechar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Layout>
   );
 };

@@ -16,9 +16,13 @@ import {
   EditableInput,
   EditablePreview,
   FormControl,
+  FormHelperText,
   FormLabel,
   NumberInput,
   NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   Table,
   Thead,
   Tbody,
@@ -412,14 +416,21 @@ const PainelAdmin = ({ trail }) => {
                   ) : (
                     <Flex direction="column">
                       <FormControl pt="15px" w="80px" isRequired id="response">
-                        <FormLabel>Pontos</FormLabel>
+                        <FormLabel mb="0">Pontos</FormLabel>
+                        <FormHelperText mt="0" mb="10px">
+                          De 0 até 100
+                        </FormHelperText>
                         <NumberInput
                           min={0}
-                          max={5}
+                          max={100}
                           value={points}
                           onChange={(value) => setPoints(value)}
                         >
                           <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
                         </NumberInput>
                       </FormControl>
                       <FormControl pt="15px" isRequired id="response">
