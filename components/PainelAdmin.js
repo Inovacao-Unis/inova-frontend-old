@@ -495,7 +495,6 @@ const PainelAdmin = ({ trail }) => {
                     <Box mb="10px">
                       <Editable
                         border="1px"
-                        maxLength="50"
                         borderColor="gray.400"
                         borderRadius="4px"
                         color="gray.600"
