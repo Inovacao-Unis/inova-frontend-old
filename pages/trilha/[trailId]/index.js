@@ -94,7 +94,7 @@ const Journey = () => {
               >
                 <Image
                   src="/images/planets/1.png"
-                  boxSize={{ base: '100%', lg: '180px' }}
+                  boxSize={{ base: '100%', lg: '200px' }}
                 />
                 <Text>Planeta 1</Text>
               </Flex>
@@ -110,7 +110,7 @@ const Journey = () => {
               >
                 <Image
                   src="/images/planets/2.png"
-                  boxSize={{ base: '100%', lg: '250px' }}
+                  boxSize={{ base: '100%', lg: '200px' }}
                   style={
                     responses[1]
                       ? { filter: 'none' }
@@ -145,14 +145,14 @@ const Journey = () => {
                   responses[3] ? Router.push(`/trilha/${trailId}/4`) : null
                 }
                 cursor={responses[3] ? 'pointer' : 'inherit'}
-                mr={{ base: 'auto', lg: '150px' }}
-                ml={{ base: '150px', lg: 'auto' }}
+                mr={{ base: 'auto', lg: '180px' }}
+                ml={{ base: '180px', lg: 'auto' }}
                 direction="column"
                 align="center"
               >
                 <Image
                   src="/images/planets/4.png"
-                  boxSize={{ base: '100%', lg: '220px' }}
+                  boxSize={{ base: '100%', lg: '240px' }}
                   style={
                     responses[3]
                       ? { filter: 'none' }
