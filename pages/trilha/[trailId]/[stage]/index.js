@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Box, Heading } from '@chakra-ui/react';
+import { Container, Box, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 // import ReactMarkdown from 'react-markdown';
 import Short from '@components/Short';
@@ -76,13 +76,13 @@ export default function BlogPost() {
             px="40px"
             borderRadius="4px"
           >
-            <Box mb="10px">
+            <Box mb="30px">
               ←{' '}
               <Link href={`/trilha/${trailId}`}>
                 <a>Voltar</a>
               </Link>
             </Box>
-            <Heading>Planeta {stage}</Heading>
+            <Text>Planeta {stage}</Text>
             <Box>
               <div
                 className="archive"
