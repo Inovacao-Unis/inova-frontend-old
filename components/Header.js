@@ -89,7 +89,7 @@ export default function Header({ profile, activityBtn, painel }) {
     <Box
       borderBottom="solid 0.5px rgba(255, 255, 255, 0.13)"
       zIndex="999"
-      py="7px"
+      py="10px"
     >
       <Container maxW="container.xl">
         <Flex>
