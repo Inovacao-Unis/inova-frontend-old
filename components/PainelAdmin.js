@@ -30,6 +30,7 @@ import {
   Th,
   Td,
   Textarea,
+  Link,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -400,7 +401,9 @@ const PainelAdmin = ({ trail }) => {
                 <ModalBody>
                   <Flex direction="column">
                     <Text fontWeight="bold">Resposta:</Text>
-                    <Text>{select?.response}</Text>
+                    <Link href={select?.response} isExternal>
+                      <Text color="highlight">{select?.response}</Text>
+                    </Link>
                   </Flex>
                   {select?.points ? (
                     <Flex direction="column">

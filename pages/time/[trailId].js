@@ -23,6 +23,7 @@ import {
   TabList,
   TabPanels,
   Tab,
+  Link,
   TabPanel,
   AlertDialog,
   AlertDialogBody,
@@ -252,7 +253,9 @@ const Time = () => {
                         p="20px"
                         borderRadius="4px"
                       >
-                        <Text color="black">{item.response}</Text>
+                        <Link href={item.response} isExternal>
+                          <Text color="highlight">{item.response}</Text>
+                        </Link>
                         {item?.points ? (
                           <Flex direction="column" mt="10px">
                             <Text color="gray.700" fontSize="1.1rem">
