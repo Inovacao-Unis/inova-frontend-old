@@ -199,7 +199,7 @@ const Time = () => {
 
   return (
     <Layout profile>
-      <Container maxW="container.sm" minH="87vh">
+      <Container maxW="container.sm" minH="89vh">
         <Flex direction="column">
           <Heading
             fontSize="2.5rem"

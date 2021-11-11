@@ -50,7 +50,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <Flex w="100vw" minH="87vh" direction="column" align="center">
+      <Flex w="100vw" minH="89vh" direction="column" align="center">
         <Image
           src="/images/astronaut.png"
           alt="Imagem de astronauta"
@@ -58,7 +58,7 @@ const Home = () => {
           top="0"
           bottom="0"
           right="0"
-          maxW={{ base: '0', lg: '0', xl: '567px', '2xl': '705px' }}
+          maxW={{ base: '0', lg: '0', xl: '555px', '2xl': '693px' }}
         />
         <Container maxW="container.xl">
           <Flex direction="column" align="center" pt="15vh">

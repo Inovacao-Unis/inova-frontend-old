@@ -10,7 +10,7 @@ import {
 
 const Politica = () => (
   <Layout painel>
-    <Flex w="100vw" minH="87vh" direction="column" align="center">
+    <Flex w="100vw" minH="89vh" direction="column" align="center">
       <Container maxW="container.xl">
         <Heading
           fontSize="2.5rem"
