@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Alert,
   AlertIcon,
+  FormHelperText,
 } from '@chakra-ui/react';
 
 import api from '../services/api';
@@ -75,6 +76,10 @@ function Short({ stage, trailId }) {
       <form onSubmit={(e) => handleSubmit(e)}>
         <FormControl isRequired id="response">
           <FormLabel fontSize="2xl">Resposta</FormLabel>
+          <FormHelperText mt="0" mb="10px">
+            Antes de enviar, confira sua resposta, pois não será possível
+            editá-la depois.
+          </FormHelperText>
           <Input
             type="text"
             mb={4}

@@ -21,4 +21,4 @@
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/YhCktEXhb8I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<p>Simulações e encenações podem ser usadas como teste de serviços, e protótipos de produto podem ser testados com um usuário diretamente. Após definir um roteiro e testar seu protótipo com uma pessoa - descreva como foi a experiência e cole o link do drive aqui - destacando qual foi o feedback do usuário! O que deu certo e a pessoa aprovou? Quais críticas e oportunidades de melhorias surgiram?</p>
+<p><strong>Tarefa:</strong> Simulações e encenações podem ser usadas como teste de serviços, e protótipos de produto podem ser testados com um usuário diretamente. Após definir um roteiro e testar seu protótipo com uma pessoa - descreva como foi a experiência e cole o link do drive aqui - destacando qual foi o feedback do usuário! O que deu certo e a pessoa aprovou? Quais críticas e oportunidades de melhorias surgiram?</p>

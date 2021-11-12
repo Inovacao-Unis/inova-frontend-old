@@ -13,4 +13,4 @@
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/SxYysAOxMA0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<p>Construam uma apresentação dizendo o problema e como o time pretende solucioná-lo. Vocês devem colocar essa gravação no Youtube e postar o link aqui pra gente, beleza? Lembrando que o pitch tem o tempo máximo (máximo mesmo!!!) de 5 min.</p>
+<p><strong>Tarefa:</strong> Construam uma apresentação dizendo o problema e como o time pretende solucioná-lo. Vocês devem colocar essa gravação no Youtube e postar o link aqui pra gente, beleza? Lembrando que o pitch tem o tempo máximo (máximo mesmo!!!) de 5 min.</p>

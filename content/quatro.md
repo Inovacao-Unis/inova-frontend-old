@@ -19,4 +19,4 @@
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/VjSrSZnjgO0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<p>A proposta é que vocês, time que desenvolveu o projeto, tenham um pitch claro e consistente sobre sua ideia que caiba dentro de 5 minutos. Deve ser algo interessante e assertivo, para que qualquer pessoa consiga entender. O desafio é garantir que a mensagem transmitida seja suficiente para ganhar a atenção. Depois de gravar o seu pitch, compartilhe o link do YouTube aqui!</p>
+<p><strong>Tarefa:</strong> A proposta é que vocês, time que desenvolveu o projeto, tenham um pitch claro e consistente sobre sua ideia que caiba dentro de 5 minutos. Deve ser algo interessante e assertivo, para que qualquer pessoa consiga entender. O desafio é garantir que a mensagem transmitida seja suficiente para ganhar a atenção. Depois de gravar o seu pitch, compartilhe o link do YouTube aqui!</p>
