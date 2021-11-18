@@ -45,6 +45,8 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Center,
+  CircularProgress,
 } from '@chakra-ui/react';
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
@@ -60,6 +62,7 @@ const PainelAdmin = ({ trail }) => {
   const [schedule, setSchedule] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -73,10 +76,12 @@ const PainelAdmin = ({ trail }) => {
   }, [trail]);
 
   useEffect(() => {
+    setLoading(true);
     const getData = async () => {
-      await api
-        .get(`painel-teams/${trail._id}`)
-        .then((res) => setTeams(res.data));
+      await api.get(`painel-teams/${trail._id}`).then((res) => {
+        setTeams(res.data);
+        setLoading(false);
+      });
     };
 
     if (trail) {
@@ -229,7 +234,7 @@ const PainelAdmin = ({ trail }) => {
             <Ranking noTitle />
           </TabPanel>
           <TabPanel p="0">
-            {teams?.length > 0 ? (
+            {teams?.length > 0 && !loading ? (
               <Table variant="simple">
                 <Thead>
                   <Tr>
@@ -243,7 +248,18 @@ const PainelAdmin = ({ trail }) => {
                 <Tbody>
                   {teams?.map((team) => (
                     <Tr key={team._id}>
-                      <Td color="black">{team.name}</Td>
+                      <Td color="black">
+                        <Box>
+                          <Text mb="10px">{team.name}</Text>
+                          <Box>
+                            {team.users?.map((user) => (
+                              <Text fontSize="xs" color="gray.500">
+                                {user}
+                              </Text>
+                            ))}
+                          </Box>
+                        </Box>
+                      </Td>
                       <Td color="black" textAlign="center">
                         <Flex direction="column" w="100%" align="center">
                           {team.responses.find((item) => item.stage === 1) ? (
@@ -389,10 +405,20 @@ const PainelAdmin = ({ trail }) => {
                 </Tbody>
               </Table>
             ) : (
+              <Center h="20vh">
+                <CircularProgress
+                  isIndeterminate
+                  value={30}
+                  size="80px"
+                  color="highlight"
+                />
+              </Center>
+            )}
+            {!(teams?.length > 0) && !loading ? (
               <Text textAlign="center" pt="2rem" color="gray.600">
                 Nenhum time nessa trilha
               </Text>
-            )}
+            ) : null}
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>

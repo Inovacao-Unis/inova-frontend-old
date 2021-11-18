@@ -1,6 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
-import { Flex, Text, Avatar, Box, Image } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Avatar,
+  Box,
+  Image,
+  Center,
+  CircularProgress,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import api from '@services/api';
 
@@ -9,12 +17,15 @@ const Ranking = ({ noTitle }) => {
   const { trailId } = Router.query;
   const [ranking, setRanking] = useState([]);
   const [teamId, setTeamId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const getData = async () => {
-      await api
-        .get(`game-ranking/${trailId}`)
-        .then((res) => setRanking(res.data));
+      await api.get(`game-ranking/${trailId}`).then((res) => {
+        setRanking(res.data);
+        setLoading(false);
+      });
     };
 
     getData();
@@ -57,7 +68,7 @@ const Ranking = ({ noTitle }) => {
         </Text>
       ) : null}
       <Flex direction="column" w="100%" h="100%" overflowY="auto">
-        {ranking.length > 0 ? (
+        {ranking.length > 0 && !loading ? (
           ranking.map((team, index) => (
             <Flex
               key={team._id}
@@ -96,8 +107,20 @@ const Ranking = ({ noTitle }) => {
             </Flex>
           ))
         ) : (
-          <Text color="gray.600">Nenhum time nessa trilha</Text>
+          <Center h="20vh">
+            <CircularProgress
+              isIndeterminate
+              value={30}
+              size="80px"
+              color="highlight"
+            />
+          </Center>
         )}
+        {!(ranking.length > 0) && !loading ? (
+          <Text textAlign="center" pt="2rem" color="gray.600">
+            Nenhum time nessa trilha
+          </Text>
+        ) : null}
       </Flex>
     </Flex>
   );
