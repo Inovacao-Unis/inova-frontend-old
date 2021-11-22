@@ -56,8 +56,8 @@ const PainelAdmin = ({ trail }) => {
   const Router = useRouter();
   const { leader } = useAuth();
   const [teams, setTeams] = useState(null);
-  const [points, setPoints] = useState(0);
-  const [feedback, setFeedback] = useState('');
+  const [points, setPoints] = useState(null);
+  const [feedback, setFeedback] = useState(null);
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -174,7 +174,17 @@ const PainelAdmin = ({ trail }) => {
     onOpen();
   };
 
+  // eslint-disable-next-line consistent-return
   const handlePoints = async () => {
+    if (!points || !feedback) {
+      toast({
+        title: 'Por favor, informe os pontos e feedback',
+        status: 'error',
+        duration: 3000,
+      });
+      return null;
+    }
+
     await api
       .post('points', {
         value: points,
@@ -185,8 +195,8 @@ const PainelAdmin = ({ trail }) => {
         teamId: select.teamId,
       })
       .then(() => {
-        setPoints(0);
-        setFeedback('');
+        setPoints(null);
+        setFeedback(null);
         toast({
           title: 'Resposta avaliada!',
           status: 'success',
@@ -268,7 +278,13 @@ const PainelAdmin = ({ trail }) => {
                                 team.responses.findIndex(
                                   (item) => item.stage === 1,
                                 )
-                              ].points?.value || '-'}
+                              ].points?.value == null
+                                ? '-'
+                                : team.responses[
+                                    team.responses.findIndex(
+                                      (item) => item.stage === 1,
+                                    )
+                                  ].points?.value}
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -278,8 +294,8 @@ const PainelAdmin = ({ trail }) => {
                           {team.responses.find((item) => item.stage === 1) ? (
                             <Button
                               onClick={() => {
-                                setPoints(0);
-                                setFeedback('');
+                                setPoints(null);
+                                setFeedback(null);
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
@@ -303,7 +319,13 @@ const PainelAdmin = ({ trail }) => {
                                 team.responses.findIndex(
                                   (item) => item.stage === 2,
                                 )
-                              ].points?.value || '-'}
+                              ].points?.value == null
+                                ? '-'
+                                : team.responses[
+                                    team.responses.findIndex(
+                                      (item) => item.stage === 2,
+                                    )
+                                  ].points?.value}
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -313,8 +335,8 @@ const PainelAdmin = ({ trail }) => {
                           {team.responses.find((item) => item.stage === 2) ? (
                             <Button
                               onClick={() => {
-                                setPoints(0);
-                                setFeedback('');
+                                setPoints(null);
+                                setFeedback(null);
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
@@ -338,7 +360,13 @@ const PainelAdmin = ({ trail }) => {
                                 team.responses.findIndex(
                                   (item) => item.stage === 3,
                                 )
-                              ].points?.value || '-'}
+                              ].points?.value == null
+                                ? '-'
+                                : team.responses[
+                                    team.responses.findIndex(
+                                      (item) => item.stage === 3,
+                                    )
+                                  ].points?.value}
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -348,8 +376,8 @@ const PainelAdmin = ({ trail }) => {
                           {team.responses.find((item) => item.stage === 3) ? (
                             <Button
                               onClick={() => {
-                                setPoints(0);
-                                setFeedback('');
+                                setPoints(null);
+                                setFeedback(null);
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
@@ -373,7 +401,13 @@ const PainelAdmin = ({ trail }) => {
                                 team.responses.findIndex(
                                   (item) => item.stage === 4,
                                 )
-                              ].points?.value || '-'}
+                              ].points?.value == null
+                                ? '-'
+                                : team.responses[
+                                    team.responses.findIndex(
+                                      (item) => item.stage === 4,
+                                    )
+                                  ].points?.value}
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -383,8 +417,8 @@ const PainelAdmin = ({ trail }) => {
                           {team.responses.find((item) => item.stage === 4) ? (
                             <Button
                               onClick={() => {
-                                setPoints(0);
-                                setFeedback('');
+                                setPoints(null);
+                                setFeedback(null);
                                 handleModal(
                                   team.responses[
                                     team.responses.findIndex(
@@ -452,10 +486,12 @@ const PainelAdmin = ({ trail }) => {
                         <NumberInput
                           min={0}
                           max={100}
-                          value={points}
+                          value={points || 0}
                           onChange={(value) => setPoints(value)}
                         >
-                          <NumberInputField />
+                          <NumberInputField
+                            color={points ? 'black' : 'gray.300'}
+                          />
                           <NumberInputStepper>
                             <NumberIncrementStepper />
                             <NumberDecrementStepper />
@@ -465,7 +501,7 @@ const PainelAdmin = ({ trail }) => {
                       <FormControl pt="15px" isRequired id="response">
                         <FormLabel>Feedback</FormLabel>
                         <Textarea
-                          value={feedback}
+                          value={feedback || ''}
                           onChange={(e) => setFeedback(e.target.value)}
                           placeholder="Digite o feedback para o time"
                         />
