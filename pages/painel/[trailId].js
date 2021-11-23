@@ -1,0 +1,76 @@
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Container, Flex, Button, Heading, useToast } from '@chakra-ui/react';
+import Layout from '@components/Layout';
+import withAuth from '@components/withAuth';
+import { useAuth } from '@contexts/AuthContext';
+import PainelAdmin from '@components/PainelAdmin';
+import api from '@services/api';
+
+const Painel = () => {
+  const Router = useRouter();
+  const { trailId } = Router.query;
+  const [trail, setTrail] = useState(null);
+  const toast = useToast();
+  const { leader } = useAuth();
+
+  useEffect(() => {
+    const getData = async () => {
+      await api.get(`trail/${trailId}`).then((res) => setTrail(res.data));
+    };
+
+    getData();
+  }, [trailId]);
+
+  const copyCodeToClipboard = (url) => {
+    const origin =
+      typeof window !== 'undefined' && window.location.origin
+        ? window.location.origin
+        : '';
+    navigator.clipboard.writeText(origin + url);
+
+    toast({
+      title: 'Link copiado',
+      position: 'bottom-left',
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
+  if (!leader) {
+    Router.push('/minha-conta');
+    return <div />;
+  }
+
+  return (
+    <Layout painel>
+      <Container maxW="container.xl" zIndex="800" pb="100px" minH="89vh">
+        <Flex direction="column" m="70px 0">
+          <Heading
+            fontSize="2.5rem"
+            fontWeight="700"
+            textAlign="center"
+            mb="15px"
+          >
+            painel da trilha
+          </Heading>
+          <Button
+            maxW="400px"
+            mx="auto"
+            mb="20px"
+            bg="white"
+            _hover={{ bg: 'white' }}
+            color="highlight"
+            onClick={() => copyCodeToClipboard(`/t/${trail?.code}`)}
+          >
+            Copiar link da trilha
+          </Button>
+        </Flex>
+        <PainelAdmin trail={trail} />
+      </Container>
+    </Layout>
+  );
+};
+
+export default withAuth(Painel);
