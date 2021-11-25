@@ -1,6 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { parseCookies } from 'nookies';
-import { useState, useEffect } from 'react';
 import api from '@services/api';
 import Layout from '@components/Layout';
 import { useAuth } from '@contexts/AuthContext';
