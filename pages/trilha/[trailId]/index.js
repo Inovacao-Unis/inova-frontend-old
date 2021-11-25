@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -21,39 +21,19 @@ import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
 import TrailInfo from '@components/TrailInfo';
-import api from '@services/api';
 import { FaMapSigns } from 'react-icons/fa';
+import { getAPI } from '@services/axios';
 
-const Journey = () => {
+const Journey = ({ trail, responses }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const [trail, setTrail] = useState(null);
   const [info, setInfo] = useState(true);
-  const [responses, setResponses] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenStart,
     onOpen: onOpenStart,
     onClose: onCloseStart,
   } = useDisclosure();
-
-  useEffect(() => {
-    const getData = async () => {
-      await api.get(`trail/${trailId}`).then((res) => setTrail(res.data));
-    };
-
-    getData();
-  }, [trailId]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await api
-        .get(`game-responses/${trailId}`)
-        .then((res) => setResponses(res.data));
-    };
-
-    getData();
-  }, [trailId]);
 
   return (
     <Layout profile>
@@ -272,3 +252,24 @@ const Journey = () => {
 };
 
 export default withAuth(Journey);
+
+export async function getServerSideProps(ctx) {
+  const apiServer = getAPI(ctx);
+  const { trailId } = ctx.query;
+
+  const trail = await apiServer.get(`trail/${trailId}`);
+  const responses = await apiServer.get(`game-responses/${trailId}`);
+
+  if (!trail || !responses) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      trail: trail.data,
+      responses: responses.data,
+    },
+  };
+}

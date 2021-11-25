@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
 import Cookies from 'js-cookie';
+import { setCookie } from 'nookies';
 import firebase from '../lib/firebase';
 
 const AuthContext = createContext();
@@ -15,12 +16,17 @@ export function AuthProvider({ children }) {
         if (!currentUser) {
           setUser(null);
           Cookies.set('itka', '');
+          setCookie(null, 'itka', '');
           return;
         }
 
         const token = await currentUser.getIdToken(true);
         setUser(currentUser);
         Cookies.set('itka', token, { expires: 60 });
+        setCookie(null, 'itkan', token, {
+          maxAge: 86400 * 60,
+          path: '/',
+        });
       }),
     [],
   );
@@ -33,6 +39,10 @@ export function AuthProvider({ children }) {
         const token = await res.user.getIdToken(true);
         setUser(res.user);
         Cookies.set('itka', token, { expires: 60 });
+        setCookie(null, 'itkan', token, {
+          maxAge: 86400 * 60,
+          path: '/',
+        });
         window.location.href = '/minha-conta';
       });
   };
