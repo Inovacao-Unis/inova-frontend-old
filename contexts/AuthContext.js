@@ -1,13 +1,34 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-import { setCookie, destroyCookie } from 'nookies';
+import { setCookie, destroyCookie, parseCookies } from 'nookies';
+import { useRouter } from 'next/router';
 import firebase from '../lib/firebase';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const Router = useRouter();
   const [user, setUser] = useState(null);
   const [leader, setLeader] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [checked, setChecked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const check = async () => {
+    console.log('rodando.........');
+    await api
+      .get('check')
+      .then((res) => {
+        setLeader(res.data.leader);
+        setChecked(true);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log('error', err);
+        setLoading(false);
+        Router.push('/');
+      });
+  };
 
   useEffect(
     () =>
@@ -28,6 +49,32 @@ export function AuthProvider({ children }) {
     [],
   );
 
+  useEffect(() => {
+    console.log('checked ', checked);
+    console.log('user ', user);
+    if (!!user && checked) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [user, checked]);
+
+  useEffect(() => {
+    setLoading(true);
+
+    const { itkan: token } = parseCookies();
+
+    console.log('token ', token);
+
+    if (token) {
+      return check();
+    }
+
+    setLoading(false);
+    Router.push('/');
+    return null;
+  }, []);
+
   const signinGoogle = async () => {
     await firebase
       .auth()
@@ -45,7 +92,15 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, setLoading, leader, setLeader, signinGoogle }}
+      value={{
+        isAuthenticated,
+        user,
+        loading,
+        setLoading,
+        leader,
+        setLeader,
+        signinGoogle,
+      }}
     >
       {children}
     </AuthContext.Provider>

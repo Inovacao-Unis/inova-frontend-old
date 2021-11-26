@@ -10,8 +10,6 @@ import { getAPI } from '@services/axios';
 const minhaConta = ({ activities }) => {
   const { user, leader } = useAuth();
 
-  console.log('api ', api.defaults.headers);
-
   return (
     <Layout activityBtn>
       <Container maxW="container.xl" zIndex="800" pb="100px" minH="89vh">
@@ -93,19 +91,20 @@ const minhaConta = ({ activities }) => {
 export default withAuth(minhaConta);
 
 export async function getServerSideProps(ctx) {
-  const apiServer = getAPI(ctx);
-
-  const res = await apiServer.get('game-trails');
-
-  if (!res) {
+  try {
+    const apiServer = getAPI(ctx);
+    const res = await apiServer.get('game-trails');
     return {
-      notFound: true,
+      props: {
+        activities: res.data,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
     };
   }
-
-  return {
-    props: {
-      activities: res.data,
-    },
-  };
 }

@@ -132,24 +132,27 @@ const Painel = ({ trailData, teamsData, rankingData }) => {
 export default withAuth(Painel);
 
 export async function getServerSideProps(ctx) {
-  const apiServer = getAPI(ctx);
-  const { trailId } = ctx.query;
+  try {
+    const apiServer = getAPI(ctx);
+    const { trailId } = ctx.query;
 
-  const trail = await apiServer.get(`trail/${trailId}`);
-  const teams = await apiServer.get(`painel-teams/${trailId}`);
-  const ranking = await apiServer.get(`game-ranking/${trailId}`);
+    const trail = await apiServer.get(`trail/${trailId}`);
+    const teams = await apiServer.get(`painel-teams/${trailId}`);
+    const ranking = await apiServer.get(`game-ranking/${trailId}`);
 
-  if (!trail) {
     return {
-      notFound: true,
+      props: {
+        trailData: trail.data,
+        teamsData: teams.data,
+        rankingData: ranking.data,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
     };
   }
-
-  return {
-    props: {
-      trailData: trail.data,
-      teamsData: teams.data,
-      rankingData: ranking.data,
-    },
-  };
 }

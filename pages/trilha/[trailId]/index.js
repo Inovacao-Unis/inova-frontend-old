@@ -256,26 +256,29 @@ const Journey = ({ trail, responses, team, ranking }) => {
 export default withAuth(Journey);
 
 export async function getServerSideProps(ctx) {
-  const apiServer = getAPI(ctx);
-  const { trailId } = ctx.query;
+  try {
+    const apiServer = getAPI(ctx);
+    const { trailId } = ctx.query;
 
-  const trail = await apiServer.get(`trail/${trailId}`);
-  const responses = await apiServer.get(`game-responses/${trailId}`);
-  const team = await apiServer.get(`game-team/${trailId}`);
-  const ranking = await apiServer.get(`game-ranking/${trailId}`);
+    const trail = await apiServer.get(`trail/${trailId}`);
+    const responses = await apiServer.get(`game-responses/${trailId}`);
+    const team = await apiServer.get(`game-team/${trailId}`);
+    const ranking = await apiServer.get(`game-ranking/${trailId}`);
 
-  if (!trail || !responses) {
     return {
-      notFound: true,
+      props: {
+        trail: trail.data,
+        responses: responses.data,
+        team: team.data,
+        ranking: ranking.data,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
     };
   }
-
-  return {
-    props: {
-      trail: trail.data,
-      responses: responses.data,
-      team: team.data,
-      ranking: ranking.data,
-    },
-  };
 }

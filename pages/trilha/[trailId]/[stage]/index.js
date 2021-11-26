@@ -106,28 +106,37 @@ export default function BlogPost() {
 }
 
 export async function getServerSideProps(ctx) {
-  const apiServer = getAPI(ctx);
-  const { trailId, stage } = ctx.query;
+  try {
+    const apiServer = getAPI(ctx);
+    const { trailId, stage } = ctx.query;
 
-  const res = await apiServer.get(`game-responses/${trailId}`);
+    const res = await apiServer.get(`game-responses/${trailId}`);
 
-  const page = Number(stage);
+    const page = Number(stage);
 
-  if (page === 1) {
+    if (page === 1) {
+      return {
+        props: {},
+      };
+    }
+    if (!res.data[page - 1]) {
+      return {
+        redirect: {
+          destination: '/minha-conta',
+          permanent: false,
+        },
+      };
+    }
+
     return {
       props: {},
     };
-  }
-  if (!res.data[page - 1]) {
+  } catch (err) {
     return {
       redirect: {
-        destination: '/minha-conta',
+        destination: '/',
         permanent: false,
       },
     };
   }
-
-  return {
-    props: {},
-  };
 }
