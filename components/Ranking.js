@@ -12,42 +12,10 @@ import {
 import { useRouter } from 'next/router';
 import api from '@services/api';
 
-const Ranking = ({ noTitle }) => {
+const Ranking = ({ noTitle, ranking, teamId }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const [ranking, setRanking] = useState([]);
-  const [teamId, setTeamId] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    const getData = async () => {
-      await api.get(`game-ranking/${trailId}`).then((res) => {
-        setRanking(res.data);
-        setLoading(false);
-      });
-    };
-
-    getData();
-  }, [trailId]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await api
-        .get(`game-team/${trailId}`)
-        .then((res) => setTeamId(res.data._id))
-        .catch((err) => {
-          if (err.response) {
-            return console.log(err.response.data.error);
-          }
-          return console.log('Ocorreu um erro. Tente novamente, por favor.');
-        });
-    };
-
-    if (!noTitle) {
-      getData();
-    }
-  }, [trailId, setTeamId]);
+  const [loading] = useState(false);
 
   return (
     <Flex

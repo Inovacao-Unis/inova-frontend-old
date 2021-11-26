@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 import { Center, CircularProgress } from '@chakra-ui/react';
+import { parseCookies } from 'nookies';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 
@@ -13,7 +13,7 @@ const withAuth = (Component) => (props) => {
   useEffect(() => {
     setLoading(true);
 
-    const token = Cookies.get('itka');
+    const { itkan: token } = parseCookies();
 
     if (!token) {
       setLoading(false);

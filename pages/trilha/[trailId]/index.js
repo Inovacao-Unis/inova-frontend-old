@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -24,7 +25,8 @@ import TrailInfo from '@components/TrailInfo';
 import { FaMapSigns } from 'react-icons/fa';
 import { getAPI } from '@services/axios';
 
-const Journey = ({ trail, responses }) => {
+const Journey = ({ trail, responses, team, ranking }) => {
+  console.log('team ', team);
   const Router = useRouter();
   const { trailId } = Router.query;
   const [info, setInfo] = useState(true);
@@ -144,8 +146,8 @@ const Journey = ({ trail, responses }) => {
             </Flex>
           )}
           <Box w="400px" display={{ base: 'none', xl: 'block' }}>
-            {trail && <TrailInfo status={30} trail={trail} />}
-            <Ranking />
+            {trail && <TrailInfo status={30} trail={trail} team={team} />}
+            <Ranking ranking={ranking} teamId={team._id} />
           </Box>
         </Flex>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -154,7 +156,7 @@ const Journey = ({ trail, responses }) => {
             <ModalCloseButton />
             <ModalBody>
               {info && trail ? (
-                <TrailInfo status={30} trail={trail} />
+                <TrailInfo status={30} trail={trail} team={team} />
               ) : (
                 <Ranking />
               )}
@@ -259,6 +261,8 @@ export async function getServerSideProps(ctx) {
 
   const trail = await apiServer.get(`trail/${trailId}`);
   const responses = await apiServer.get(`game-responses/${trailId}`);
+  const team = await apiServer.get(`game-team/${trailId}`);
+  const ranking = await apiServer.get(`game-ranking/${trailId}`);
 
   if (!trail || !responses) {
     return {
@@ -270,6 +274,8 @@ export async function getServerSideProps(ctx) {
     props: {
       trail: trail.data,
       responses: responses.data,
+      team: team.data,
+      ranking: ranking.data,
     },
   };
 }

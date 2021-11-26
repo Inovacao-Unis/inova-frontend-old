@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-import Cookies from 'js-cookie';
-import { setCookie } from 'nookies';
+import { setCookie, destroyCookie } from 'nookies';
 import firebase from '../lib/firebase';
 
 const AuthContext = createContext();
@@ -15,14 +14,12 @@ export function AuthProvider({ children }) {
       firebase.auth().onIdTokenChanged(async (currentUser) => {
         if (!currentUser) {
           setUser(null);
-          Cookies.set('itka', '');
-          setCookie(null, 'itka', '');
+          destroyCookie(null, 'itkan');
           return;
         }
 
         const token = await currentUser.getIdToken(true);
         setUser(currentUser);
-        Cookies.set('itka', token, { expires: 60 });
         setCookie(null, 'itkan', token, {
           maxAge: 86400 * 60,
           path: '/',
@@ -38,7 +35,6 @@ export function AuthProvider({ children }) {
       .then(async (res) => {
         const token = await res.user.getIdToken(true);
         setUser(res.user);
-        Cookies.set('itka', token, { expires: 60 });
         setCookie(null, 'itkan', token, {
           maxAge: 86400 * 60,
           path: '/',

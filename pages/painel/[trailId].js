@@ -6,21 +6,73 @@ import withAuth from '@components/withAuth';
 import { useAuth } from '@contexts/AuthContext';
 import PainelAdmin from '@components/PainelAdmin';
 import api from '@services/api';
+import { getAPI } from '@services/axios';
 
-const Painel = () => {
+const Painel = ({ trailData, teamsData, rankingData }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const [trail, setTrail] = useState(null);
   const toast = useToast();
   const { leader } = useAuth();
+  const [trail, setTrail] = useState(null);
+  const [teams, setTeams] = useState(null);
+  const [ranking, setRanking] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const getData = async () => {
-      await api.get(`trail/${trailId}`).then((res) => setTrail(res.data));
+      if (!trail) {
+        return setTrail(trailData);
+      }
+      const res = await api.get(`trail/${trailId}`);
+      return setTrail(res.data);
     };
 
-    getData();
-  }, [trailId]);
+    if (isMounted) {
+      getData();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [trail, setTrail]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const getData = async () => {
+      if (!teams) {
+        return setTeams(teamsData);
+      }
+      const res = await api.get(`painel-teams/${trailId}`);
+      return setTeams(res.data);
+    };
+
+    if (isMounted) {
+      getData();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [teams, setTeams]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const getData = async () => {
+      if (!ranking) {
+        return setRanking(rankingData);
+      }
+      const res = await api.get(`game-ranking/${trailId}`);
+      return setRanking(res.data);
+    };
+
+    if (isMounted) {
+      getData();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [ranking, setRanking]);
 
   const copyCodeToClipboard = (url) => {
     const origin =
@@ -44,33 +96,60 @@ const Painel = () => {
   }
 
   return (
-    <Layout painel>
-      <Container maxW="container.xl" zIndex="800" pb="100px" minH="89vh">
-        <Flex direction="column" m="70px 0">
-          <Heading
-            fontSize="2.5rem"
-            fontWeight="700"
-            textAlign="center"
-            mb="15px"
-          >
-            painel da trilha
-          </Heading>
-          <Button
-            maxW="400px"
-            mx="auto"
-            mb="20px"
-            bg="white"
-            _hover={{ bg: 'white' }}
-            color="highlight"
-            onClick={() => copyCodeToClipboard(`/t/${trail?.code}`)}
-          >
-            Copiar link da trilha
-          </Button>
-        </Flex>
-        <PainelAdmin trail={trail} />
-      </Container>
-    </Layout>
+    <>
+      {trail && teams && ranking ? (
+        <Layout painel>
+          <Container maxW="container.xl" zIndex="800" pb="100px" minH="89vh">
+            <Flex direction="column" m="70px 0">
+              <Heading
+                fontSize="2.5rem"
+                fontWeight="700"
+                textAlign="center"
+                mb="15px"
+              >
+                painel da trilha
+              </Heading>
+              <Button
+                maxW="400px"
+                mx="auto"
+                mb="20px"
+                bg="white"
+                _hover={{ bg: 'white' }}
+                color="highlight"
+                onClick={() => copyCodeToClipboard(`/t/${trail?.code}`)}
+              >
+                Copiar link da trilha
+              </Button>
+            </Flex>
+            <PainelAdmin trail={trail} teams={teams} ranking={ranking} />
+          </Container>
+        </Layout>
+      ) : null}
+    </>
   );
 };
 
 export default withAuth(Painel);
+
+export async function getServerSideProps(ctx) {
+  const apiServer = getAPI(ctx);
+  const { trailId } = ctx.query;
+
+  const trail = await apiServer.get(`trail/${trailId}`);
+  const teams = await apiServer.get(`painel-teams/${trailId}`);
+  const ranking = await apiServer.get(`game-ranking/${trailId}`);
+
+  if (!trail) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      trailData: trail.data,
+      teamsData: teams.data,
+      rankingData: ranking.data,
+    },
+  };
+}

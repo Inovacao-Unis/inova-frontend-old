@@ -17,55 +17,14 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Skeleton,
 } from '@chakra-ui/react';
 import Challenges from '@components/Challenges';
 
-const TrailInfo = ({ trail, painel }) => {
+const TrailInfo = ({ trail, team, painel }) => {
+  console.log('team ', team);
   const toast = useToast();
-  const [team, setTeam] = useState(null);
-  const [challenge, setChallenge] = useState({});
-  const [category, setCategory] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    const getData = async () => {
-      await api
-        .get(`game-team/${trail._id}`)
-        .then((res) => setTeam(res.data))
-        .catch((err) => {
-          if (err.response) {
-            return console.log(err.response.data.error);
-          }
-          return console.log('Ocorreu um erro. Tente novamente, por favor.');
-        });
-    };
-
-    getData();
-  }, [trail, setTeam]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await api
-        .get(`challenge/${team.challengeId}`)
-        .then((res) => setChallenge(res.data));
-    };
-
-    if (team && team.challengeId) {
-      getData();
-    }
-  }, [team, setChallenge]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await api
-        .get(`category/${challenge.categoryId}`)
-        .then((res) => setCategory(res.data));
-    };
-
-    if (challenge && challenge.categoryId) {
-      getData();
-    }
-  }, [challenge, setCategory]);
 
   const copyCodeToClipboard = (url) => {
     const origin =
@@ -127,7 +86,7 @@ const TrailInfo = ({ trail, painel }) => {
             >
               Copiar link da trilha
             </Button>
-            {!painel && team && (
+            {!painel && team ? (
               <>
                 <Text fontSize="xs" color="highlight">
                   Time
@@ -152,7 +111,7 @@ const TrailInfo = ({ trail, painel }) => {
                   mb="5px"
                   color="highlight"
                 >
-                  {challenge?.title}
+                  {team?.challenge?.title}
                 </Text>
                 <Button
                   size="xs"
@@ -167,29 +126,29 @@ const TrailInfo = ({ trail, painel }) => {
                   Ver o conteúdo dos desafios
                 </Button>
               </>
-            )}
+            ) : null}
           </Flex>
-          {!painel && (
+          {!painel && team?.category?.image ? (
             <Avatar
               size="xl"
-              src={category?.image ? category.image : '/images/saude.png'}
+              src={team?.category?.image}
               alt="Imagem da jornada"
             />
-          )}
+          ) : null}
         </Flex>
-        {!painel && team && (
+        {!painel ? (
           <Box w="100%" maxW="100%" py="0" px="2rem">
             <Flex justify="space-between" align="center" mb="0.5rem">
               <Text color="highlight" fontWeight="bold">
                 Seu progresso:
               </Text>
-              <Text color="highlight">{team.progress}/100%</Text>
+              <Text color="highlight">{team?.progress}/100%</Text>
             </Flex>
             <Box>
-              <Progress hasStripe colorScheme="pink" value={team.progress} />
+              <Progress hasStripe colorScheme="pink" value={team?.progress} />
             </Box>
           </Box>
-        )}
+        ) : null}
       </Flex>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />

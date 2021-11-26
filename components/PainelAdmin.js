@@ -52,10 +52,9 @@ import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 
-const PainelAdmin = ({ trail }) => {
+const PainelAdmin = ({ trail, teams, ranking }) => {
   const Router = useRouter();
   const { leader } = useAuth();
-  const [teams, setTeams] = useState(null);
   const [points, setPoints] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [title, setTitle] = useState('');
@@ -74,20 +73,6 @@ const PainelAdmin = ({ trail }) => {
       setSchedule(trail.schedule);
     }
   }, [trail]);
-
-  useEffect(() => {
-    setLoading(true);
-    const getData = async () => {
-      await api.get(`painel-teams/${trail._id}`).then((res) => {
-        setTeams(res.data);
-        setLoading(false);
-      });
-    };
-
-    if (trail) {
-      getData();
-    }
-  }, [trail, select]);
 
   // eslint-disable-next-line consistent-return
   const editTrail = async () => {
@@ -241,7 +226,7 @@ const PainelAdmin = ({ trail }) => {
             mx="auto"
             p={{ base: '0', lg: 'var(--chakra-space-4)' }}
           >
-            <Ranking noTitle />
+            <Ranking ranking={ranking} noTitle />
           </TabPanel>
           <TabPanel p="0">
             {teams?.length > 0 && !loading ? (
