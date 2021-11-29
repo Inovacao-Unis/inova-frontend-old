@@ -158,7 +158,7 @@ const Journey = ({ trail, responses, team, ranking }) => {
               {info && trail ? (
                 <TrailInfo status={30} trail={trail} team={team} />
               ) : (
-                <Ranking />
+                <Ranking ranking={ranking} teamId={team._id} />
               )}
             </ModalBody>
 
