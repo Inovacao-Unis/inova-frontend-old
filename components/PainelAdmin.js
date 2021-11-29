@@ -45,8 +45,6 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  Center,
-  CircularProgress,
 } from '@chakra-ui/react';
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
@@ -61,16 +59,17 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
   const [schedule, setSchedule] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
-  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
   const cancelRef = useRef();
 
   useEffect(() => {
+    console.log('title', title);
     if (trail) {
       setTitle(trail.title);
       setSchedule(trail.schedule);
+      console.log('title', title);
     }
   }, [trail]);
 
@@ -102,6 +101,8 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
       });
       return null;
     }
+
+    console.log('titulo novo ', title);
 
     await api
       .put(`trail/${trail._id}`, {
@@ -229,7 +230,7 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
             <Ranking ranking={ranking} noTitle />
           </TabPanel>
           <TabPanel p="0">
-            {teams?.length > 0 && !loading ? (
+            {teams?.length > 0 ? (
               <Table variant="simple">
                 <Thead>
                   <Tr>
@@ -423,17 +424,8 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
                   ))}
                 </Tbody>
               </Table>
-            ) : (
-              <Center h="20vh">
-                <CircularProgress
-                  isIndeterminate
-                  value={30}
-                  size="80px"
-                  color="highlight"
-                />
-              </Center>
-            )}
-            {!(teams?.length > 0) && !loading ? (
+            ) : null}
+            {!(teams?.length > 0) ? (
               <Text textAlign="center" pt="2rem" color="gray.600">
                 Nenhum time nessa trilha
               </Text>
