@@ -15,7 +15,6 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const check = async () => {
-    console.log('rodando.........');
     await api
       .get('check')
       .then((res) => {
@@ -50,8 +49,6 @@ export function AuthProvider({ children }) {
   );
 
   useEffect(() => {
-    console.log('checked ', checked);
-    console.log('user ', user);
     if (!!user && checked) {
       setIsAuthenticated(true);
     } else {
@@ -63,8 +60,6 @@ export function AuthProvider({ children }) {
     setLoading(true);
 
     const { itkan: token } = parseCookies();
-
-    console.log('token ', token);
 
     if (token) {
       return check();

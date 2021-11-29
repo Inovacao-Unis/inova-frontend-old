@@ -50,7 +50,7 @@ import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 
-const PainelAdmin = ({ trail, teams, ranking }) => {
+const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
   const Router = useRouter();
   const { leader } = useAuth();
   const [points, setPoints] = useState(null);
@@ -65,13 +65,9 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
   const cancelRef = useRef();
 
   useEffect(() => {
-    console.log('title', title);
-    if (trail) {
-      setTitle(trail.title);
-      setSchedule(trail.schedule);
-      console.log('title', title);
-    }
-  }, [trail]);
+    setTitle(trail.title);
+    setSchedule(trail.schedule);
+  }, [setTitle, setSchedule]);
 
   // eslint-disable-next-line consistent-return
   const editTrail = async () => {
@@ -102,20 +98,19 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
       return null;
     }
 
-    console.log('titulo novo ', title);
-
     await api
       .put(`trail/${trail._id}`, {
         title,
         schedule,
       })
-      .then(() =>
+      .then(() => {
         toast({
           title: 'Alterado com sucesso',
           status: 'success',
           duration: 3000,
-        }),
-      )
+        });
+        setReload(!reload);
+      })
       .catch((err) => {
         toast({
           title: 'Houve um erro',
@@ -188,6 +183,7 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
           status: 'success',
           duration: 3000,
         });
+        setReload(!reload);
         setSelect(null);
         onClose();
       })
@@ -249,7 +245,7 @@ const PainelAdmin = ({ trail, teams, ranking }) => {
                           <Text mb="10px">{team.name}</Text>
                           <Box>
                             {team.users?.map((user) => (
-                              <Text fontSize="xs" color="gray.500">
+                              <Text key={user} fontSize="xs" color="gray.500">
                                 {user}
                               </Text>
                             ))}

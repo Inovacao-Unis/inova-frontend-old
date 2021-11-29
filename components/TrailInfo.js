@@ -22,7 +22,6 @@ import {
 import Challenges from '@components/Challenges';
 
 const TrailInfo = ({ trail, team, painel }) => {
-  console.log('team ', team);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

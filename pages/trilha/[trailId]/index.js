@@ -26,7 +26,6 @@ import { FaMapSigns } from 'react-icons/fa';
 import { getAPI } from '@services/axios';
 
 const Journey = ({ trail, responses, team, ranking }) => {
-  console.log('team ', team);
   const Router = useRouter();
   const { trailId } = Router.query;
   const [info, setInfo] = useState(true);

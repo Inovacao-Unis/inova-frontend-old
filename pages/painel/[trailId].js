@@ -16,63 +16,54 @@ const Painel = ({ trailData, teamsData, rankingData }) => {
   const [trail, setTrail] = useState(null);
   const [teams, setTeams] = useState(null);
   const [ranking, setRanking] = useState(null);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-
     const getData = async () => {
-      if (!trail) {
-        return setTrail(trailData);
-      }
       const res = await api.get(`trail/${trailId}`);
-      return setTrail(res.data);
+      setTrail(res.data);
+      return null;
     };
 
-    if (isMounted) {
-      getData();
+    if (!trail) {
+      setTrail(trailData);
+      return null;
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [trail, setTrail]);
+
+    getData();
+    return null;
+  }, [trailId, setTrail, reload]);
 
   useEffect(() => {
-    let isMounted = true;
-
     const getData = async () => {
-      if (!teams) {
-        return setTeams(teamsData);
-      }
       const res = await api.get(`painel-teams/${trailId}`);
       return setTeams(res.data);
     };
 
-    if (isMounted) {
-      getData();
+    if (!teams) {
+      setTeams(teamsData);
+      return null;
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [teams, setTeams]);
+
+    getData();
+    return null;
+  }, [setTeams, reload]);
 
   useEffect(() => {
-    let isMounted = true;
-
     const getData = async () => {
-      if (!ranking) {
-        return setRanking(rankingData);
-      }
       const res = await api.get(`game-ranking/${trailId}`);
-      return setRanking(res.data);
+      setRanking(res.data);
+      return null;
     };
 
-    if (isMounted) {
-      getData();
+    if (!ranking) {
+      setRanking(rankingData);
+      return null;
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [ranking, setRanking]);
+
+    getData();
+    return null;
+  }, [setRanking, reload]);
 
   const copyCodeToClipboard = (url) => {
     const origin =
@@ -107,7 +98,7 @@ const Painel = ({ trailData, teamsData, rankingData }) => {
                 textAlign="center"
                 mb="15px"
               >
-                painel da trilha
+                {trail.title}
               </Heading>
               <Button
                 maxW="400px"
@@ -121,7 +112,13 @@ const Painel = ({ trailData, teamsData, rankingData }) => {
                 Copiar link da trilha
               </Button>
             </Flex>
-            <PainelAdmin trail={trail} teams={teams} ranking={ranking} />
+            <PainelAdmin
+              trail={trail}
+              teams={teams}
+              ranking={ranking}
+              reload={reload}
+              setReload={setReload}
+            />
           </Container>
         </Layout>
       ) : null}
