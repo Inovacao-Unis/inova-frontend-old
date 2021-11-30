@@ -26,5 +26,5 @@
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/5J_6FvIhrqo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <p><strong>Tarefa:</strong> Agora é a vez de vocês construírem o Canvas de vocês e colocarem aqui o link do drive com o resultado! Vamos lá?</p>
-<p>Obs.: Não se esqueçam de compartilhar o arquivo no e-mail dos professores: paulo.bueno@professor.unis.edu.br  e 
+<p>Obs.: Não se esqueçam de compartilhar o arquivo no e-mail dos professores: paulo.bueno@professor.unis.edu.br e 
 gustavo.flausino@professor.unis.edu.br</p>
