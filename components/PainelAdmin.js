@@ -63,6 +63,7 @@ const PainelAdmin = ({ trail }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -87,7 +88,7 @@ const PainelAdmin = ({ trail }) => {
     if (trail) {
       getData();
     }
-  }, [trail, select]);
+  }, [trail, select, reload]);
 
   // eslint-disable-next-line consistent-return
   const editTrail = async () => {
@@ -170,6 +171,10 @@ const PainelAdmin = ({ trail }) => {
   };
 
   const handleModal = (response) => {
+    if (response.points) {
+      setPoints(response.points.value);
+      setFeedback(response.points.feedback);
+    }
     setSelect(response);
     onOpen();
   };
@@ -197,8 +202,47 @@ const PainelAdmin = ({ trail }) => {
       .then(() => {
         setPoints(null);
         setFeedback(null);
+        setReload(!reload);
         toast({
           title: 'Resposta avaliada!',
+          status: 'success',
+          duration: 3000,
+        });
+        setSelect(null);
+        onClose();
+      })
+      .catch((err) => {
+        console.error('Erro: ', err.response.data.error);
+        toast({
+          title: 'Houve um erro!',
+          status: 'error',
+          duration: 3000,
+        });
+      });
+  };
+
+  // eslint-disable-next-line consistent-return
+  const editPoints = async () => {
+    if (!points || !feedback) {
+      toast({
+        title: 'Por favor, informe os pontos e feedback',
+        status: 'error',
+        duration: 3000,
+      });
+      return null;
+    }
+
+    await api
+      .put(`point/${select.points._id}`, {
+        value: points,
+        feedback,
+      })
+      .then(() => {
+        setPoints(null);
+        setFeedback(null);
+        setReload(!reload);
+        toast({
+          title: 'Salvo com sucesso!',
           status: 'success',
           duration: 3000,
         });
@@ -263,7 +307,7 @@ const PainelAdmin = ({ trail }) => {
                           <Text mb="10px">{team.name}</Text>
                           <Box>
                             {team.users?.map((user) => (
-                              <Text fontSize="xs" color="gray.500">
+                              <Text key={user} fontSize="xs" color="gray.500">
                                 {user}
                               </Text>
                             ))}
@@ -465,56 +509,52 @@ const PainelAdmin = ({ trail }) => {
                       <Text color="highlight">{select?.response}</Text>
                     </Link>
                   </Flex>
-                  {select?.points ? (
-                    <Flex direction="column">
-                      <Text pt="10px" fontWeight="bold">
-                        Pontos:
-                      </Text>
-                      <Text>{select?.points?.value}</Text>
-                      <Text pt="10px" fontWeight="bold">
-                        Feedback:
-                      </Text>
-                      <Text>{select?.points?.feedback}</Text>
-                    </Flex>
-                  ) : (
-                    <Flex direction="column">
-                      <FormControl pt="15px" w="80px" isRequired id="response">
-                        <FormLabel mb="0">Pontos</FormLabel>
-                        <FormHelperText mt="0" mb="10px">
-                          De 0 até 100
-                        </FormHelperText>
-                        <NumberInput
-                          min={0}
-                          max={100}
-                          value={points || 0}
-                          onChange={(value) => setPoints(value)}
-                        >
-                          <NumberInputField
-                            color={points ? 'black' : 'gray.300'}
-                          />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                      </FormControl>
-                      <FormControl pt="15px" isRequired id="response">
-                        <FormLabel>Feedback</FormLabel>
-                        <Textarea
-                          value={feedback || ''}
-                          onChange={(e) => setFeedback(e.target.value)}
-                          placeholder="Digite o feedback para o time"
+                  <Flex direction="column">
+                    <FormControl pt="15px" w="80px" isRequired id="response">
+                      <FormLabel mb="0">Pontos</FormLabel>
+                      <FormHelperText mt="0" mb="10px">
+                        De 0 até 100
+                      </FormHelperText>
+                      <NumberInput
+                        min={0}
+                        max={100}
+                        value={points || 0}
+                        onChange={(value) => setPoints(value)}
+                      >
+                        <NumberInputField
+                          color={points ? 'black' : 'gray.300'}
                         />
-                      </FormControl>
-                    </Flex>
-                  )}
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </FormControl>
+                    <FormControl pt="15px" isRequired id="response">
+                      <FormLabel>Feedback</FormLabel>
+                      <Textarea
+                        value={feedback || ''}
+                        onChange={(e) => setFeedback(e.target.value)}
+                        placeholder="Digite o feedback para o time"
+                      />
+                    </FormControl>
+                  </Flex>
                 </ModalBody>
 
                 <ModalFooter>
                   <Button variant="ghost" bg="gray.100" onClick={onClose}>
                     Fechar
                   </Button>
-                  {select?.points ? null : (
+                  {select?.points ? (
+                    <Button
+                      ml="10px"
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={editPoints}
+                    >
+                      Editar
+                    </Button>
+                  ) : (
                     <Button
                       ml="10px"
                       colorScheme="blue"
