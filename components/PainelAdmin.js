@@ -30,6 +30,7 @@ import {
   Th,
   Td,
   Textarea,
+  Input,
   Link,
   Modal,
   ModalOverlay,
@@ -57,6 +58,8 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
   const [feedback, setFeedback] = useState(null);
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState('');
+  const [note, setNote] = useState(null);
+  const [users, setUsers] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
   const toast = useToast();
@@ -197,6 +200,25 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
       });
   };
 
+  const convertNote = (usersList) => {
+    const newUsersList = [];
+    usersList.forEach((user) => {
+      const result = (user.points * note) / 100 / 4;
+      const userObject = {
+        user: user.user,
+        points: result,
+      };
+      newUsersList.push(userObject);
+    });
+    setUsers(newUsersList);
+  };
+
+  const handleUsers = async () => {
+    await api.get(`painel-users/${trail._id}`).then((res) => {
+      convertNote(res.data);
+    });
+  };
+
   return (
     <Flex
       p={{ base: '10px', lg: '30px' }}
@@ -214,6 +236,7 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
         <TabList>
           <Tab color="black">Ranking</Tab>
           <Tab color="black">Respostas</Tab>
+          <Tab color="black">Conversor de notas</Tab>
           <Tab color="black">Editar/Excluir</Tab>
         </TabList>
 
@@ -500,6 +523,44 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
+          </TabPanel>
+          <TabPanel p="0">
+            <Box>
+              <FormControl pt="15px">
+                <FormLabel color="black" mb="0">
+                  Nota total dessa atividade:
+                </FormLabel>
+                <FormHelperText mt="0" mb="10px">
+                  Converta os pontos da plataforma para a nota que gostaria de
+                  dar.
+                </FormHelperText>
+                <NumberInput
+                  color="black"
+                  min={0}
+                  max={100}
+                  value={note || 0}
+                  onChange={(value) => setNote(value)}
+                >
+                  <NumberInputField color="black" />
+                  <NumberInputStepper color="black">
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
+              <Button bg="highlight" onClick={handleUsers}>
+                Converter
+              </Button>
+            </Box>
+            <Box>
+              {users?.length > 0 &&
+                users.map((user) => (
+                  <Flex>
+                    <Text color="black">{user.user}</Text>
+                    <Text color="black">{user.points}</Text>
+                  </Flex>
+                ))}
+            </Box>
           </TabPanel>
           <TabPanel p="0">
             {trail && (
