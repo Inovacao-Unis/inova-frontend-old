@@ -8,13 +8,14 @@ import PainelAdmin from '@components/PainelAdmin';
 import api from '@services/api';
 import { getAPI } from '@services/axios';
 
-const Painel = ({ trailData, teamsData, rankingData }) => {
+const Painel = ({ trailData, teamsData, usersData, rankingData }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
   const toast = useToast();
   const { leader } = useAuth();
   const [trail, setTrail] = useState(null);
   const [teams, setTeams] = useState(null);
+  const [users, setUsers] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [reload, setReload] = useState(false);
 
@@ -48,6 +49,21 @@ const Painel = ({ trailData, teamsData, rankingData }) => {
     getData();
     return null;
   }, [setTeams, reload]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await api.get(`painel-users/${trailId}`);
+      return setUsers(res.data);
+    };
+
+    if (!users) {
+      setUsers(usersData);
+      return null;
+    }
+
+    getData();
+    return null;
+  }, [setUsers, reload]);
 
   useEffect(() => {
     const getData = async () => {
@@ -115,6 +131,7 @@ const Painel = ({ trailData, teamsData, rankingData }) => {
             <PainelAdmin
               trail={trail}
               teams={teams}
+              users={users}
               ranking={ranking}
               reload={reload}
               setReload={setReload}
@@ -135,12 +152,14 @@ export async function getServerSideProps(ctx) {
 
     const trail = await apiServer.get(`trail/${trailId}`);
     const teams = await apiServer.get(`painel-teams/${trailId}`);
+    const users = await apiServer.get(`painel-users/${trailId}`);
     const ranking = await apiServer.get(`game-ranking/${trailId}`);
 
     return {
       props: {
         trailData: trail.data,
         teamsData: teams.data,
+        usersData: users.data,
         rankingData: ranking.data,
       },
     };

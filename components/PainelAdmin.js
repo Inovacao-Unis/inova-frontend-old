@@ -30,7 +30,6 @@ import {
   Th,
   Td,
   Textarea,
-  Input,
   Link,
   Modal,
   ModalOverlay,
@@ -50,8 +49,10 @@ import {
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
+import { CSVLink, CSVDownload } from 'react-csv';
+import { MdDownload } from 'react-icons/md';
 
-const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
+const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const Router = useRouter();
   const { leader } = useAuth();
   const [points, setPoints] = useState(null);
@@ -59,7 +60,6 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState('');
   const [note, setNote] = useState(null);
-  const [users, setUsers] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
   const toast = useToast();
@@ -70,7 +70,8 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
   useEffect(() => {
     setTitle(trail.title);
     setSchedule(trail.schedule);
-  }, [setTitle, setSchedule]);
+    setNote(trail.note);
+  }, [setTitle, setSchedule, setSchedule]);
 
   // eslint-disable-next-line consistent-return
   const editTrail = async () => {
@@ -154,6 +155,10 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
   };
 
   const handleModal = (response) => {
+    if (response.points) {
+      setPoints(response.points.value);
+      setFeedback(response.points.feedback);
+    }
     setSelect(response);
     onOpen();
   };
@@ -200,23 +205,42 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
       });
   };
 
-  const convertNote = (usersList) => {
-    const newUsersList = [];
-    usersList.forEach((user) => {
-      const result = (user.points * note) / 100 / 4;
-      const userObject = {
-        user: user.user,
-        points: result,
-      };
-      newUsersList.push(userObject);
-    });
-    setUsers(newUsersList);
-  };
+  // eslint-disable-next-line consistent-return
+  const editPoints = async () => {
+    if (!points || !feedback) {
+      toast({
+        title: 'Por favor, informe os pontos e feedback',
+        status: 'error',
+        duration: 3000,
+      });
+      return null;
+    }
 
-  const handleUsers = async () => {
-    await api.get(`painel-users/${trail._id}`).then((res) => {
-      convertNote(res.data);
-    });
+    await api
+      .put(`point/${select.points._id}`, {
+        value: points,
+        feedback,
+      })
+      .then(() => {
+        setPoints(null);
+        setFeedback(null);
+        setReload(!reload);
+        toast({
+          title: 'Salvo com sucesso!',
+          status: 'success',
+          duration: 3000,
+        });
+        setSelect(null);
+        onClose();
+      })
+      .catch((err) => {
+        console.error('Erro: ', err.response.data.error);
+        toast({
+          title: 'Houve um erro!',
+          status: 'error',
+          duration: 3000,
+        });
+      });
   };
 
   return (
@@ -236,7 +260,7 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
         <TabList>
           <Tab color="black">Ranking</Tab>
           <Tab color="black">Respostas</Tab>
-          <Tab color="black">Conversor de notas</Tab>
+          <Tab color="black">Participantes</Tab>
           <Tab color="black">Editar/Excluir</Tab>
         </TabList>
 
@@ -258,6 +282,8 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
                     <Th textAlign="center">Etapa 2</Th>
                     <Th textAlign="center">Etapa 3</Th>
                     <Th textAlign="center">Etapa 4</Th>
+                    <Th textAlign="center">Total</Th>
+                    <Th textAlign="center">Nota</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -439,6 +465,20 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
                           ) : null}
                         </Flex>
                       </Td>
+                      <Td color="black" textAlign="center">
+                        <Flex direction="column" w="100%" align="center">
+                          <Text color="black" mb="10px">
+                            {team.totalPoints}%
+                          </Text>
+                        </Flex>
+                      </Td>
+                      <Td color="black" textAlign="center">
+                        <Flex direction="column" w="100%" align="center">
+                          <Text color="black" mb="10px">
+                            {(team.totalPoints * trail.note) / 100}
+                          </Text>
+                        </Flex>
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
@@ -461,56 +501,52 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
                       <Text color="highlight">{select?.response}</Text>
                     </Link>
                   </Flex>
-                  {select?.points ? (
-                    <Flex direction="column">
-                      <Text pt="10px" fontWeight="bold">
-                        Pontos:
-                      </Text>
-                      <Text>{select?.points?.value}</Text>
-                      <Text pt="10px" fontWeight="bold">
-                        Feedback:
-                      </Text>
-                      <Text>{select?.points?.feedback}</Text>
-                    </Flex>
-                  ) : (
-                    <Flex direction="column">
-                      <FormControl pt="15px" w="80px" isRequired id="response">
-                        <FormLabel mb="0">Pontos</FormLabel>
-                        <FormHelperText mt="0" mb="10px">
-                          De 0 até 100
-                        </FormHelperText>
-                        <NumberInput
-                          min={0}
-                          max={100}
-                          value={points || 0}
-                          onChange={(value) => setPoints(value)}
-                        >
-                          <NumberInputField
-                            color={points ? 'black' : 'gray.300'}
-                          />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                      </FormControl>
-                      <FormControl pt="15px" isRequired id="response">
-                        <FormLabel>Feedback</FormLabel>
-                        <Textarea
-                          value={feedback || ''}
-                          onChange={(e) => setFeedback(e.target.value)}
-                          placeholder="Digite o feedback para o time"
+                  <Flex direction="column">
+                    <FormControl pt="15px" w="80px" isRequired id="response">
+                      <FormLabel mb="0">Pontos</FormLabel>
+                      <FormHelperText mt="0" mb="10px">
+                        De 0 até 25%
+                      </FormHelperText>
+                      <NumberInput
+                        min={0}
+                        max={25}
+                        value={points || 0}
+                        onChange={(value) => setPoints(value)}
+                      >
+                        <NumberInputField
+                          color={points ? 'black' : 'gray.300'}
                         />
-                      </FormControl>
-                    </Flex>
-                  )}
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </FormControl>
+                    <FormControl pt="15px" isRequired id="response">
+                      <FormLabel>Feedback</FormLabel>
+                      <Textarea
+                        value={feedback || ''}
+                        onChange={(e) => setFeedback(e.target.value)}
+                        placeholder="Digite o feedback para o time"
+                      />
+                    </FormControl>
+                  </Flex>
                 </ModalBody>
 
                 <ModalFooter>
                   <Button variant="ghost" bg="gray.100" onClick={onClose}>
                     Fechar
                   </Button>
-                  {select?.points ? null : (
+                  {select?.points ? (
+                    <Button
+                      ml="10px"
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={editPoints}
+                    >
+                      Editar
+                    </Button>
+                  ) : (
                     <Button
                       ml="10px"
                       colorScheme="blue"
@@ -526,40 +562,43 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
           </TabPanel>
           <TabPanel p="0">
             <Box>
-              <FormControl pt="15px">
-                <FormLabel color="black" mb="0">
-                  Nota total dessa atividade:
-                </FormLabel>
-                <FormHelperText mt="0" mb="10px">
-                  Converta os pontos da plataforma para a nota que gostaria de
-                  dar.
-                </FormHelperText>
-                <NumberInput
-                  color="black"
-                  min={0}
-                  max={100}
-                  value={note || 0}
-                  onChange={(value) => setNote(value)}
-                >
-                  <NumberInputField color="black" />
-                  <NumberInputStepper color="black">
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </FormControl>
-              <Button bg="highlight" onClick={handleUsers}>
-                Converter
-              </Button>
-            </Box>
-            <Box>
-              {users?.length > 0 &&
-                users.map((user) => (
-                  <Flex>
-                    <Text color="black">{user.user}</Text>
-                    <Text color="black">{user.points}</Text>
+              {users?.length > 0 && (
+                <Box my="10px">
+                  <Flex justify="flex-end">
+                    <CSVLink
+                      filename="participantes_inova.csv"
+                      data={users}
+                      className="export-csv"
+                    >
+                      <Flex align="center">
+                        <MdDownload />
+                        <Text ml="5px">Exportar</Text>
+                      </Flex>
+                    </CSVLink>
                   </Flex>
-                ))}
+                </Box>
+              )}
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Nome</Th>
+                    <Th>E-mail</Th>
+                    <Th isNumeric>Nota</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {users?.length > 0 &&
+                    users.map((user) => (
+                      <Tr key={user.user}>
+                        <Td color="black">{user.displayName}</Td>
+                        <Td color="black">{user.email}</Td>
+                        <Td isNumeric color="black">
+                          {user.points}
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
             </Box>
           </TabPanel>
           <TabPanel p="0">
@@ -608,7 +647,27 @@ const PainelAdmin = ({ trail, teams, ranking, reload, setReload }) => {
                       </Editable>
                     </Box>
                   </FormControl>
-
+                  <FormControl pb="20px">
+                    <FormLabel color="black" fontWeight="600" fontSize="1rem">
+                      Nota
+                    </FormLabel>
+                    <Box mb="10px">
+                      <Editable
+                        border="1px"
+                        borderColor="gray.400"
+                        borderRadius="4px"
+                        color="gray.600"
+                        defaultValue={trail?.note}
+                        px="10px"
+                        py="10px"
+                      >
+                        <EditablePreview maxW="100%" w="100%" />
+                        <EditableInput
+                          onChange={(e) => setNote(e.target.value)}
+                        />
+                      </Editable>
+                    </Box>
+                  </FormControl>
                   <Button
                     bg="highlight"
                     _hover={{ bg: 'highlight' }}
