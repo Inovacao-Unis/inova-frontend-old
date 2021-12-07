@@ -67,6 +67,8 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const onCloseAlert = () => setIsOpenAlert(false);
   const cancelRef = useRef();
 
+  console.log('users ', users);
+
   useEffect(() => {
     setTitle(trail.title);
     setSchedule(trail.schedule);
@@ -282,8 +284,12 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                     <Th textAlign="center">Etapa 2</Th>
                     <Th textAlign="center">Etapa 3</Th>
                     <Th textAlign="center">Etapa 4</Th>
-                    <Th textAlign="center">Total</Th>
-                    <Th textAlign="center">Nota</Th>
+                    <Th textAlign="center" color="black">
+                      Total
+                    </Th>
+                    <Th textAlign="center" color="black">
+                      Nota
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -294,8 +300,12 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                           <Text mb="10px">{team.name}</Text>
                           <Box>
                             {team.users?.map((user) => (
-                              <Text key={user} fontSize="xs" color="gray.500">
-                                {user}
+                              <Text
+                                key={user.email}
+                                fontSize="xs"
+                                color="gray.500"
+                              >
+                                {user.email}
                               </Text>
                             ))}
                           </Box>
@@ -316,6 +326,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                       (item) => item.stage === 1,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -357,6 +368,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                       (item) => item.stage === 2,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -398,6 +410,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                       (item) => item.stage === 3,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -439,6 +452,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                       (item) => item.stage === 4,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -467,15 +481,15 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                       </Td>
                       <Td color="black" textAlign="center">
                         <Flex direction="column" w="100%" align="center">
-                          <Text color="black" mb="10px">
-                            {team.totalPoints}%
+                          <Text color="black" mb="10px" fontSize="1rem">
+                            {team.totalPoints}/100%
                           </Text>
                         </Flex>
                       </Td>
                       <Td color="black" textAlign="center">
                         <Flex direction="column" w="100%" align="center">
-                          <Text color="black" mb="10px">
-                            {(team.totalPoints * trail.note) / 100}
+                          <Text color="black" mb="10px" fontSize="1rem">
+                            {(team.totalPoints * trail.note) / 100}/{trail.note}
                           </Text>
                         </Flex>
                       </Td>
@@ -589,7 +603,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                 <Tbody>
                   {users?.length > 0 &&
                     users.map((user) => (
-                      <Tr key={user.user}>
+                      <Tr key={user.email}>
                         <Td color="black">{user.displayName}</Td>
                         <Td color="black">{user.email}</Td>
                         <Td isNumeric color="black">

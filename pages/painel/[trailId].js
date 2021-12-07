@@ -38,32 +38,34 @@ const Painel = ({ trailData, teamsData, usersData, rankingData }) => {
   useEffect(() => {
     const getData = async () => {
       const res = await api.get(`painel-teams/${trailId}`);
-      return setTeams(res.data);
+      setUsers(res.data.participants);
+      return setTeams(res.data.teams);
     };
 
-    if (!teams) {
+    if (!teams || !users) {
       setTeams(teamsData);
-      return null;
-    }
-
-    getData();
-    return null;
-  }, [setTeams, reload]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const res = await api.get(`painel-users/${trailId}`);
-      return setUsers(res.data);
-    };
-
-    if (!users) {
       setUsers(usersData);
       return null;
     }
 
     getData();
     return null;
-  }, [setUsers, reload]);
+  }, [setTeams, setUsers, reload]);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const res = await api.get(`painel-users/${trailId}`);
+  //     return setUsers(res.data);
+  //   };
+
+  //   if (!users) {
+  //     setUsers(usersData);
+  //     return null;
+  //   }
+
+  //   getData();
+  //   return null;
+  // }, [setUsers, reload]);
 
   useEffect(() => {
     const getData = async () => {
@@ -151,15 +153,20 @@ export async function getServerSideProps(ctx) {
     const { trailId } = ctx.query;
 
     const trail = await apiServer.get(`trail/${trailId}`);
-    const teams = await apiServer.get(`painel-teams/${trailId}`);
-    const users = await apiServer.get(`painel-users/${trailId}`);
+    const painel = await apiServer.get(`painel-teams/${trailId}`);
+    // const users = await apiServer.get(`painel-users/${trailId}`);
     const ranking = await apiServer.get(`game-ranking/${trailId}`);
+
+    const { teams } = painel.data;
+    const users = painel.data.participants;
+
+    console.log('users ', users);
 
     return {
       props: {
         trailData: trail.data,
-        teamsData: teams.data,
-        usersData: users.data,
+        teamsData: teams,
+        usersData: users,
         rankingData: ranking.data,
       },
     };
