@@ -49,7 +49,7 @@ import {
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import { MdDownload } from 'react-icons/md';
 
 const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
@@ -62,7 +62,11 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const [note, setNote] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
+<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
+=======
+  const [teamSelect, setTeamSelect] = useState(null);
+>>>>>>> develop
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -122,6 +126,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       .put(`trail/${trail._id}`, {
         title,
         schedule,
+        note,
       })
       .then(() => {
         toast({
@@ -170,13 +175,17 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       });
   };
 
+<<<<<<< HEAD
   const handleModal = (response) => {
+=======
+  const handleModal = (teamItemSelect, response) => {
+>>>>>>> develop
     if (response.points) {
       setPoints(response.points.value);
       setFeedback(response.points.feedback);
     }
     setSelect(response);
-    setTeam(teamSelect);
+    setTeamSelect(teamItemSelect);
     onOpen();
   };
 
@@ -560,7 +569,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Time: {team?.name}</ModalHeader>
+                <ModalHeader>Time: {teamSelect?.name}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Flex direction="column">
