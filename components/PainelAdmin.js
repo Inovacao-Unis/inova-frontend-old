@@ -62,32 +62,17 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const [note, setNote] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [teamSelect, setTeamSelect] = useState(null);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
   const cancelRef = useRef();
 
   useEffect(() => {
-    if (trail) {
-      setTitle(trail.title);
-      setSchedule(trail.schedule);
-    }
-  }, [trail]);
-
-  useEffect(() => {
-    setLoading(true);
-    const getData = async () => {
-      await api.get(`painel-teams/${trail._id}`).then((res) => {
-        setTeams(res.data);
-        setLoading(false);
-      });
-    };
-
-    if (trail) {
-      getData();
-    }
-  }, [trail, select, reload]);
+    setTitle(trail.title);
+    setSchedule(trail.schedule);
+    setNote(trail.note);
+  }, [setTitle, setSchedule, setSchedule]);
 
   // eslint-disable-next-line consistent-return
   const editTrail = async () => {
@@ -171,7 +156,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       });
   };
 
-  const handleModal = (response) => {
+  const handleModal = (teamItemSelect, response) => {
     if (response.points) {
       setPoints(response.points.value);
       setFeedback(response.points.feedback);
@@ -204,7 +189,6 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       .then(() => {
         setPoints(null);
         setFeedback(null);
-        setReload(!reload);
         toast({
           title: 'Resposta avaliada!',
           status: 'success',
@@ -317,8 +301,12 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                           <Text mb="10px">{team.name}</Text>
                           <Box>
                             {team.users?.map((user) => (
-                              <Text key={user} fontSize="xs" color="gray.500">
-                                {user}
+                              <Text
+                                key={user.email}
+                                fontSize="xs"
+                                color="gray.500"
+                              >
+                                {user.email}
                               </Text>
                             ))}
                           </Box>
@@ -536,11 +524,11 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                     <FormControl pt="15px" w="80px" isRequired id="response">
                       <FormLabel mb="0">Pontos</FormLabel>
                       <FormHelperText mt="0" mb="10px">
-                        De 0 até 100
+                        De 0 até 25%
                       </FormHelperText>
                       <NumberInput
                         min={0}
-                        max={100}
+                        max={25}
                         value={points || 0}
                         onChange={(value) => setPoints(value)}
                       >
