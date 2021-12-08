@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Container,
-  Box,
   Flex,
   Button,
   Heading,

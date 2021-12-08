@@ -49,7 +49,7 @@ import {
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import { MdDownload } from 'react-icons/md';
 
 const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
@@ -62,7 +62,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const [note, setNote] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
-  const [team, setTeam] = useState(null);
+  const [teamSelect, setTeamSelect] = useState(null);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -107,6 +107,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       .put(`trail/${trail._id}`, {
         title,
         schedule,
+        note,
       })
       .then(() => {
         toast({
@@ -155,14 +156,13 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       });
   };
 
-  const handleModal = (teamSelect, response) => {
+  const handleModal = (teamItemSelect, response) => {
     if (response.points) {
       setPoints(response.points.value);
       setFeedback(response.points.feedback);
     }
-    console.log('team ', team);
     setSelect(response);
-    setTeam(teamSelect);
+    setTeamSelect(teamItemSelect);
     onOpen();
   };
 
@@ -511,7 +511,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Time: {team?.name}</ModalHeader>
+                <ModalHeader>Time: {teamSelect?.name}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Flex direction="column">

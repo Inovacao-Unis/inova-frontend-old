@@ -1,6 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { useState, useEffect } from 'react';
-import api from '@services/api';
 import {
   Flex,
   Box,
@@ -17,7 +15,6 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Skeleton,
 } from '@chakra-ui/react';
 import Challenges from '@components/Challenges';
 

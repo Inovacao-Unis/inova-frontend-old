@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import api from '@services/api';
 import Layout from '@components/Layout';
 import { useAuth } from '@contexts/AuthContext';
 import withAuth from '@components/withAuth';

@@ -35,7 +35,6 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import Challenges from '@components/Challenges';
 
 const adicionarAtividade = () => {
   const Router = useRouter();
@@ -49,8 +48,6 @@ const adicionarAtividade = () => {
   const { leader } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const conteudoDesafio = 'Aqui o conteúdo do desafio.';
 
   useEffect(() => {
     const getData = async () => {
@@ -157,6 +154,7 @@ const adicionarAtividade = () => {
       });
   };
 
+  // eslint-disable-next-line consistent-return
   function createMarkup(content) {
     if (content) {
       return {
