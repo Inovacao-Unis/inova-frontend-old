@@ -1,4 +1,7 @@
 import Head from 'next/head';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import Router from 'next/router';
 import { ChakraProvider, extendTheme, CSSReset } from '@chakra-ui/react';
 import { Global, css } from '@emotion/react';
 import { AuthProvider } from '../contexts/AuthContext';
@@ -6,6 +9,18 @@ import theme from '../styles/theme';
 import '../styles/fonts.css';
 import '../styles/background.css';
 import '../styles/content.css';
+import '../styles/nprogressCustom.css';
+
+NProgress.configure({
+  minimum: 0.3,
+  easing: 'ease',
+  speed: 800,
+  showSpinner: false,
+});
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const myTheme = extendTheme(theme);
 

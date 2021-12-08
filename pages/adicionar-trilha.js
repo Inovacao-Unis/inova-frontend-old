@@ -28,6 +28,11 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Challenges from '@components/Challenges';
@@ -36,12 +41,16 @@ const adicionarAtividade = () => {
   const Router = useRouter();
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState('');
+  const [note, setNote] = useState(null);
   const [engenhariaChallenges, setEngenhariaChallenges] = useState({});
   const [saudeChallenges, setSaudeChallenges] = useState({});
   const [gestaoChallenges, setGestaoChallenges] = useState({});
+  const [challengeSelect, setChallengeSelect] = useState(null);
   const { leader } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const conteudoDesafio = 'Aqui o conteúdo do desafio.';
 
   useEffect(() => {
     const getData = async () => {
@@ -120,6 +129,7 @@ const adicionarAtividade = () => {
       .post('trails', {
         title,
         schedule,
+        note,
         leaderId: leader,
         challenges: challengesCheked,
       })
@@ -146,6 +156,14 @@ const adicionarAtividade = () => {
         }
       });
   };
+
+  function createMarkup(content) {
+    if (content) {
+      return {
+        __html: content,
+      };
+    }
+  }
 
   return (
     <Layout painel>
@@ -184,27 +202,44 @@ const adicionarAtividade = () => {
               onChange={(e) => setSchedule(e.target.value)}
             />
           </FormControl>
+          <FormControl maxW="400px" pb="40px">
+            <FormLabel mb="0" color="black" fontWeight="600" fontSize="1.4rem">
+              Nota
+            </FormLabel>
+            <FormHelperText mt="0" mb="10px">
+              Qual o valor dessa atividade
+            </FormHelperText>
+            <NumberInput
+              min={0}
+              value={note || 0}
+              onChange={(value) => setNote(value)}
+              color="black"
+            >
+              <NumberInputField color="black" />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
           <Text color="black" fontWeight="600" fontSize="1.4rem">
             Escolha os desafios:
           </Text>
-          <Button
-            size="xs"
-            bgColor="highlight"
-            color="white"
-            _hover={{ bg: 'highlight' }}
-            mb="30px"
-            onClick={onOpen}
-          >
-            Ver o conteúdo dos desafios
-          </Button>
+
           <Flex
             justify="space-between"
             mb="70px"
             direction={{ base: 'column', lg: 'row' }}
           >
-            <Box mb="20px">
+            <Box mb="20px" mr="10px">
               <Checkbox
-                color="black"
+                color="white"
+                bg="highlight"
+                py="10px"
+                px="10px"
+                w="100%"
+                colorScheme="orange"
+                borderRadius="4px"
                 isChecked={allCheckedEngenharia}
                 isIndeterminate={isIndeterminateEngenharia}
                 onChange={(e) => {
@@ -220,37 +255,68 @@ const adicionarAtividade = () => {
                   {engenhariaChallenges?.title}
                 </Text>
               </Checkbox>
-              <Stack pl={6} mt={1} spacing={1}>
+              <Stack pl={6} mt={1} spacing={4}>
                 {engenhariaChallenges.challenges &&
                   engenhariaChallenges.challenges.map((challenge) => (
-                    <Checkbox
+                    <Flex
+                      align="center"
+                      bg="highlight"
+                      py="10px"
+                      px="10px"
+                      borderRadius="4px"
+                      justifyContent="space-between"
                       key={challenge._id}
-                      color="black"
-                      isChecked={
-                        engenhariaChallenges?.challenges[
-                          engenhariaChallenges.challenges.indexOf(challenge)
-                        ]?.checked
-                      }
-                      onChange={(e) => {
-                        const newArr = [...engenhariaChallenges.challenges];
-                        newArr[
-                          engenhariaChallenges.challenges.indexOf(challenge)
-                        ].checked = e.target.checked;
-
-                        setEngenhariaChallenges((prevState) => ({
-                          ...prevState,
-                          challenges: newArr,
-                        }));
-                      }}
                     >
-                      {challenge.title}
-                    </Checkbox>
+                      <Checkbox
+                        color="white"
+                        lineHeight="20px"
+                        colorScheme="orange"
+                        isChecked={
+                          engenhariaChallenges?.challenges[
+                            engenhariaChallenges.challenges.indexOf(challenge)
+                          ]?.checked
+                        }
+                        onChange={(e) => {
+                          const newArr = [...engenhariaChallenges.challenges];
+                          newArr[
+                            engenhariaChallenges.challenges.indexOf(challenge)
+                          ].checked = e.target.checked;
+
+                          setEngenhariaChallenges((prevState) => ({
+                            ...prevState,
+                            challenges: newArr,
+                          }));
+                        }}
+                      >
+                        <Text maxW="390px" mr="10px">
+                          {challenge.title}
+                        </Text>
+                      </Checkbox>
+                      <Button
+                        size="xs"
+                        bgColor="white"
+                        color="highlight"
+                        _hover={{ bg: 'white' }}
+                        onClick={() => {
+                          setChallengeSelect(challenge);
+                          onOpen();
+                        }}
+                      >
+                        Ver
+                      </Button>
+                    </Flex>
                   ))}
               </Stack>
             </Box>
-            <Box mb="20px">
+            <Box mb="20px" mr="10px">
               <Checkbox
-                color="black"
+                color="white"
+                bg="highlight"
+                py="10px"
+                px="10px"
+                w="100%"
+                borderRadius="4px"
+                colorScheme="orange"
                 isChecked={allCheckedSaude}
                 isIndeterminate={isIndeterminateSaude}
                 onChange={(e) => {
@@ -266,37 +332,68 @@ const adicionarAtividade = () => {
                   {saudeChallenges?.title}
                 </Text>
               </Checkbox>
-              <Stack pl={6} mt={1} spacing={1}>
+              <Stack pl={6} mt={1} spacing={4}>
                 {saudeChallenges.challenges &&
                   saudeChallenges.challenges.map((challenge) => (
-                    <Checkbox
+                    <Flex
                       key={challenge._id}
-                      color="black"
-                      isChecked={
-                        saudeChallenges?.challenges[
-                          saudeChallenges.challenges.indexOf(challenge)
-                        ]?.checked
-                      }
-                      onChange={(e) => {
-                        const newArr = [...saudeChallenges.challenges];
-                        newArr[
-                          saudeChallenges.challenges.indexOf(challenge)
-                        ].checked = e.target.checked;
-
-                        setSaudeChallenges((prevState) => ({
-                          ...prevState,
-                          challenges: newArr,
-                        }));
-                      }}
+                      align="center"
+                      bg="highlight"
+                      py="10px"
+                      px="10px"
+                      borderRadius="4px"
+                      justifyContent="space-between"
                     >
-                      {challenge.title}
-                    </Checkbox>
+                      <Checkbox
+                        color="white"
+                        lineHeight="20px"
+                        colorScheme="orange"
+                        isChecked={
+                          saudeChallenges?.challenges[
+                            saudeChallenges.challenges.indexOf(challenge)
+                          ]?.checked
+                        }
+                        onChange={(e) => {
+                          const newArr = [...saudeChallenges.challenges];
+                          newArr[
+                            saudeChallenges.challenges.indexOf(challenge)
+                          ].checked = e.target.checked;
+
+                          setSaudeChallenges((prevState) => ({
+                            ...prevState,
+                            challenges: newArr,
+                          }));
+                        }}
+                      >
+                        <Text maxW="390px" mr="10px">
+                          {challenge.title}
+                        </Text>
+                      </Checkbox>
+                      <Button
+                        size="xs"
+                        bgColor="white"
+                        color="highlight"
+                        _hover={{ bg: 'white' }}
+                        onClick={() => {
+                          setChallengeSelect(challenge);
+                          onOpen();
+                        }}
+                      >
+                        Ver
+                      </Button>
+                    </Flex>
                   ))}
               </Stack>
             </Box>
             <Box mb="20px">
               <Checkbox
-                color="black"
+                color="white"
+                bg="highlight"
+                py="10px"
+                px="10px"
+                w="100%"
+                borderRadius="4px"
+                colorScheme="orange"
                 isChecked={allCheckedGestao}
                 isIndeterminate={isIndeterminateGestao}
                 onChange={(e) => {
@@ -312,31 +409,56 @@ const adicionarAtividade = () => {
                   {gestaoChallenges?.title}
                 </Text>
               </Checkbox>
-              <Stack pl={6} mt={1} spacing={1}>
+              <Stack pl={6} mt={1} spacing={4}>
                 {gestaoChallenges.challenges &&
                   gestaoChallenges.challenges.map((challenge) => (
-                    <Checkbox
+                    <Flex
                       key={challenge._id}
-                      color="black"
-                      isChecked={
-                        gestaoChallenges?.challenges[
-                          gestaoChallenges.challenges.indexOf(challenge)
-                        ]?.checked
-                      }
-                      onChange={(e) => {
-                        const newArr = [...gestaoChallenges.challenges];
-                        newArr[
-                          gestaoChallenges.challenges.indexOf(challenge)
-                        ].checked = e.target.checked;
-
-                        setGestaoChallenges((prevState) => ({
-                          ...prevState,
-                          challenges: newArr,
-                        }));
-                      }}
+                      align="center"
+                      bg="highlight"
+                      py="10px"
+                      px="10px"
+                      borderRadius="4px"
+                      justifyContent="space-between"
                     >
-                      {challenge.title}
-                    </Checkbox>
+                      <Checkbox
+                        color="white"
+                        lineHeight="20px"
+                        colorScheme="orange"
+                        isChecked={
+                          gestaoChallenges?.challenges[
+                            gestaoChallenges.challenges.indexOf(challenge)
+                          ]?.checked
+                        }
+                        onChange={(e) => {
+                          const newArr = [...gestaoChallenges.challenges];
+                          newArr[
+                            gestaoChallenges.challenges.indexOf(challenge)
+                          ].checked = e.target.checked;
+
+                          setGestaoChallenges((prevState) => ({
+                            ...prevState,
+                            challenges: newArr,
+                          }));
+                        }}
+                      >
+                        <Text maxW="390px" mr="10px">
+                          {challenge.title}
+                        </Text>
+                      </Checkbox>
+                      <Button
+                        size="xs"
+                        bgColor="white"
+                        color="highlight"
+                        _hover={{ bg: 'white' }}
+                        onClick={() => {
+                          setChallengeSelect(challenge);
+                          onOpen();
+                        }}
+                      >
+                        Ver
+                      </Button>
+                    </Flex>
                   ))}
               </Stack>
             </Box>
@@ -360,10 +482,14 @@ const adicionarAtividade = () => {
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Desafios</ModalHeader>
+            <ModalHeader>{challengeSelect?.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Challenges />
+              <Text
+                dangerouslySetInnerHTML={
+                  challengeSelect?.content && createMarkup(`<p></p>`)
+                }
+              />
             </ModalBody>
 
             <ModalFooter>

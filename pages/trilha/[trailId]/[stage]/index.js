@@ -12,6 +12,7 @@ import tres from '@content/tres.md';
 import quatro from '@content/quatro.md';
 
 import Layout from '@components/Layout';
+import { getAPI } from '@services/axios';
 
 export default function BlogPost() {
   const Router = useRouter();
@@ -104,36 +105,38 @@ export default function BlogPost() {
   );
 }
 
-// export async function getStaticProps({ ...ctx }) {
-//   const { slug } = ctx.params;
+export async function getServerSideProps(ctx) {
+  try {
+    const apiServer = getAPI(ctx);
+    const { trailId, stage } = ctx.query;
 
-//   const content = await import(`content/challenges/${slug}.md`);
-//   const config = await import(`../../siteconfig.json`);
-//   const data = matter(content.default);
+    const res = await apiServer.get(`game-responses/${trailId}`);
 
-//   const { title } = data.data;
+    const page = Number(stage);
 
-//   return {
-//     props: {
-//       title: config.title,
-//       description: config.description,
-//       frontmatter: {
-//         title,
-//       },
-//       markdownBody: data.content,
-//     },
-//   };
-// }
+    if (page === 1) {
+      return {
+        props: {},
+      };
+    }
+    if (!res.data[page - 1]) {
+      return {
+        redirect: {
+          destination: '/minha-conta',
+          permanent: false,
+        },
+      };
+    }
 
-// export async function getStaticPaths() {
-//   const challengesSlugs = ((context) => getSlugs(context))(
-//     require.context('content/challenges', true, /\.md$/),
-//   );
-
-//   const paths = challengesSlugs.map((slug) => `/desafio/${slug}`);
-
-//   return {
-//     paths, // An array of path names, and any params
-//     fallback: false, // so that 404s properly appear if something's not matching
-//   };
-// }
+    return {
+      props: {},
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+}

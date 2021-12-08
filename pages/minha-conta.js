@@ -1,23 +1,14 @@
 /* eslint-disable no-underscore-dangle */
-import { useState, useEffect } from 'react';
 import api from '@services/api';
 import Layout from '@components/Layout';
 import { useAuth } from '@contexts/AuthContext';
 import withAuth from '@components/withAuth';
 import Link from 'next/link';
 import { Container, Heading, Flex, Text, Button } from '@chakra-ui/react';
+import { getAPI } from '@services/axios';
 
-const minhaConta = () => {
+const minhaConta = ({ activities }) => {
   const { user, leader } = useAuth();
-  const [activities, setActivities] = useState([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await api.get('game-trails').then((res) => setActivities(res.data));
-    };
-
-    getData();
-  }, [setActivities]);
 
   return (
     <Layout activityBtn>
@@ -98,3 +89,22 @@ const minhaConta = () => {
 };
 
 export default withAuth(minhaConta);
+
+export async function getServerSideProps(ctx) {
+  try {
+    const apiServer = getAPI(ctx);
+    const res = await apiServer.get('game-trails');
+    return {
+      props: {
+        activities: res.data,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+}

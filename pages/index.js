@@ -26,7 +26,7 @@ const Home = () => {
   const { user, signinGoogle } = useAuth();
 
   useEffect(() => {
-    const token = Cookies.get('itka');
+    const token = Cookies.get('itkan');
 
     if (!token) {
       return null;

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable no-underscore-dangle */
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -21,39 +22,19 @@ import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import Ranking from '@components/Ranking';
 import TrailInfo from '@components/TrailInfo';
-import api from '@services/api';
 import { FaMapSigns } from 'react-icons/fa';
+import { getAPI } from '@services/axios';
 
-const Journey = () => {
+const Journey = ({ trail, responses, team, ranking }) => {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const [trail, setTrail] = useState(null);
   const [info, setInfo] = useState(true);
-  const [responses, setResponses] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenStart,
     onOpen: onOpenStart,
     onClose: onCloseStart,
   } = useDisclosure();
-
-  useEffect(() => {
-    const getData = async () => {
-      await api.get(`trail/${trailId}`).then((res) => setTrail(res.data));
-    };
-
-    getData();
-  }, [trailId]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await api
-        .get(`game-responses/${trailId}`)
-        .then((res) => setResponses(res.data));
-    };
-
-    getData();
-  }, [trailId]);
 
   return (
     <Layout profile>
@@ -164,8 +145,8 @@ const Journey = () => {
             </Flex>
           )}
           <Box w="400px" display={{ base: 'none', xl: 'block' }}>
-            {trail && <TrailInfo status={30} trail={trail} />}
-            <Ranking />
+            {trail && <TrailInfo status={30} trail={trail} team={team} />}
+            <Ranking ranking={ranking} teamId={team._id} />
           </Box>
         </Flex>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -174,9 +155,9 @@ const Journey = () => {
             <ModalCloseButton />
             <ModalBody>
               {info && trail ? (
-                <TrailInfo status={30} trail={trail} />
+                <TrailInfo status={30} trail={trail} team={team} />
               ) : (
-                <Ranking />
+                <Ranking ranking={ranking} teamId={team._id} />
               )}
             </ModalBody>
 
@@ -272,3 +253,31 @@ const Journey = () => {
 };
 
 export default withAuth(Journey);
+
+export async function getServerSideProps(ctx) {
+  try {
+    const apiServer = getAPI(ctx);
+    const { trailId } = ctx.query;
+
+    const trail = await apiServer.get(`trail/${trailId}`);
+    const responses = await apiServer.get(`game-responses/${trailId}`);
+    const team = await apiServer.get(`game-team/${trailId}`);
+    const ranking = await apiServer.get(`game-ranking/${trailId}`);
+
+    return {
+      props: {
+        trail: trail.data,
+        responses: responses.data,
+        team: team.data,
+        ranking: ranking.data,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+}

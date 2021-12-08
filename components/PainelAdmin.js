@@ -45,25 +45,24 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  Center,
-  CircularProgress,
 } from '@chakra-ui/react';
 import Ranking from '@components/Ranking';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
+import { CSVLink, CSVDownload } from 'react-csv';
+import { MdDownload } from 'react-icons/md';
 
-const PainelAdmin = ({ trail }) => {
+const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const Router = useRouter();
   const { leader } = useAuth();
-  const [teams, setTeams] = useState(null);
   const [points, setPoints] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState('');
+  const [note, setNote] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [reload, setReload] = useState(false);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -124,13 +123,14 @@ const PainelAdmin = ({ trail }) => {
         title,
         schedule,
       })
-      .then(() =>
+      .then(() => {
         toast({
           title: 'Alterado com sucesso',
           status: 'success',
           duration: 3000,
-        }),
-      )
+        });
+        setReload(!reload);
+      })
       .catch((err) => {
         toast({
           title: 'Houve um erro',
@@ -176,6 +176,7 @@ const PainelAdmin = ({ trail }) => {
       setFeedback(response.points.feedback);
     }
     setSelect(response);
+    setTeam(teamSelect);
     onOpen();
   };
 
@@ -205,6 +206,45 @@ const PainelAdmin = ({ trail }) => {
         setReload(!reload);
         toast({
           title: 'Resposta avaliada!',
+          status: 'success',
+          duration: 3000,
+        });
+        setReload(!reload);
+        setSelect(null);
+        onClose();
+      })
+      .catch((err) => {
+        console.error('Erro: ', err.response.data.error);
+        toast({
+          title: 'Houve um erro!',
+          status: 'error',
+          duration: 3000,
+        });
+      });
+  };
+
+  // eslint-disable-next-line consistent-return
+  const editPoints = async () => {
+    if (!points || !feedback) {
+      toast({
+        title: 'Por favor, informe os pontos e feedback',
+        status: 'error',
+        duration: 3000,
+      });
+      return null;
+    }
+
+    await api
+      .put(`point/${select.points._id}`, {
+        value: points,
+        feedback,
+      })
+      .then(() => {
+        setPoints(null);
+        setFeedback(null);
+        setReload(!reload);
+        toast({
+          title: 'Salvo com sucesso!',
           status: 'success',
           duration: 3000,
         });
@@ -276,6 +316,7 @@ const PainelAdmin = ({ trail }) => {
         <TabList>
           <Tab color="black">Ranking</Tab>
           <Tab color="black">Respostas</Tab>
+          <Tab color="black">Participantes</Tab>
           <Tab color="black">Editar/Excluir</Tab>
         </TabList>
 
@@ -285,10 +326,10 @@ const PainelAdmin = ({ trail }) => {
             mx="auto"
             p={{ base: '0', lg: 'var(--chakra-space-4)' }}
           >
-            <Ranking noTitle />
+            <Ranking ranking={ranking} noTitle />
           </TabPanel>
           <TabPanel p="0">
-            {teams?.length > 0 && !loading ? (
+            {teams?.length > 0 ? (
               <Table variant="simple">
                 <Thead>
                   <Tr>
@@ -297,6 +338,12 @@ const PainelAdmin = ({ trail }) => {
                     <Th textAlign="center">Etapa 2</Th>
                     <Th textAlign="center">Etapa 3</Th>
                     <Th textAlign="center">Etapa 4</Th>
+                    <Th textAlign="center" color="black">
+                      Total
+                    </Th>
+                    <Th textAlign="center" color="black">
+                      Nota
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -329,6 +376,7 @@ const PainelAdmin = ({ trail }) => {
                                       (item) => item.stage === 1,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -341,6 +389,7 @@ const PainelAdmin = ({ trail }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 1,
@@ -370,6 +419,7 @@ const PainelAdmin = ({ trail }) => {
                                       (item) => item.stage === 2,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -382,6 +432,7 @@ const PainelAdmin = ({ trail }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 2,
@@ -411,6 +462,7 @@ const PainelAdmin = ({ trail }) => {
                                       (item) => item.stage === 3,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -423,6 +475,7 @@ const PainelAdmin = ({ trail }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 3,
@@ -452,6 +505,7 @@ const PainelAdmin = ({ trail }) => {
                                       (item) => item.stage === 4,
                                     )
                                   ].points?.value}
+                              %
                             </Text>
                           ) : (
                             <Text color="black" mb="10px">
@@ -464,6 +518,7 @@ const PainelAdmin = ({ trail }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 4,
@@ -478,21 +533,26 @@ const PainelAdmin = ({ trail }) => {
                           ) : null}
                         </Flex>
                       </Td>
+                      <Td color="black" textAlign="center">
+                        <Flex direction="column" w="100%" align="center">
+                          <Text color="black" mb="10px" fontSize="1rem">
+                            {team.totalPoints}/100%
+                          </Text>
+                        </Flex>
+                      </Td>
+                      <Td color="black" textAlign="center">
+                        <Flex direction="column" w="100%" align="center">
+                          <Text color="black" mb="10px" fontSize="1rem">
+                            {(team.totalPoints * trail.note) / 100}/{trail.note}
+                          </Text>
+                        </Flex>
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
               </Table>
-            ) : (
-              <Center h="20vh">
-                <CircularProgress
-                  isIndeterminate
-                  value={30}
-                  size="80px"
-                  color="highlight"
-                />
-              </Center>
-            )}
-            {!(teams?.length > 0) && !loading ? (
+            ) : null}
+            {!(teams?.length > 0) ? (
               <Text textAlign="center" pt="2rem" color="gray.600">
                 Nenhum time nessa trilha
               </Text>
@@ -500,7 +560,7 @@ const PainelAdmin = ({ trail }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Resposta do time</ModalHeader>
+                <ModalHeader>Time: {team?.name}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Flex direction="column">
@@ -569,6 +629,47 @@ const PainelAdmin = ({ trail }) => {
             </Modal>
           </TabPanel>
           <TabPanel p="0">
+            <Box>
+              {users?.length > 0 && (
+                <Box my="10px">
+                  <Flex justify="flex-end">
+                    <CSVLink
+                      filename="participantes_inova.csv"
+                      data={users}
+                      className="export-csv"
+                    >
+                      <Flex align="center">
+                        <MdDownload />
+                        <Text ml="5px">Exportar</Text>
+                      </Flex>
+                    </CSVLink>
+                  </Flex>
+                </Box>
+              )}
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Nome</Th>
+                    <Th>E-mail</Th>
+                    <Th isNumeric>Nota</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {users?.length > 0 &&
+                    users.map((user) => (
+                      <Tr key={user.email}>
+                        <Td color="black">{user.displayName}</Td>
+                        <Td color="black">{user.email}</Td>
+                        <Td isNumeric color="black">
+                          {user.points}
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </Box>
+          </TabPanel>
+          <TabPanel p="0">
             {trail && (
               <Box mt="20px" maxW="400px" mx="auto">
                 <Flex direction="column" mx="auto">
@@ -614,7 +715,27 @@ const PainelAdmin = ({ trail }) => {
                       </Editable>
                     </Box>
                   </FormControl>
-
+                  <FormControl pb="20px">
+                    <FormLabel color="black" fontWeight="600" fontSize="1rem">
+                      Nota
+                    </FormLabel>
+                    <Box mb="10px">
+                      <Editable
+                        border="1px"
+                        borderColor="gray.400"
+                        borderRadius="4px"
+                        color="gray.600"
+                        defaultValue={trail?.note}
+                        px="10px"
+                        py="10px"
+                      >
+                        <EditablePreview maxW="100%" w="100%" />
+                        <EditableInput
+                          onChange={(e) => setNote(e.target.value)}
+                        />
+                      </Editable>
+                    </Box>
+                  </FormControl>
                   <Button
                     bg="highlight"
                     _hover={{ bg: 'highlight' }}

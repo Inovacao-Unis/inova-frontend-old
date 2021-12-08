@@ -32,7 +32,7 @@ import firebase from '../lib/firebase';
 export default function Header({ profile, activityBtn, painel }) {
   const Router = useRouter();
   const { trailId } = Router.query;
-  const { user, leader } = useAuth();
+  const { user, leader, isAuthenticated } = useAuth();
   const [team, setTeam] = useState({});
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -93,7 +93,14 @@ export default function Header({ profile, activityBtn, painel }) {
     >
       <Container maxW="container.xl">
         <Flex>
-          <Center cursor="pointer" onClick={() => Router.push('/minha-conta')}>
+          <Center
+            cursor="pointer"
+            onClick={() => {
+              if (isAuthenticated) {
+                Router.push('/minha-conta');
+              }
+            }}
+          >
             <Box maxWidth="100px">
               <Image src="/images/logo.png" alt="Logo UaiInovei" />
             </Box>
