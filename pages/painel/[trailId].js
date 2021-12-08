@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Flex, Button, Heading, useToast } from '@chakra-ui/react';
+import {
+  Container,
+  Box,
+  Flex,
+  Button,
+  Heading,
+  useToast,
+  Text,
+} from '@chakra-ui/react';
 import Layout from '@components/Layout';
 import withAuth from '@components/withAuth';
 import { useAuth } from '@contexts/AuthContext';
@@ -109,12 +117,12 @@ const Painel = ({ trailData, teamsData, usersData, rankingData }) => {
       {trail && teams && ranking ? (
         <Layout painel>
           <Container maxW="container.xl" zIndex="800" pb="100px" minH="89vh">
-            <Flex direction="column" m="70px 0">
+            <Flex direction="column" justify="center" m="70px 0 30px">
               <Heading
                 fontSize="2.5rem"
                 fontWeight="700"
                 textAlign="center"
-                mb="15px"
+                mb="10px"
               >
                 {trail.title}
               </Heading>
@@ -129,6 +137,59 @@ const Painel = ({ trailData, teamsData, usersData, rankingData }) => {
               >
                 Copiar link da trilha
               </Button>
+            </Flex>
+            <Flex
+              justify="center"
+              mb="50px"
+              border="1px"
+              borderColor="white"
+              borderRadius="4px"
+              maxW="400px"
+              mx="auto"
+              p="10px"
+              direction="column"
+            >
+              <Flex
+                borderBottom="1px"
+                borderBottomColor="gray.500"
+                justify="space-evenly"
+                align="center"
+                pb="5px"
+              >
+                <Flex direction="column" align="center" px="20px">
+                  <Text fontSize="1.8rem" fontWeight="bold">
+                    {teams?.length || '0'}
+                  </Text>
+                  <Text fontSize="1.1rem">Times</Text>
+                </Flex>
+                <Flex
+                  direction="column"
+                  align="center"
+                  borderLeft="1px"
+                  borderRight="1px"
+                  borderColor="gray.500"
+                  px="20px"
+                >
+                  <Text fontSize="1.8rem" fontWeight="bold">
+                    {users?.length || '0'}
+                  </Text>
+                  <Text fontSize="1.1rem">Participantes</Text>
+                </Flex>
+                <Flex direction="column" align="center" px="20px">
+                  <Text fontSize="1.8rem" fontWeight="bold">
+                    {trail.note || '0'}
+                  </Text>
+                  <Text fontSize="1.1rem">Nota</Text>
+                </Flex>
+              </Flex>
+              <Flex justify="center" align="center" pt="10px">
+                <Flex direction="column" align="center" px="20px">
+                  <Text fontSize="1.1rem" fontWeight="bold">
+                    {trail.schedule || '-'}
+                  </Text>
+                  <Text fontSize="1rem">Cronograma</Text>
+                </Flex>
+              </Flex>
             </Flex>
             <PainelAdmin
               trail={trail}
@@ -154,13 +215,10 @@ export async function getServerSideProps(ctx) {
 
     const trail = await apiServer.get(`trail/${trailId}`);
     const painel = await apiServer.get(`painel-teams/${trailId}`);
-    // const users = await apiServer.get(`painel-users/${trailId}`);
     const ranking = await apiServer.get(`game-ranking/${trailId}`);
 
     const { teams } = painel.data;
     const users = painel.data.participants;
-
-    console.log('users ', users);
 
     return {
       props: {

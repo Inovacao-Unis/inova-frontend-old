@@ -28,6 +28,11 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Challenges from '@components/Challenges';
@@ -36,6 +41,7 @@ const adicionarAtividade = () => {
   const Router = useRouter();
   const [title, setTitle] = useState('');
   const [schedule, setSchedule] = useState('');
+  const [note, setNote] = useState(null);
   const [engenhariaChallenges, setEngenhariaChallenges] = useState({});
   const [saudeChallenges, setSaudeChallenges] = useState({});
   const [gestaoChallenges, setGestaoChallenges] = useState({});
@@ -123,6 +129,7 @@ const adicionarAtividade = () => {
       .post('trails', {
         title,
         schedule,
+        note,
         leaderId: leader,
         challenges: challengesCheked,
       })
@@ -149,6 +156,14 @@ const adicionarAtividade = () => {
         }
       });
   };
+
+  function createMarkup(content) {
+    if (content) {
+      return {
+        __html: content,
+      };
+    }
+  }
 
   return (
     <Layout painel>
@@ -186,6 +201,26 @@ const adicionarAtividade = () => {
               value={schedule}
               onChange={(e) => setSchedule(e.target.value)}
             />
+          </FormControl>
+          <FormControl maxW="400px" pb="40px">
+            <FormLabel mb="0" color="black" fontWeight="600" fontSize="1.4rem">
+              Nota
+            </FormLabel>
+            <FormHelperText mt="0" mb="10px">
+              Qual o valor dessa atividade
+            </FormHelperText>
+            <NumberInput
+              min={0}
+              value={note || 0}
+              onChange={(value) => setNote(value)}
+              color="black"
+            >
+              <NumberInputField color="black" />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
           </FormControl>
           <Text color="black" fontWeight="600" fontSize="1.4rem">
             Escolha os desafios:
@@ -263,7 +298,7 @@ const adicionarAtividade = () => {
                         color="highlight"
                         _hover={{ bg: 'white' }}
                         onClick={() => {
-                          setChallengeSelect(challenge.title);
+                          setChallengeSelect(challenge);
                           onOpen();
                         }}
                       >
@@ -340,7 +375,7 @@ const adicionarAtividade = () => {
                         color="highlight"
                         _hover={{ bg: 'white' }}
                         onClick={() => {
-                          setChallengeSelect(challenge.title);
+                          setChallengeSelect(challenge);
                           onOpen();
                         }}
                       >
@@ -357,7 +392,6 @@ const adicionarAtividade = () => {
                 py="10px"
                 px="10px"
                 w="100%"
-                mb="10px"
                 borderRadius="4px"
                 colorScheme="orange"
                 isChecked={allCheckedGestao}
@@ -418,7 +452,7 @@ const adicionarAtividade = () => {
                         color="highlight"
                         _hover={{ bg: 'white' }}
                         onClick={() => {
-                          setChallengeSelect(challenge.title);
+                          setChallengeSelect(challenge);
                           onOpen();
                         }}
                       >
@@ -448,10 +482,14 @@ const adicionarAtividade = () => {
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>{challengeSelect}</ModalHeader>
+            <ModalHeader>{challengeSelect?.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Text>Conteúdo do desafio aqui...</Text>
+              <Text
+                dangerouslySetInnerHTML={
+                  challengeSelect?.content && createMarkup(`<p></p>`)
+                }
+              />
             </ModalBody>
 
             <ModalFooter>

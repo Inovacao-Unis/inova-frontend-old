@@ -62,12 +62,11 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const [note, setNote] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
+  const [team, setTeam] = useState(null);
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
   const cancelRef = useRef();
-
-  console.log('users ', users);
 
   useEffect(() => {
     setTitle(trail.title);
@@ -156,12 +155,14 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       });
   };
 
-  const handleModal = (response) => {
+  const handleModal = (teamSelect, response) => {
     if (response.points) {
       setPoints(response.points.value);
       setFeedback(response.points.feedback);
     }
+    console.log('team ', team);
     setSelect(response);
+    setTeam(teamSelect);
     onOpen();
   };
 
@@ -339,6 +340,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 1,
@@ -381,6 +383,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 2,
@@ -423,6 +426,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 3,
@@ -465,6 +469,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
                                 setPoints(null);
                                 setFeedback(null);
                                 handleModal(
+                                  team,
                                   team.responses[
                                     team.responses.findIndex(
                                       (item) => item.stage === 4,
@@ -506,7 +511,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Resposta do time</ModalHeader>
+                <ModalHeader>Time: {team?.name}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Flex direction="column">
