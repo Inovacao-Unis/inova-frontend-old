@@ -262,44 +262,6 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       });
   };
 
-  // eslint-disable-next-line consistent-return
-  const editPoints = async () => {
-    if (!points || !feedback) {
-      toast({
-        title: 'Por favor, informe os pontos e feedback',
-        status: 'error',
-        duration: 3000,
-      });
-      return null;
-    }
-
-    await api
-      .put(`point/${select.points._id}`, {
-        value: points,
-        feedback,
-      })
-      .then(() => {
-        setPoints(null);
-        setFeedback(null);
-        setReload(!reload);
-        toast({
-          title: 'Salvo com sucesso!',
-          status: 'success',
-          duration: 3000,
-        });
-        setSelect(null);
-        onClose();
-      })
-      .catch((err) => {
-        console.error('Erro: ', err.response.data.error);
-        toast({
-          title: 'Houve um erro!',
-          status: 'error',
-          duration: 3000,
-        });
-      });
-  };
-
   return (
     <Flex
       p={{ base: '10px', lg: '30px' }}
