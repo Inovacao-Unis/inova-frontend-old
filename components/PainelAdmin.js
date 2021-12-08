@@ -62,11 +62,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
   const [note, setNote] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [select, setSelect] = useState(null);
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
-=======
-  const [teamSelect, setTeamSelect] = useState(null);
->>>>>>> develop
   const toast = useToast();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -175,11 +171,7 @@ const PainelAdmin = ({ trail, teams, users, ranking, reload, setReload }) => {
       });
   };
 
-<<<<<<< HEAD
   const handleModal = (response) => {
-=======
-  const handleModal = (teamItemSelect, response) => {
->>>>>>> develop
     if (response.points) {
       setPoints(response.points.value);
       setFeedback(response.points.feedback);
