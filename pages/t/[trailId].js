@@ -34,7 +34,6 @@ import withAuth from '@components/withAuth';
 import { useAuth } from '@contexts/AuthContext';
 import api from '@services/api';
 import imgAvatars from '@utils/imgAvatars.json';
-import Challenges from '@components/Challenges';
 
 const TrilhaPage = () => {
   const Router = useRouter();

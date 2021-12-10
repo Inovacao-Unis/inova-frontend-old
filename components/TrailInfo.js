@@ -17,7 +17,6 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import Challenges from '@components/Challenges';
 
 const TrailInfo = ({ trail, team, painel }) => {
   const toast = useToast();
