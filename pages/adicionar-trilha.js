@@ -483,9 +483,10 @@ const adicionarAtividade = () => {
             <ModalHeader>{challengeSelect?.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Text
+              <Box
                 dangerouslySetInnerHTML={
-                  challengeSelect?.content && createMarkup(`<p></p>`)
+                  challengeSelect?.content &&
+                  createMarkup(challengeSelect?.content)
                 }
               />
             </ModalBody>

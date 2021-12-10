@@ -49,6 +49,7 @@ const TrilhaPage = () => {
   const [engenharia, setEngenharia] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [select, setSelect] = useState(null);
   const [users, setUsers] = useState([]);
   const [avatar, setAvatar] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -183,6 +184,20 @@ const TrilhaPage = () => {
       });
   };
 
+  const handleModal = (response) => {
+    setSelect(response);
+    onOpen();
+  };
+
+  // eslint-disable-next-line consistent-return
+  function createMarkup(content) {
+    if (content) {
+      return {
+        __html: content,
+      };
+    }
+  }
+
   return (
     <Layout painel>
       <Container maxW="container.lg" zIndex="800" pb="40vh">
@@ -227,8 +242,18 @@ const TrilhaPage = () => {
               {trail?.challenges.map((item) => {
                 if (item.categoryId === '614389a34db7167c3368f753') {
                   return (
-                    <Radio key={item._id} value={item._id}>
+                    <Radio key={item._id} value={item._id} colorScheme="pink">
                       {item.title}
+                      <Button
+                        size="xs"
+                        ml="10px"
+                        bgColor="highlight"
+                        color="white"
+                        _hover={{ bg: 'highlight' }}
+                        onClick={() => handleModal(item)}
+                      >
+                        Ver
+                      </Button>
                     </Radio>
                   );
                 }
@@ -243,8 +268,18 @@ const TrilhaPage = () => {
               {trail?.challenges.map((item) => {
                 if (item.categoryId === '61438a07f87adb7c88785a41') {
                   return (
-                    <Radio key={item._id} value={item._id}>
+                    <Radio key={item._id} value={item._id} colorScheme="pink">
                       {item.title}
+                      <Button
+                        size="xs"
+                        ml="10px"
+                        bgColor="highlight"
+                        color="white"
+                        _hover={{ bg: 'highlight' }}
+                        onClick={() => handleModal(item)}
+                      >
+                        Ver
+                      </Button>
                     </Radio>
                   );
                 }
@@ -255,12 +290,22 @@ const TrilhaPage = () => {
                 Engenharia
               </Text>
             )}
-            <Stack direction="column">
+            <Stack direction="column" mt={1} spacing={4}>
               {trail?.challenges.map((item) => {
                 if (item.categoryId === '61438a13f87adb7c88785a44') {
                   return (
-                    <Radio key={item._id} value={item._id}>
+                    <Radio key={item._id} value={item._id} colorScheme="pink">
                       {item.title}
+                      <Button
+                        size="xs"
+                        ml="10px"
+                        bgColor="highlight"
+                        color="white"
+                        _hover={{ bg: 'highlight' }}
+                        onClick={() => handleModal(item)}
+                      >
+                        Ver
+                      </Button>
                     </Radio>
                   );
                 }
@@ -398,10 +443,14 @@ const TrilhaPage = () => {
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Desafios</ModalHeader>
+            <ModalHeader>{select?.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Challenges />
+              <Box
+                dangerouslySetInnerHTML={
+                  select?.content && createMarkup(select?.content)
+                }
+              />
             </ModalBody>
 
             <ModalFooter>

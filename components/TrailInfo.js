@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import { useState } from 'react';
 import {
   Flex,
   Box,
@@ -21,6 +22,7 @@ import Challenges from '@components/Challenges';
 const TrailInfo = ({ trail, team, painel }) => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [select, setSelect] = useState(null);
 
   const copyCodeToClipboard = (url) => {
     const origin =
@@ -37,6 +39,20 @@ const TrailInfo = ({ trail, team, painel }) => {
       isClosable: true,
     });
   };
+
+  const handleModal = (response) => {
+    setSelect(response);
+    onOpen();
+  };
+
+  // eslint-disable-next-line consistent-return
+  function createMarkup(content) {
+    if (content) {
+      return {
+        __html: content,
+      };
+    }
+  }
 
   return (
     <>
@@ -117,9 +133,9 @@ const TrailInfo = ({ trail, team, painel }) => {
                   color="highlight"
                   _hover={{ bg: 'white' }}
                   mb="30px"
-                  onClick={onOpen}
+                  onClick={() => handleModal(team.challenge)}
                 >
-                  Ver o conteúdo dos desafios
+                  Ver o conteúdo do desafio
                 </Button>
               </>
             ) : null}
@@ -149,10 +165,14 @@ const TrailInfo = ({ trail, team, painel }) => {
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Desafios</ModalHeader>
+          <ModalHeader>{select?.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Challenges />
+            <Box
+              dangerouslySetInnerHTML={
+                select?.content && createMarkup(select?.content)
+              }
+            />
           </ModalBody>
 
           <ModalFooter>
